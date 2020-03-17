@@ -42,10 +42,35 @@ gen_model <- function(data, method = 0, lam = 0)
     if(ncol(data) == 3) ml <- multinom(y ~ x1 + x2, data = data, trace = FALSE)
     return(ml)
   }
-  if (method == 1) return(bfgs(data, lam))
-  if (method == 1.1) return(nm(data, lam))
-  if (method == 1.2) return(gd(data, lam))
+  if (floor(method) == 1)
+  {
+    w <- 0
+    if (method == 1) w <- bfgs(data, lam)
+    if (method == 1.1) w <- nm(data, lam)
+    if (method == 1.2) w <- gd(data, lam)
+    class(w) <- c("w", class(w))
+    return(w)
+  }
   if (method == 2) return(gaussian_naive_bayes(data.matrix(data[,2:ncol(data)]), data[,1]))
+}
+
+print_model <- function(model, method = 0)
+{
+  if (method == 0) print(summary(model))
+  if (floor(method) == 1)
+  {
+    table <- matrix(c(model[3], model[1], model[2], model[6], model[4], model[5]), nrow = 2, ncol = 3, byrow = T)
+    rownames(table) <- c("2", "3")
+    colnames(table) <- c("(Intercept)", "x1", "x2")
+    print(table)
+  }
+  if (method == 2) print(summary(model))
+}
+
+predict.w <- function(object, newdata, ...)
+{
+  prob <- mle_activate(cbind(y = rep(0, nrow(newdata)),newdata), object[1:6])
+  return(apply(prob, 1, function(x) which(x == max(x))))
 }
 
 # model = either model or weight matrix
@@ -71,6 +96,24 @@ gen_pred <- function(model, data, i = 1, yc = 0, method = 0)
   if (method == 2) return(predict(model, data.matrix(data[i,2:ncol(data)]), "prob")[yc])
 }
 
+gen_pred_all <- function(model, data, method = 0)
+{
+  #i <- 1:(nrow(data))
+  #pred <- sapply(i, function(x) gen_pred(model, data, x, data$y[x], method))
+  #return(as.matrix(pred))
+  if (method == 0)
+  {
+    if (ncol(data) == 2) xc <- data.frame(x1 = data$x1)
+    if (ncol(data) == 3) xc <- data.frame(x1 = data$x1, x2 = data$x2)
+    k = nlevels(data$y)
+    if (k == 2) py <- c(predict(model, xc, "probs")[1], 1 - predict(model, xc, "probs")[1])
+    if (k > 2) py <- predict(model, xc, "probs")
+    return(py)
+  }
+  if (floor(method) == 1) return(mle_activate(data, model))
+  if (method == 2) return(predict(model, data.matrix(data[,2:ncol(data)]), "prob"))
+}
+
 # data = (y, x1, x2)
 # seed = seed
 # out = whether to output
@@ -81,6 +124,15 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
   ml <- gen_model(data, method, lam)
   ic <- 1
   sym <- rep(20, nrow(data))
+  if (out) 
+  {
+    print("Original Model")
+    print_model(ml, method)
+    pred <- cbind(data$y, gen_pred_all(ml, data, method))
+    colnames(pred) <- c("y", 1:(ncol(pred)-1))
+    rownames(pred) <- 1:nrow(pred)
+    print(round(pred, 6))
+  }
   for (i in 1:nrow(data))
   {
     yi <- data$y[i]
@@ -88,14 +140,25 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
     for (j in 1:nlevels(data$y))
     {
       note <- ""
-      data$y[i] = j
+      data$y[i] <- j
       mlj <- gen_model(data, method, lam)
       pyj <- gen_pred(mlj, data, i, yi, method)
       if (pyj > py + 0.001) 
       {
-        note = "<- not IC"
+        note <- "<- not IC"
         sym[i] <- 15
         ic <- 0
+        if (out) 
+        {
+          print(paste("New Model if ", i, " reports ", j, " instead of ", yi))
+          print_model(mlj, method)
+          data$y[i] <- yi
+          pred <- cbind(data$y, gen_pred_all(mlj, data, method))
+          colnames(pred) <- c("y", 1:(ncol(pred)-1))
+          rownames(pred) <- 1:nrow(pred)
+          print(round(pred, 6))
+          if (out) dplot(mlj, data, sym)
+        }
       }
       if (out) print(paste("y =", yi, ", p(y) =", round(py, 4), ", y' =", j, ", p'(y) =", round(pyj, 4), note))
     }
@@ -146,7 +209,7 @@ mle_activate <- function(data, weights)
 {
   if (ncol(data) == 3) design <- cbind(data$x1, data$x2, rep(1, nrow(data)))
   if (ncol(data) == 2) design <- cbind(data$x1, rep(1, nrow(data)))                
-  w <- cbind(rep(0, ncol(data)), matrix(weights, ncol(data), nlevels(data$y) - 1))
+  w <- cbind(rep(0, ncol(data)), matrix(weights, ncol(data), length(weights) / ncol(data)))
   z <- design %*% w
   ez <- exp(z)
   ps <- ez / rowSums(ez)
@@ -212,7 +275,6 @@ decisionplot <- function(model, data, class = NULL, sym = NULL, predict_type = "
   p <- as.factor(p)
   
   if(showgrid) points(g, col = as.integer(p)+1L, pch = ".")
-  
   z <- matrix(as.integer(p), nrow = resolution, byrow = TRUE)
   contour(xs, ys, z, add = TRUE, drawlabels = FALSE,
           lwd = 2, levels = (1:(k-1))+.5)
@@ -265,9 +327,10 @@ boundary_data <- function(r = 1, n = 10, off = 0.1)
   return(data.frame(y = y, x1 = x1, x2 = x2))
 }
 
-offset_boundary_data <- function(r = 1, n = 10, off = 0.05)
+offset_boundary_data <- function(r = 1, n = 10, off = 0.05, rot = 0)
 {
-  theta <- c(0, 2 / 3 * pi, 4 / 3 * pi)
+  #theta <- c(0, 2 / 3 * pi, 4 / 3 * pi)
+  theta <- c(0, 2 / 3 * pi, 4 / 3 * pi) + rot
   ax <- off * sin(pi / 2 + theta)
   ay <- off * cos(pi / 2 + theta)
   x2 <- c((1:n) / n * r * sin(theta[1]) + ax[1], (1:n) / n * r * sin(theta[2]) + ax[2], (1:n) / n * r * sin(theta[3]) + ax[3])
@@ -299,8 +362,12 @@ test_special <- function(n = 10, off = 0.05, type = 0)
 }
 
 #test_special(3, 0.05, 2)
-data <- offset_boundary_data(1, 3)
-data[11,1] <- 1
+#data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
+#data[5,1] <- 1
+#test(data, seed = 0, out = TRUE, method = 0, lam = 0.01)
+
+data <- offset_boundary_data(1, 3, 0.01, pi * 0.5)
+data[5,1] <- 1
 test(data, seed = 0, out = TRUE, method = 0, lam = 0.01)
 
 #data <- circular_data(1, 11)
