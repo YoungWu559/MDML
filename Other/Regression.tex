@@ -61,8 +61,48 @@ Previous work on mechanism design for machine learning with strategic data sourc
 \subsection{Maximum Likelihood Estimation}
 There are $n $ strategic agents each providing the label of one data point to the principal. The principal is the learner and builds a machine learning model based on the data points provided by the agents, in particular, we assume the principal is training a softmax regression for multi-class classification. An agent, $i $, has publicly known feature vector, $x^{\left(i\right)}$, and a private discrete label, $y^{\left(i\right)}$. The objective of the agent is to maximize the probability that her data point is labeled correctly by the principal's model, and the agent can choose to report $\hat{y} ^{\left(i\right)}$ to achieve the objective, with possibly $\hat{y} ^{\left(i\right)} \neq  y^{\left(i\right)}$. The objective of the principal is to minimize the loss from the data set with the correct labels.
 \newline \newline
+
+
+\subsection{Partial Loss Function Derivations}
+A dataset is incentive incompatible if,
+\begin{align*}
+\mathbb{P}\left\{Y = y^{\left(i\right)} | w^\star , x^{\left(i\right)}\right\} &\leq  \mathbb{P}\left\{Y = y^{\left(i\right)} | \hat{w}, x^{\left(i\right)}\right\},
+\end{align*}
+where,
+\begin{align*}
+w^\star  &= \arg\displaystyle\max_{w} \log\left(\mathbb{P}\left\{Y = y^{\left(i\right)} | w, x^{\left(i\right)}\right\}\right) + C_{-i}\left(w\right),
+\\ \hat{w} &= \arg\displaystyle\max_{w} \log\left(\mathbb{P}\left\{Y = \hat{y} | w, x^{\left(i\right)}\right\}\right) + C_{-i}\left(w\right).
+\end{align*}
+The function $C\left(w\right) $ summarizes the loss due to other agents, assuming they are reporting labels truthfully,
+\begin{align*}
+C_{-i}\left(w\right) &= \displaystyle\sum_{i' \neq  i} \log\left(\mathbb{P}\left\{Y = y^{\left(i'\right)} | w, x^{\left(i'\right)}\right\}\right).
+\end{align*}
+Suppose the function $L $ is globally convex, differentiable, etc, then the problem translates to the first derivative condition,
+\begin{align*}
+\dfrac{\nabla _{w} \mathbb{P}\left\{Y = y^{\left(i\right)} | w^\star , x^{\left(i\right)}\right\}}{\mathbb{P}\left\{Y = y^{\left(i\right)} | w^\star , x^{\left(i\right)}\right\}} + \nabla _{w} \left(C_{-i}\left(w^\star \right)\right) &= 0,
+\\ \dfrac{\nabla _{w} \mathbb{P}\left\{Y = \hat{y} | \hat{w}, x^{\left(i\right)}\right\}}{\mathbb{P}\left\{Y = \hat{y} | \hat{w}, x^{\left(i\right)}\right\}} + \nabla _{w} \left(C_{-i}\left(\hat{w}\right)\right) &= 0.
+\end{align*}
+For logistic regression with weights $w_{c}, c = 1, 2, ..., K, $
+\begin{align*}
+\mathbb{P}\left\{Y = c | w, x\right\} &= \dfrac{e^{w_{c}^{T} x + b_{c}}}{\displaystyle\sum_{c'} e^{w_{c'}^{T} x + b_{c'}}},
+\\ \nabla _{w_{c}} \mathbb{P}\left\{Y = c | w, x\right\} &= \dfrac{e^{w_{c}^{T} x + b_{c}} \displaystyle\sum_{c' \neq  c} e^{w_{c}^{T} x + b_{c}}}{\left(\displaystyle\sum_{c'} e^{w_{c'}^{T} x + b_{c'}}\right)^{2}} x.
+\\ \nabla _{w_{c}} \mathbb{P}\left\{Y = \hat{c} \neq  c | w, x\right\} &= \dfrac{e^{w_{c}^{T} x + b_{c}} e^{w_{\hat{c}}^{T} x + b_{\hat{c}}}}{\left(\displaystyle\sum_{c'} e^{w_{c'}^{T} x + b_{c'}}\right)^{2}} x.
+\end{align*}
+The derivative conditions implies,
+\begin{align*}
+\left(1 - \mathbb{P}\left\{Y = c | w^\star , x^{\left(i\right)}\right\}\right) x^{\left(i\right)} + \nabla _{w_{c}} \left(C_{-i}\left(w^\star \right)\right) &= 0, c = y^{\left(i\right)},
+\\ \left(\mathbb{P}\left\{Y = c | w^\star , x^{\left(i\right)}\right\}\right) x^{\left(i\right)} + \nabla _{w_{c}} \left(C_{-i}\left(w^\star \right)\right) &= 0, c \neq  y^{\left(i\right)},
+\end{align*}
+same for the expression with $\hat{w}$.
+\\* Substitute into the incentive incompatibility condition,
+\begin{align*}
+\nabla _{w_{y^{\left(i\right)}j}} \left(C_{-i}\left(w^\star \right)\right)) x^{\left(i\right)}_{j} &\leq  \nabla _{w_{y^{\left(i\right)}j}} \left(C_{-i}\left(\hat{w}\right)\right) x^{\left(i\right)}_{j}, j = 1, 2, ..., m. 
+\end{align*}
+
+
+\subsection{Old: Continuous Y Derivations}
 \begin{tcolorbox}[colback = white]
-The objective of the principal may need to be changed.
+Envolope theorem version of the derivation.
 \end{tcolorbox}
 Specifically, for the softmax regression, the objective of agent $i $ with $x^{\left(i\right)} \in \mathbb{R}^{m}$ and $y^{\left(i\right)} \in \left\{1, 2, ..., k \right\}$ is,
 \begin{align*}
@@ -129,7 +169,24 @@ This implies (why?) decreasing $y_{c}$ and thus increasing $y_{c'}$ for some $c'
 
 \subsection{Naive Bayes Model}
 No example in which agents have incentive to misreport is found for the Gaussian Naive Bayes estimator.
-\\* Given the dataset, the parameters $w  = \left(\mu, \Sigma, \pi\right)$ (mean, variance, prior) are given by,
+\newline \newline
+The prediction is given by:
+\begin{align*}
+&\arg\displaystyle\max_{c} \mathbb{P} \left\{Y = c\right\} \mathbb{P} \left\{x^{\left(i\right)} | Y = c\right\}
+\end{align*}
+Consider agent $i $ with $\left(x^{\left(i\right)}, y^{\left(i\right)}\right)$, if she reports truthfully,
+\begin{align*}
+\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \dfrac{n_{c}}{n},
+\\ \mathbb{P} \left\{x^{\left(i\right)} | Y = y^{\left(i\right)}\right\} &\geq  \mathbb{P} \left\{x^{\left(i\right)} | Y = \hat{y}\right\},
+\end{align*}
+and if she reports $\hat{y} \neq  y^{\left(i\right)}$,
+\begin{align*}
+\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \dfrac{n_{c} - 1}{n},
+\\ \mathbb{P} \left\{x^{\left(i\right)} | Y = c\right\} &\leq  \mathbb{P} \left\{x^{\left(i\right)} | Y = \hat{y}\right\},
+\end{align*}
+and both terms are smaller.
+\newline \newline
+Given the dataset, the parameters $w  = \left(\mu, \Sigma, \pi\right)$ (mean, variance, prior) are given by,
 \begin{align*}
 \mu_{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} x^{\left(i'\right)} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c}},
 \\ \Sigma_{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} \left(x^{\left(i'\right)} - \mu_{c}\right) \left(x^{\left(i'\right)} - \mu_{c}\right)^{T} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c}},
@@ -146,7 +203,7 @@ The condition for incentive compatibility is,
 where,
 \begin{align*}
 \mu'_{c} &= \dfrac{\displaystyle\sum_{i' \neq  i} x^{\left(i'\right)} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c} - 1},
-\\ \Sigma_{c} &= \dfrac{\displaystyle\sum_{i' \neq  i} \left(x^{\left(i'\right)} - \mu_{c}\right) \left(x^{\left(i'\right)} - \mu_{c}\right)^{T} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c} - 1},
+\\ \Sigma'_{c} &= \dfrac{\displaystyle\sum_{i' \neq  i} \left(x^{\left(i'\right)} - \mu_{c}\right) \left(x^{\left(i'\right)} - \mu_{c}\right)^{T} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c} - 1},
 \\ \pi'_{c} &= \dfrac{n_{c} - 1}{n} .
 \end{align*}
 
@@ -244,20 +301,35 @@ The data points are:
 \\ \left(y^{\left(32\right)}, x_{1}^{\left(32\right)}, x_{2}^{\left(32\right)}\right) &= \left(3,-0.1892512,0.9819287\right)
 \\ \left(y^{\left(33\right)}, x_{1}^{\left(33\right)}, x_{2}^{\left(33\right)}\right) &= \left(3,0,1\right)
 \end{align*}
-Another $2$ geometrically more symmetric examples
+Another geometrically more symmetric example with $18$ points in which the points are away from the classification boundary. If the agent represented by the red square report her label as blue, the probability that the point is classified as red will increase from $0.3239$ to $0.4966$, which changes from an incorrect classification to the correct classification if the label with the largest prediction probability is chosen.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\linewidth]{test2_18_5}
-\caption{The 2D boundary example 2}
-\end{figure}
- -
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\linewidth]{test2_18_11}
-\caption{The 2D boundary example 3}
+\includegraphics[width=0.5\linewidth]{test_18_5}
+\caption{The 2D edge example}
 \end{figure}
  -
 \newline \newline
+The data points are:
+\begin{align*}
+\left(y^{\left(1\right)}, x_{1}^{\left(1\right)}, x_{2}^{\left(1\right)}\right) &= \left(1,-0.0100000,0.3333333\right)
+\\ \left(y^{\left(2\right)}, x_{1}^{\left(2\right)}, x_{2}^{\left(2\right)}\right) &= \left(1,-0.0100000,0.6666667\right)
+\\ \left(y^{\left(3\right)}, x_{1}^{\left(3\right)}, x_{2}^{\left(3\right)}\right) &= \left(1,-0.0100000,1.0000000\right)
+\\ \left(y^{\left(4\right)}, x_{1}^{\left(4\right)}, x_{2}^{\left(4\right)}\right) &= \left(2,-0.2836751,-0.1753269\right)
+\\ \left(y^{\left(5\right)}, x_{1}^{\left(5\right)}, x_{2}^{\left(5\right)}\right) &= \left(1,-0.5723503,-0.3419936\right) \leftarrow \text{\;This point\;}
+\\ \left(y^{\left(6\right)}, x_{1}^{\left(6\right)}, x_{2}^{\left(6\right)}\right) &= \left(2,-0.8610254,-0.5086603\right)
+\\ \left(y^{\left(7\right)}, x_{1}^{\left(7\right)}, x_{2}^{\left(7\right)}\right) &= \left(3,0.2936751,-0.1580064\right)
+\\ \left(y^{\left(8\right)}, x_{1}^{\left(8\right)}, x_{2}^{\left(8\right)}\right) &= \left(3,0.5823503,-0.3246731\right)
+\\ \left(y^{\left(9\right)}, x_{1}^{\left(9\right)}, x_{2}^{\left(9\right)}\right) &= \left(3,0.8710254,-0.4913397\right)
+\\ \left(y^{\left(10\right)}, x_{1}^{\left(10\right)}, x_{2}^{\left(10\right)}\right) &= \left(3,0.0100000,0.3333333\right)
+\\ \left(y^{\left(11\right)}, x_{1}^{\left(11\right)}, x_{2}^{\left(11\right)}\right) &= \left(3,0.0100000,0.6666667\right)
+\\ \left(y^{\left(12\right)}, x_{1}^{\left(12\right)}, x_{2}^{\left(12\right)}\right) &= \left(3,0.0100000,1.0000000\right)
+\\ \left(y^{\left(13\right)}, x_{1}^{\left(13\right)}, x_{2}^{\left(13\right)}\right) &= \left(1,-0.2936751,-0.1580064\right)
+\\ \left(y^{\left(14\right)}, x_{1}^{\left(14\right)}, x_{2}^{\left(14\right)}\right) &= \left(1,-0.5823503,-0.3246731\right)
+\\ \left(y^{\left(15\right)}, x_{1}^{\left(15\right)}, x_{2}^{\left(15\right)}\right) &= \left(1,-0.8710254,-0.4913397\right)
+\\ \left(y^{\left(16\right)}, x_{1}^{\left(16\right)}, x_{2}^{\left(16\right)}\right) &= \left(2,0.2836751,-0.1753269\right)
+\\ \left(y^{\left(17\right)}, x_{1}^{\left(17\right)}, x_{2}^{\left(17\right)}\right) &= \left(2,0.5723503,-0.3419936\right)
+\\ \left(y^{\left(18\right)}, x_{1}^{\left(18\right)}, x_{2}^{\left(18\right)}\right) &= \left(2,0.8610254,-0.5086603\right)
+\end{align*}
 
 
 \subsection{Randomly Generated Examples}

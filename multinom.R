@@ -1,6 +1,7 @@
 require(nnet)
 require(mlogit)
 require(naivebayes)
+require(e1071)
 
 # seed = random seed
 # dim = 1 or 2
@@ -52,6 +53,8 @@ gen_model <- function(data, method = 0, lam = 0)
     return(w)
   }
   if (method == 2) return(gaussian_naive_bayes(data.matrix(data[,2:ncol(data)]), data[,1]))
+  if (method == 3) return(svm(y ~ x1 + x2, data = data, kernel = "linear", probability = TRUE))
+  if (method == 3.1) return(svm(y ~ x1 + x2, data = data, kernel = "linear"))
 }
 
 print_model <- function(model, method = 0)
@@ -65,6 +68,7 @@ print_model <- function(model, method = 0)
     print(table)
   }
   if (method == 2) print(summary(model))
+  if (floor(method) == 3) print(summary(model))
 }
 
 predict.w <- function(object, newdata, ...)
@@ -94,13 +98,17 @@ gen_pred <- function(model, data, i = 1, yc = 0, method = 0)
   }
   if (floor(method) == 1) return(mle_activate(data[i,], model)[yc])
   if (method == 2) return(predict(model, data.matrix(data[i,2:ncol(data)]), "prob")[yc])
+  if (method == 3) return(attr(predict(model, data[i,], probability = TRUE), "probabilities")[yc])
+  if (method == 3.1)
+  {
+    pred = predict(model, data[i,]);
+    if (pred == yc) return(1);
+    if (pred != yc) return(0);
+  }
 }
 
 gen_pred_all <- function(model, data, method = 0)
 {
-  #i <- 1:(nrow(data))
-  #pred <- sapply(i, function(x) gen_pred(model, data, x, data$y[x], method))
-  #return(as.matrix(pred))
   if (method == 0)
   {
     if (ncol(data) == 2) xc <- data.frame(x1 = data$x1)
@@ -112,6 +120,8 @@ gen_pred_all <- function(model, data, method = 0)
   }
   if (floor(method) == 1) return(mle_activate(data, model))
   if (method == 2) return(predict(model, data.matrix(data[,2:ncol(data)]), "prob"))
+  if (method == 3) return(attr(predict(model, data, probability = TRUE), "probabilities"))
+  if (method == 3.1) return(onehot(predict(model, data)))
 }
 
 # data = (y, x1, x2)
@@ -266,8 +276,8 @@ decisionplot <- function(model, data, class = NULL, sym = NULL, predict_type = "
   ys <- seq(r[1,2], r[2,2], length.out = resolution)
   g <- cbind(rep(xs, each=resolution), rep(ys, time = resolution))
   colnames(g) <- colnames(r)
-  #g <- as.data.frame(g)
-  g <- data.matrix(g)
+  g <- as.data.frame(g)
+  #g <- data.matrix(g)
   
   ### guess how to get class labels from predict
   ### (unfortunately not very consistent between models)
@@ -371,9 +381,9 @@ test_special <- function(n = 10, off = 0.05, type = 0)
 #data <- rbind(data, c(y = 1, x1 = 0.75, y1 = -0.01))
 #test(data, seed = y, out = TRUE, method = 2, lam = 0.01)
 
-data <- offset_boundary_data(1, 3, 0.01, pi * 0.5)
-data[5,1] <- 3
-test(data, seed = 0, out = TRUE, method = 2, lam = 0.01)
+data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
+data[5,1] <- 1
+test(data, seed = 0, out = TRUE, method = 3, lam = 0.01)
 
 #data <- circular_data(1, 11)
 #data[15,1] <- 1
