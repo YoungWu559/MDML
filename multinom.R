@@ -53,8 +53,21 @@ gen_model <- function(data, method = 0, lam = 0)
     return(w)
   }
   if (method == 2) return(gaussian_naive_bayes(data.matrix(data[,2:ncol(data)]), data[,1]))
-  if (method == 3) return(svm(y ~ x1 + x2, data = data, kernel = "linear", probability = TRUE))
-  if (method == 3.1) return(svm(y ~ x1 + x2, data = data, kernel = "linear"))
+  if (method == 3) return(svm(y ~ x1 + x2, data = data, kernel = "linear", scale = FALSE, probability = TRUE))
+  if (method == 3.1) return(svm(y ~ x1 + x2, data = data, kernel = "linear", scale = FALSE))
+  if (method == 3.2) {
+    nlevel <- length(levels(data$y))
+    ws <- c()
+    for (i in 1:nlevel)
+    {
+      data$yi <- as.factor((data$y == i) + 1)
+      mi <- svm(yi ~ x1 + x2, data = data, kernel = "linear", scale = FALSE)
+      beta <- t(mi$coefs) %*% as.matrix(data[mi$index,2:3])
+      beta0 <- mi$rho
+      ws <- rbind(ws, c(beta0 / beta[2], -beta[1] / beta[2]))
+    }
+    return(ws)
+  }
 }
 
 print_model <- function(model, method = 0)
@@ -68,7 +81,14 @@ print_model <- function(model, method = 0)
     print(table)
   }
   if (method == 2) print(summary(model))
-  if (floor(method) == 3) print(summary(model))
+  if (floor(method) == 3 && method != 3.2) print(summary(model))
+  if (method == 3.2)
+  {
+    table <- matrix(model, nrow = 3, ncol = 2)
+    rownames(table) <- c("1", "2", "3")
+    colnames(table) <- c("(Intercept)", "(slope)")
+    print(table)
+  }
 }
 
 predict.w <- function(object, newdata, ...)
@@ -76,7 +96,7 @@ predict.w <- function(object, newdata, ...)
   prob <- mle_activate(cbind(y = rep(0, nrow(newdata)),newdata), object[1:6])
   return(apply(prob, 1, function(x) which(x == max(x))))
 }
-
+ 
 # model = either model or weight matrix
 # data = (y, x1, x2)
 # i = index
@@ -105,6 +125,7 @@ gen_pred <- function(model, data, i = 1, yc = 0, method = 0)
     if (pred == yc) return(1);
     if (pred != yc) return(0);
   }
+  if (method == 3.2) return((abs(data[i,2] * (-model[yc,1]) + data[i,3] + (-model[yc,2]))) / (sqrt(model[yc,1] * model[yc,1] + 1)))
 }
 
 gen_pred_all <- function(model, data, method = 0)
@@ -122,6 +143,13 @@ gen_pred_all <- function(model, data, method = 0)
   if (method == 2) return(predict(model, data.matrix(data[,2:ncol(data)]), "prob"))
   if (method == 3) return(attr(predict(model, data, probability = TRUE), "probabilities"))
   if (method == 3.1) return(onehot(predict(model, data)))
+  if (method == 3.2) {
+    pred <- c()
+    for (i in 1:dim(data)[1]) {
+      pred <- rbind(pred, (abs(data[i,2] * (-model[,1]) + data[i,3] + (-model[,2]))) / (sqrt(model[,1] * model[,1] + 1)))
+    }
+    return(pred)
+  }
 }
 
 # data = (y, x1, x2)
@@ -383,7 +411,7 @@ test_special <- function(n = 10, off = 0.05, type = 0)
 
 data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
 data[5,1] <- 1
-test(data, seed = 0, out = TRUE, method = 3, lam = 0.01)
+test(data, seed = 0, out = TRUE, method = 3.2, lam = 0.01)
 
 #data <- circular_data(1, 11)
 #data[15,1] <- 1
@@ -412,3 +440,11 @@ test(data, seed = 0, out = TRUE, method = 3, lam = 0.01)
 #test1d(seed = 585, out = TRUE, k = 3, n = 20, var = 0, sep = 1)
 #test1d(seed = 421, out = TRUE, k = 3, n = 20, var = 1, sep = 1)
 #test1d(seed = 0, out = TRUE, k = 3, n = 20, var = 0, sep = 1)
+
+x <- seq(-5, 5, length=1000)
+y <- dnorm(x, mean=0, sd=1)
+plot(x, y, type="l", lwd=1, col="green")
+yp <- dnorm(x, mean=-1, sd=2)
+lines(x, yp, type="l", lwd=1, col="blue")
+abline(v = 3, col="red")
+
