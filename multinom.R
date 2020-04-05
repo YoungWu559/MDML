@@ -64,7 +64,7 @@ gen_model <- function(data, method = 0, lam = 0)
       mi <- svm(yi ~ x1 + x2, data = data, kernel = "linear", scale = FALSE)
       beta <- t(mi$coefs) %*% as.matrix(data[mi$index,2:3])
       beta0 <- mi$rho
-      ws <- rbind(ws, c(beta0 / beta[2], -beta[1] / beta[2]))
+      ws <- rbind(ws, c(beta0 / beta[2], -beta[1] / beta[2], beta0, beta[1], beta[2]))
     }
     return(ws)
   }
@@ -84,9 +84,9 @@ print_model <- function(model, method = 0)
   if (floor(method) == 3 && method != 3.2) print(summary(model))
   if (method == 3.2)
   {
-    table <- matrix(model, nrow = 3, ncol = 2)
+    table <- matrix(model[,3:5], nrow = 3, ncol = 3)
     rownames(table) <- c("1", "2", "3")
-    colnames(table) <- c("(Intercept)", "(slope)")
+    colnames(table) <- c("(Intercept)", "x1", "x2")
     print(table)
   }
 }
@@ -126,6 +126,13 @@ gen_pred <- function(model, data, i = 1, yc = 0, method = 0)
     if (pred != yc) return(0);
   }
   if (method == 3.2) return((abs(data[i,2] * (-model[yc,1]) + data[i,3] + (-model[yc,2]))) / (sqrt(model[yc,1] * model[yc,1] + 1)))
+}
+
+test_svm <- function(data)
+{
+  mi <- gen_model(data, 3.2)
+  plot(data$x2 ~ data$x1, col=data$y)
+  abline(mi[1,1], mi[1,2])
 }
 
 gen_pred_all <- function(model, data, method = 0)
@@ -413,6 +420,7 @@ data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
 data[5,1] <- 1
 test(data, seed = 0, out = TRUE, method = 3.2, lam = 0.01)
 
+
 #data <- circular_data(1, 11)
 #data[15,1] <- 1
 #test(data, seed = 0, out = TRUE, method = 0, lam = 1)
@@ -441,10 +449,10 @@ test(data, seed = 0, out = TRUE, method = 3.2, lam = 0.01)
 #test1d(seed = 421, out = TRUE, k = 3, n = 20, var = 1, sep = 1)
 #test1d(seed = 0, out = TRUE, k = 3, n = 20, var = 0, sep = 1)
 
-x <- seq(-5, 5, length=1000)
-y <- dnorm(x, mean=0, sd=1)
-plot(x, y, type="l", lwd=1, col="green")
-yp <- dnorm(x, mean=-1, sd=2)
-lines(x, yp, type="l", lwd=1, col="blue")
-abline(v = 3, col="red")
+#x <- seq(-5, 5, length=1000)
+#y <- dnorm(x, mean=0, sd=1)
+#plot(x, y, type="l", lwd=1, col="green")
+#yp <- dnorm(x, mean=-1, sd=2)
+#lines(x, yp, type="l", lwd=1, col="blue")
+#abline(v = 3, col="red")
 

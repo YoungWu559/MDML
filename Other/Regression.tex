@@ -100,7 +100,7 @@ same for the expression with $\hat{w}$.
 \end{align*}
 
 
-\subsection{Old: Continuous Y Derivations}
+\subsection{Continuous Y Derivations}
 \begin{tcolorbox}[colback = white]
 Envolope theorem version of the derivation.
 \end{tcolorbox}
@@ -167,7 +167,20 @@ This implies (why?) decreasing $y_{c}$ and thus increasing $y_{c'}$ for some $c'
 \newline \newline
 
 
-\subsection{Naive Bayes Model}
+\subsection{Zero-One Loss Logistic Regression}
+With zero-one loss, in general, for an agent with label $y, $
+\\* If $\hat{y} = y $, misreporting could only make $\hat{y} \neq  y$.
+\\* If $\hat{y} \neq  y, $
+\begin{enumerate}
+\item switching to report $\hat{y}$ would improve the zero-one loss, and will not change the prediction $\hat{y}$. It is impossible to increase the loss by more than $1$, because if it were possible, then the original model was not optimal.
+\item switching to $y' \neq  \hat{y}$ would keep the same zero-one loss, and will either not change the prediction $\hat{y}$, or will change the prediction to $y' \neq  y $, which does not make the agent better off.
+\end{enumerate}
+
+
+
+
+
+\section{Naive Bayes Model} 
 No example in which agents have incentive to misreport is found for the Gaussian Naive Bayes estimator.
 \newline \newline
 The prediction is given by:
@@ -176,13 +189,13 @@ The prediction is given by:
 \end{align*}
 Consider agent $i $ with $\left(x^{\left(i\right)}, y^{\left(i\right)}\right)$, if she reports truthfully,
 \begin{align*}
-\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \dfrac{n_{c}}{n},
+\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \left(\dfrac{n_{y^{\left(i\right)}}}{n},\right.
 \\ \mathbb{P} \left\{x^{\left(i\right)} | Y = y^{\left(i\right)}\right\} &\geq  \mathbb{P} \left\{x^{\left(i\right)} | Y = \hat{y}\right\},
 \end{align*}
 and if she reports $\hat{y} \neq  y^{\left(i\right)}$,
 \begin{align*}
-\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \dfrac{n_{c} - 1}{n},
-\\ \mathbb{P} \left\{x^{\left(i\right)} | Y = c\right\} &\leq  \mathbb{P} \left\{x^{\left(i\right)} | Y = \hat{y}\right\},
+\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \dfrac{n_{y^{\left(i\right)}} - 1}{n},
+\\ \mathbb{P} \left\{x^{\left(i\right)} | Y = y^{\left(i\right)}\right\} &\leq  \mathbb{P} \left\{x^{\left(i\right)} | Y = \hat{y}\right\},
 \end{align*}
 and both terms are smaller.
 \newline \newline
@@ -206,6 +219,43 @@ where,
 \\ \Sigma'_{c} &= \dfrac{\displaystyle\sum_{i' \neq  i} \left(x^{\left(i'\right)} - \mu_{c}\right) \left(x^{\left(i'\right)} - \mu_{c}\right)^{T} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c} - 1},
 \\ \pi'_{c} &= \dfrac{n_{c} - 1}{n} .
 \end{align*}
+In one-dimensional case, if agent $i $ with $x^{\left(i\right)}$ and label $y^{\left(i\right)} = c $ reports truthfully,
+\begin{align*}
+\mathbb{P} \left\{Y = c | x^{\left(i\right)}\right\} &= \dfrac{1}{\sigma_{c} \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x^{\left(i\right)} - \mu_{c}\right)^{2}}{2 \sigma_{c}^{2}}\right),
+\\ \mathbb{P}' \left\{Y = c | x^{\left(i\right)}\right\} &= \dfrac{1}{\sigma'_{c} \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x^{\left(i\right)} - \mu'_{c}\right)^{2}}{2 \left(\sigma'_{c}\right)^{2}}\right),
+\end{align*}
+where,
+\begin{align*}
+\mu'_{c} &= \dfrac{n_{c} \mu}{n_{c} - 1} - \dfrac{x^{\left(i\right)}}{n_{c} - 1} ,
+\\ \left(\sigma'_{c}\right)^{2} &= \dfrac{n_{c} \sigma_{c}^{2}}{n_{c} - 1} - \dfrac{\left(x^{\left(i\right)} - \mu_{c}\right) \left(x^{\left(i\right)} - \mu'_{c}\right)}{n_{c} - 1}
+\\ &= \dfrac{n_{c} \sigma_{c}^{2}}{n_{c} - 1} - \dfrac{n_{c} \left(x^{\left(i\right)} - \mu_{c}\right)^{2}}{\left(n_{c} - 1\right)^{2}} .
+\end{align*}
+If $x^{\left(i\right)} > \mu_{c}$, then $\mu'_{c} < \mu_{c}$, but it is not clear how $\sigma'_{c}$ and $\sigma_{c}$ compares? Is it possible to have the following scenario?
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\linewidth]{normal}
+\caption{Normal Means}
+\end{figure}
+ -
+\newline \newline
+
+
+
+\section{Support Vector Machines} 
+
+\subsection{One-vs-One}
+Since binary SVM is incentive compatible, no agent can gain from misreporting in any of the one-vs-one SVMs. Therefore, there will be no incentive to misreport in the multi-class SVM.
+\newline \newline
+
+
+\subsection{One-vs-Rest}
+If margin is used as the prediction probabilities, then it is possible to improve the margin by misreporting the third class label, for example on the $18$-point data set.
+\newline \newline
+
+
+\subsection{Tree-Based}
+Since binary SVM is incentive compatible, no agent can gain from misreporting in any stage. Therefore, there will be no incentive to misreport in the multi-class SVM.
+\newline \newline
 
 
 
