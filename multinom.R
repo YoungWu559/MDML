@@ -418,8 +418,7 @@ test_special <- function(n = 10, off = 0.05, type = 0)
 
 data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
 data[5,1] <- 1
-test(data, seed = 0, out = TRUE, method = 3.2, lam = 0.01)
-
+test(data, seed = 0, out = TRUE, method = 0, lam = 0.01)
 
 #data <- circular_data(1, 11)
 #data[15,1] <- 1
