@@ -68,11 +68,11 @@ The following is the diagram showing a dataset that is incentive incompatible wi
 \draw[fill = green, thick] (-2.5, -1.67) circle [radius = 0.1];
 \end{tikzpicture} \captionof{figure}{Incentive Incompatible Example}\label{fig:ic}
 \end{figure}
-The $18$ points are located inside a unit circle, and each point is $0.004$ away from the three line segments through the origin that form angles of $120$ degrees between them. There is one point, labeled by a square in the plot, that is on the "incorrect" side of the boundary. Suppose the point corresponds to the feature vector of an agent $i $ with private label "red", then truthfully reporting her label will lead to a multi-class logistic regression model that classifies her point as "green". The probability that this model classifies her point as "red" is $0.3290$. However, if the agent misreports her label as "blue", the resulting model classifies her point as "red" with probability $0.4966$. Therefore, by lying about her label, the agent is able to make the principal learn an incorrect model that classifies her point correctly and with a higher probability.
+The $18$ points are located inside a unit circle, and each point is $0.004$ away from the three line segments through the origin that forms angles of $120$ degrees between them. There is one point, labeled by a square in the plot, that is on the "incorrect" side of the boundary. Suppose the point corresponds to the feature vector of an agent $i $ with private label "red", then truthfully reporting her label will lead to a multi-class logistic regression model that classifies her point as "green". The probability that this model classifies her point as "red" is $0.3290$. However, if the agent misreports her label as "blue", the resulting model classifies her point as "red" with probability $0.4966$. Therefore, by lying about her label, the agent can make the principal learn an incorrect model that classifies her point correctly and with a higher probability.
 \newline \newline
 The same dataset is also incentive incompatible with respect to the one-vs-rest linear support vector machine if the margin is used as the class "probabilities". However, in this case, the agent, with feature vector corresponding to the blue point close to the center and close to the green point, can only improve the margin slightly without making the model switch from classifying her point incorrectly to classifying her point correctly.
 \newline \newline
-However, this dataset is incentive compatible with respect to the Naive Bayes classifiers, and in general, there does not exist any dataset that is incentive incompatible with respect to discrete-valued Naive Bayes classifiers. Misreporting will always lead to lower posterior probability of the agent's true label. In addition, no dataset is incentive incompatible with respect to classifiers that minimizes empirical risk with zero-one loss.
+However, this dataset is incentive compatible with respect to the Naive Bayes classifiers, and in general, there does not exist any dataset that is incentive incompatible with respect to discrete-valued Naive Bayes classifiers. Misreporting will always lead to a lower posterior probability of the agent's true label. In addition, no dataset is incentive incompatible with respect to classifiers that minimize empirical risk with zero-one loss.
 \newline \newline
 
 
@@ -111,7 +111,7 @@ The principal is not strategic and he maximizes the likelihood of the data,
 \begin{align*}
 &\displaystyle\max_{w} \displaystyle\sum_{i=1}^{n} \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | w, x_{i}\right\}\right).
 \end{align*}
-We consider the case without coalition of group of agents, so only one agent is misreporting at a time, and use the following notations,
+We consider the case without a coalition of a group of agents, so only one agent is misreporting at a time, and use the following notations,
 \begin{align*}
 w^\star  &= \arg\displaystyle\max_{w} \displaystyle\sum_{i=1}^{n} \log\left(\mathbb{P}\left\{Y = y_{i} | w, x_{i}\right\}\right)
 \\ w^\star \left(y^{\dagger}_{i}\right) &= \arg\displaystyle\max_{w} \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | w, x_{i}\right) + \displaystyle\sum_{i' = 0, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | w, x_{i'}\right\}\right),\right.
@@ -208,7 +208,7 @@ same for the expression with $w^\star \left(y^{\dagger}_{i}\right)$.
 
 
 \subsection{Continuous Label}
-The previous formulation does not permit $y^{\dagger}_{i}$ to be a continous variable, but if we rewrite the optimization as the maximization of the cross entropy, then we could treat $y^{\dagger}_{i} \in \Delta^{K-1}$ as a continous multinomial distribution where $y^{\dagger}_{i,c} \in \left[0, 1\right]$ denotes the probability of agent $i $ reporting label $c \in \left\{1, 2, ..., K\right\}$. The principal's problem can be rewritten as,
+The previous formulation does not permit $y^{\dagger}_{i}$ to be a continuous variable, but if we rewrite the optimization as the maximization of the cross-entropy, then we could treat $y^{\dagger}_{i} \in \Delta^{K-1}$ as a continuous multinomial distribution where $y^{\dagger}_{i,c} \in \left[0, 1\right]$ denotes the probability of agent $i $ reporting label $c \in \left\{1, 2, ..., K\right\}$. The principal's problem can be rewritten as,
 \begin{align*}
 &\displaystyle\min_{w} \displaystyle\sum_{i=1}^{n} \displaystyle\sum_{c=1}^{K} -y^{\dagger}_{i,c} \log\left(\mathbb{P}\left\{Y = c | w, x_{i}\right\}\right).
 \end{align*}
@@ -248,76 +248,108 @@ This implies decreasing $y_{i,c}$ and thus increasing $y_{i,c'}$ for some $c'$ w
 
 
 \subsection{Zero-One Loss Logistic Regression}
-With zero-one loss, in general, for an agent with label $y, $
-\\* If $\hat{y} = y $, misreporting could only make $\hat{y} \neq  y$.
-\\* If $\hat{y} \neq  y, $
-\begin{enumerate}
-\item switching to report $\hat{y}$ would improve the zero-one loss, and will not change the prediction $\hat{y}$. It is impossible to increase the loss by more than $1$, because if it were possible, then the original model was not optimal.
-\item switching to $y' \neq  \hat{y}$ would keep the same zero-one loss, and will either not change the prediction $\hat{y}$, or will change the prediction to $y' \neq  y $, which does not make the agent better off.
-\end{enumerate}
-
+It is, however, possible to change the loss function so that logistic regression is incentive compatible. Changing the loss function to absolute value $L^{1}$ loss is one possibility, due to \citet*{dekel2010incentive}. Their result on incentive compatibility of empirical risk minimization in the regression setting is applicable in our model. In addition to absolute value loss, which is not a meaningful loss function for multi-class logistic regression, zero-one loss logistic regression with deterministic predictions is also incentive compatible.
+\newline \newline
+\begin{prop} \label{prop:zolog} 
+Multi-class deterministic classifiers estimated by empirical risk minimization with zero-one loss is incentive compatible.
+\end{prop}
+\begin{proof} \label{proof:zologpf} 
+For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, suppose the model is parameterized by $w, $
+\begin{align*}
+w^\star  &= \arg\displaystyle\min_{w} \displaystyle\sum_{i=1}^{n} \mathbbm{1}_{\left\{y_{i} \neq  \arg\displaystyle\max_{c} \mathbb{P}\left\{Y = c| w, x_{i}\right\}\right\}}.
+\end{align*}
+If $y_{i} = \arg\displaystyle\max_{c} \mathbb{P}\left\{Y = c| w, x_{i}\right\}$, then the classifier is already classifying $x_{i}$ correctly. Now suppose,
+\begin{align*}
+y^\star  &= \arg\displaystyle\max_{c} \mathbb{P}\left\{Y = c| w, x_{i}\right\}, y^\star  \neq  y_{i.}
+\end{align*}
+If agent $i $ reports $y^\star $, then the total loss is decreased by $1$. It is impossible to achieve a lower loss because the converse would contradict the optimality of $w^\star $. Therefore $w^\star \left(y^{\dagger}_{i} = y^\star \right) = w^\star $ and the classification will not change.
+\\* If agent $i $ reports $y' \neq  y^\star $, then the total loss stays the same. The only way to possibly achieve a lower loss is having $w^\star \left(y^{\dagger}_{i} = y'\right)$ classifies $x_{i}$ as $y'$. Therefore, agent $i $ is not better off.
+\newline \newline\end{proof}
 
 
 
 
 \section{Naive Bayes Model} 
-No example in which agents have incentive to misreport is found for the Gaussian Naive Bayes estimator.
+The example given previously is incentive compatible with respect to Gaussian Naive Bayes. None of the agents have the incentive to misreport their labels. This is always true in general for multinomial Naive Bayes.
 \newline \newline
-The prediction is given by:
+\begin{prop} \label{prop:mnb} 
+Multinomial Naive Bayes classifier is incentive compatible.
+\end{prop}
+\begin{proof} \label{proof:mnbpf} 
+For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, denote the total count of feature $j $ with label $c $ as $n_{j,c}$, and the number of points with label $c $ as $n_{c.}$
 \begin{align*}
-&\arg\displaystyle\max_{c} \mathbb{P} \left\{Y = c\right\} \mathbb{P} \left\{x^{\left(i\right)} | Y = c\right\}
+n_{j,c} &= \displaystyle\sum_{i=1}^{n} x_{i,j} \mathbbm{1}_{\left\{y_{i} = c\right\}}),
+\\ n_{c} &= \displaystyle\sum_{i=1}^{n} \mathbbm{1}_{\left\{y_{i} = c\right\}}.
 \end{align*}
-Consider agent $i $ with $\left(x^{\left(i\right)}, y^{\left(i\right)}\right)$, if she reports truthfully,
+The probability that $x_{i}$ is classified as $y_{i}$, if agent $i $ reports truthfully is,
 \begin{align*}
-\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \left(\dfrac{n_{y^{\left(i\right)}}}{n},\right.
-\\ \mathbb{P} \left\{x^{\left(i\right)} | Y = y^{\left(i\right)}\right\} &\geq  \mathbb{P} \left\{x^{\left(i\right)} | Y = \hat{y}\right\},
+\mathbb{P} \left\{Y = y_{i} | w^\star , x_{i}\right\} &= \dfrac{\mathbb{P} \left\{Y = y_{i}, w^\star \right\} \mathbb{P} \left\{ x_{i} | y_{i}, w^\star \right\}}{\mathbb{P}\left\{ x_{i}, w^\star  \right\}}
+\\ &= \dfrac{\dfrac{n_{y_{i}}}{n} \displaystyle\prod_{j=1}^{m} \left(\dfrac{n_{j, y_{i}}}{n_{y_{i}}}\right)^{x_{i}}}{C} ,
 \end{align*}
-and if she reports $\hat{y} \neq  y^{\left(i\right)}$,
+where $C $ is a scaling constant.
+\\* If agent $i $ misreports $y^{\dagger}_{i} \neq  y_{i,}$
 \begin{align*}
-\mathbb{P} \left\{Y = y^{\left(i\right)}\right\} &= \dfrac{n_{y^{\left(i\right)}} - 1}{n},
-\\ \mathbb{P} \left\{x^{\left(i\right)} | Y = y^{\left(i\right)}\right\} &\leq  \mathbb{P} \left\{x^{\left(i\right)} | Y = \hat{y}\right\},
+\mathbb{P} \left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\} &= \dfrac{\mathbb{P} \left\{Y = y_{i}, w^\star \left(y^{\dagger}_{i}\right)\right\} \mathbb{P} \left\{ x_{i} | y_{i}, w^\star \left(y^{\dagger}_{i}\right)\right\}}{\mathbb{P}\left\{ x_{i}, w^\star \left(y^{\dagger}_{i}\right) \right\}}
+\\ &= \dfrac{\dfrac{n_{y_{i}} - 1}{n} \displaystyle\prod_{j=1}^{m} \left(\dfrac{n_{j, y_{i}} - x_{i}}{n_{y_{i}} - 1}\right)^{x_{i}}}{C} ,
 \end{align*}
-and both terms are smaller.
-\newline \newline
-Given the dataset, the parameters $w  = \left(\mu, \Sigma, \pi\right)$ (mean, variance, prior) are given by,
+note that the constants are identical, so we have,
 \begin{align*}
-\mu_{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} x^{\left(i'\right)} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c}},
-\\ \Sigma_{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} \left(x^{\left(i'\right)} - \mu_{c}\right) \left(x^{\left(i'\right)} - \mu_{c}\right)^{T} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c}},
-\\ \pi_{c} &= \dfrac{n_{c}}{n} .
+\dfrac{n_{y_{i}} - 1}{n} &< \dfrac{n_{y_{i}}}{n} ,
+\\ \dfrac{n_{j, y_{i}} - 1}{n_{y_{i}} - x_{i}} &\leq  \dfrac{n_{j, y_{i}}}{n_{y_{i}}}, \text{\;for each\;} j  \in \left\{1, 2, ..., m \right\} ,
 \end{align*}
-Then, the classification probability is,
+which implies,
 \begin{align*}
-\mathbb{P}_{c} \left\{Y = c | x^{\left(i\right)}\right\} &\propto \pi_{c} \dfrac{1}{\left| \Sigma_{c} \right|} \exp\left(- \dfrac{1}{2} \left(x^{\left(i\right)} - \mu_{c}\right)^{T} \left(\Sigma_{c}\right)^{-1} \left(x^{\left(i\right)} - \mu_{c}\right)\right).
+\mathbb{P} \left\{Y = y_{i} | w^\star , x_{i}\right\} &\geq  \mathbb{P} \left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\}.
 \end{align*}
-The condition for incentive compatibility is,
+Therefore, the classifier is not incentive incompatible on this dataset.
+\newline \newline\end{proof}
+\begin{conj} \label{conj:gnb} 
+Gaussian Naive Bayes classifier is incentive compatible.
+\end{conj}
+\begin{proof} \label{proof:gnbpf} 
+The parameters of the Gaussian Naive Bayes $w  = \left(\mu, \Sigma, \pi\right)$ (mean, variance, prior) are estimated by,
 \begin{align*}
-\pi'_{c} \dfrac{1}{\left| \Sigma'_{c} \right|} \exp\left(- \dfrac{1}{2} \left(x^{\left(i\right)} - \mu'_{c}\right)^{T} \left(\Sigma'_{c}\right)^{-1} \left(x^{\left(i\right)} - \mu'_{c}\right)\right) &< \pi_{c} \dfrac{1}{\left| \Sigma_{c} \right|} \exp\left(- \dfrac{1}{2} \left(x^{\left(i\right)} - \mu_{c}\right)^{T} \left(\Sigma_{c}\right)^{-1} \left(x^{\left(i\right)} - \mu_{c}\right)\right),
+\mu^\star _{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} x_{i'} \mathbbm{1}_{y_{i'} = c}}{n_{c}},
+\\ \Sigma^\star _{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} \left(x_{i'} - \mu^\star _{c}\right) \left(x_{i'} - \mu^\star _{c}\right)^{T} \mathbbm{1}_{y_{i'} = c}}{n_{c}},
+\\ \pi^\star _{c} &= \dfrac{n_{c}}{n} .
+\end{align*}
+If agent $i $ reports truthfully, the classification probability is,
+\begin{align*}
+\mathbb{P} \left\{Y = y_{i} | w^\star , x_{i}\right\} &\propto \pi^\star _{y_{i}} \dfrac{1}{\left| \Sigma^\star _{y_{i}} \right|} \exp\left(- \dfrac{1}{2} \left(x_{i} - \mu^\star _{y_{i}}\right)^{T} \left(\Sigma^\star _{y_{i}}\right)^{-1} \left(x_{i} - \mu^\star _{y_{i}}\right)\right).
+\end{align*}
+If agent $i $ misreports $y^{\dagger}_{i} \neq  y_{i,}$
+\begin{align*}
+\mu^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{\displaystyle\sum_{i' \neq  i} x_{i'} \mathbbm{1}_{y_{i'} = c}}{n_{c} - 1},
+\\ \Sigma^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{\displaystyle\sum_{i' \neq  i} \left(x_{i'} - \mu^\star _{c}\left(y^{\dagger}_{i}\right)\right) \left(x_{i'} - \mu^\star _{c}\left(y^{\dagger}_{i}\right)\right)^{T} \mathbbm{1}_{y_{i'} = c}}{n_{c} - 1},
+\\ \pi^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} - 1}{n} .
+\end{align*}
+The classification with the parameters $w^\star \left(y^{\dagger}_{i}\right)$ is,
+\begin{align*}
+\mathbb{P} \left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\} &\propto \pi^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \dfrac{1}{\left| \Sigma^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \right|} \exp\left(- \dfrac{1}{2} \left(x_{i} - \mu^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)^{T} \left(\Sigma^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)^{-1} \left(x_{i} - \mu^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)\right).
+\end{align*}
+To make the comparison, consider the one-dimensional case. The incentive compatibility condition is,
+\begin{align*}
+\pi^\star _{y_{i}} \dfrac{1}{\sigma^\star _{y_{i}} \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x_{i} - \mu^\star _{y_{i}}\right)^{2}}{2 \left(\sigma^\star _{y_{i}}\right)^{2}}\right) &\geq   \pi^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \dfrac{1}{\sigma^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x_{i} - \mu^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)^{2}}{2 \left(\sigma^\star _{y_{i}}\right)^{2}\left(y^{\dagger}_{i}\right)}\right),
 \end{align*}
 where,
 \begin{align*}
-\mu'_{c} &= \dfrac{\displaystyle\sum_{i' \neq  i} x^{\left(i'\right)} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c} - 1},
-\\ \Sigma'_{c} &= \dfrac{\displaystyle\sum_{i' \neq  i} \left(x^{\left(i'\right)} - \mu_{c}\right) \left(x^{\left(i'\right)} - \mu_{c}\right)^{T} \mathbbm{1}_{y^{\left(i'\right)} = c}}{n_{c} - 1},
-\\ \pi'_{c} &= \dfrac{n_{c} - 1}{n} .
+\pi^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} - 1}{n_{c}} \pi^\star _{c} ,
+\\ \mu^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} \mu^\star _{c}}{n_{c} - 1} - \dfrac{x_{i}}{n_{c} - 1} ,
+\\ \left(\sigma^\star _{c}\right)^{2}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} \left(\sigma^\star _{c}\right)^{2}}{n_{c} - 1} - \dfrac{\left(x_{i} - \mu^\star _{c}\right) \left(x_{i} - \mu^\star _{c}\right)}{n_{c} - 1}
+\\ &= \dfrac{n_{c} \left(\sigma^\star _{c}\right)^{2}}{n_{c} - 1} - \dfrac{n_{c} \left(x_{i} - \mu^\star _{c}\right)^{2}}{\left(n_{c} - 1\right)^{2}} .
 \end{align*}
-In one-dimensional case, if agent $i $ with $x^{\left(i\right)}$ and label $y^{\left(i\right)} = c $ reports truthfully,
+Without the loss of generality, let $\mu^\star  = 0$ and $\sigma^\star  = \sigma$, the incentive incompatibility condition reduces to,
 \begin{align*}
-\mathbb{P} \left\{Y = c | x^{\left(i\right)}\right\} &= \dfrac{1}{\sigma_{c} \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x^{\left(i\right)} - \mu_{c}\right)^{2}}{2 \sigma_{c}^{2}}\right),
-\\ \mathbb{P}' \left\{Y = c | x^{\left(i\right)}\right\} &= \dfrac{1}{\sigma'_{c} \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x^{\left(i\right)} - \mu'_{c}\right)^{2}}{2 \left(\sigma'_{c}\right)^{2}}\right),
+x_{i} &> \sqrt{n_{c} \cdot  \sigma^{2}}.
 \end{align*}
-where,
+Since $\mu^\star  = 0$,
 \begin{align*}
-\mu'_{c} &= \dfrac{n_{c} \mu}{n_{c} - 1} - \dfrac{x^{\left(i\right)}}{n_{c} - 1} ,
-\\ \left(\sigma'_{c}\right)^{2} &= \dfrac{n_{c} \sigma_{c}^{2}}{n_{c} - 1} - \dfrac{\left(x^{\left(i\right)} - \mu_{c}\right) \left(x^{\left(i\right)} - \mu'_{c}\right)}{n_{c} - 1}
-\\ &= \dfrac{n_{c} \sigma_{c}^{2}}{n_{c} - 1} - \dfrac{n_{c} \left(x^{\left(i\right)} - \mu_{c}\right)^{2}}{\left(n_{c} - 1\right)^{2}} .
+\left(\sigma^\star \right)^{2} &\geq  \dfrac{1}{n_{c}} \left(x_{i} - 0\right)^{2}
+\\ &> \dfrac{1}{n_{c}} \left(\sqrt{n_{c} \cdot  \sigma^{2}}\right)^{2}
+\\ &= \sigma^{2} ,
 \end{align*}
-If $x^{\left(i\right)} > \mu_{c}$, then $\mu'_{c} < \mu_{c}$, but it is not clear how $\sigma'_{c}$ and $\sigma_{c}$ compares? Is it possible to have the following scenario?
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\linewidth]{normal}
-\caption{Normal Means}
-\end{figure}
- -
-\newline \newline
+which leads to a contradiction. Therefore, in the one-dimensional case, Gaussian Naive Bayes is incentive compatible.
+\newline \newline\end{proof}
 
 
 
@@ -336,26 +368,6 @@ If margin is used as the prediction probabilities, then it is possible to improv
 \subsection{Tree-Based}
 Since binary SVM is incentive compatible, no agent can gain from misreporting in any stage. Therefore, there will be no incentive to misreport in the multi-class SVM.
 \newline \newline
-
-
-
-
-\section{Numerical Results} 
-
-\subsection{Structured Examples}
-A dataset is incentive incompatible with respect to the model parameterized by $w $ if at least one agent has the incentive to report $\hat{y} ^{\left(i\right)} \neq  y^{\left(i\right)}$. Formally, let the model estimated with the true label be,
-\begin{align*}
-w^\star  &= \arg\displaystyle\max_{w} \displaystyle\sum_{i'=1^{n}} \log\left(\mathbb{P}\left\{Y = y^{\left(i'\right)} | w, x^{\left(i'\right)}\right\}\right) + \lambda \left\|w\right\|,
-\end{align*}
-and the model estimated with the misreported label be,
-\begin{align*}
-\hat{w} &= \arg\displaystyle\max_{w} \left(\displaystyle\sum_{i' \neq  i} \log\left(\mathbb{P}\left\{Y = y^{\left(i'\right)} | w, x^{\left(i'\right)}\right\}\right)\right) + \log\left(\mathbb{P}\left\{Y = \hat{y} ^{\left(i\right)} | w, x^{\left(i\right)}\right\}\right) + \lambda \left\|w\right\|.
-\end{align*}
-The parameter $\lambda$ is the regulerization parameter.
-\\* The dataset is incentive incompatible if there is $i $ such that,
-\begin{align*}
-\mathbb{P}\left\{Y = y^{\left(i\right)} | \hat{w}, x^{\left(i\right)}\right\} &> \mathbb{P}\left\{Y = y^{\left(i\right)} | w^\star , x^{\left(i\right)}\right\}.
-\end{align*}
 \bibliographystyle{te}
 \bibliography{cs}
 
