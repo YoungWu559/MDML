@@ -254,101 +254,82 @@ It is, however, possible to change the loss function so that logistic regression
 Multi-class deterministic classifiers estimated by empirical risk minimization with zero-one loss is incentive compatible.
 \end{prop}
 \begin{proof} \label{proof:zologpf} 
-For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, suppose the model is parameterized by $w, $
+For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the hypothesis class $\mathcal{H}$, let the optimal classifier be,
 \begin{align*}
-w^\star  &= \arg\displaystyle\min_{w} \displaystyle\sum_{i=1}^{n} \mathbbm{1}_{\left\{y_{i} \neq  \arg\displaystyle\max_{c} \mathbb{P}\left\{Y = c| w, x_{i}\right\}\right\}}.
+h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \mathbbm{1}_{\left\{y_{i'} \neq  h\left(x_{i'}\right)\right\}}.
 \end{align*}
-If $y_{i} = \arg\displaystyle\max_{c} \mathbb{P}\left\{Y = c| w, x_{i}\right\}$, then the classifier is already classifying $x_{i}$ correctly. Now suppose,
+Fix an agent $i $, her feature vector $x_{i}$, and fix other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the loss function given the classifier $h $ and report of agent $i , y^{\dagger}_{i}$ as,
 \begin{align*}
-y^\star  &= \arg\displaystyle\max_{c} \mathbb{P}\left\{Y = c| w, x_{i}\right\}, y^\star  \neq  y_{i.}
+\mathcal{L}\left(h, y^{\dagger}_{i}\right) &= \displaystyle\sum_{i' \neq  i} \mathbbm{1}_{\left\{y_{i'} \neq  h\left(x_{i'}\right)\right\}} + \mathbbm{1}_{\left\{y^{\dagger}_{i} \neq  h\left(x_{i}\right)\right\}}.
 \end{align*}
-If agent $i $ reports $y^\star $, then the total loss is decreased by $1$. It is impossible to achieve a lower loss because the converse would contradict the optimality of $w^\star $. Therefore $w^\star \left(y^{\dagger}_{i} = y^\star \right) = w^\star $ and the classification will not change.
-\\* If agent $i $ reports $y' \neq  y^\star $, then the total loss stays the same. The only way to possibly achieve a lower loss is having $w^\star \left(y^{\dagger}_{i} = y'\right)$ classifies $x_{i}$ as $y'$. Therefore, agent $i $ is not better off.
-\newline \newline\end{proof}
+If $y_{i} = h^\star \left(x_{i}\right)$, then the classifier is already classifying $x_{i}$ correctly, misreporting will not improve the outcome for $i $. Now let the prediction be $h^\star \left(x_{i}\right) = y^\star  \neq  y_{i}$, and suppose $h^\star $ is making $k $ mistakes, meaning,
+\begin{align*}
+k  &= \displaystyle\min_{h \in \mathcal{H}} \mathcal{L}\left(h^\star , y_{i}\right).
+\end{align*}
+Agent $i $ can misreport in the following two ways:
+\end{proof}
+\begin{enumerate}
+\item If agent $i $ reports $y^{\dagger}_{i} = y^\star $, let the new classifier be $h^{\dagger}$, note that we must have,
+\begin{align*}
+\mathcal{L}\left(h^{\dagger}, y^\star \right) &\leq  k - 1,
+\end{align*}
+because $\mathcal{L}\left(h^{\dagger}, y^\star \right) > k - 1 = \mathcal{L}\left(h^\star , y^\star \right)$ contradicts the optimality of $h^{\dagger.}$
+\\* Now suppose that agent $i $ could get her true label with $h^{\dagger}$, meaning $h^{\dagger}\left(x_{i}\right) = y_{i}$, then,
+\begin{align*}
+\mathcal{L}\left(h^{\dagger}, y_{i}\right) &= \mathcal{L}\left(h^{\dagger}, y^\star \right) - 1
+\\ &\leq  k - 2
+\\ &< \mathcal{L}\left(h^\star , y_{i}\right),
+\end{align*}
+which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot improve the outcome by misreporting $y^\star $.
+\item If agent $i $ reports $y^{\dagger}_{i} = y' \neq  y^\star $, let the new classifier be $h^{\dagger}$, note that we must have,
+\begin{align*}
+\mathcal{L}\left(h^{\dagger}, y'\right) &\leq  k,
+\end{align*}
+because if $\mathcal{L}\left(h^{\dagger}, y'\right) > k = \mathcal{L}\left(h^\star , y'\right)$ contradicts the optimality of $h^{\dagger.}$
+\\* Now suppose that agent $i $ could get her true label with $h^{\dagger}$, then,
+\begin{align*}
+\mathcal{L}\left(h^{\dagger}, y_{i}\right) &= \mathcal{L}\left(h^{\dagger}, y_{i}\right) - 1
+\\ &\leq  k - 1
+\\ &< \mathcal{L}\left(h^\star , y_{i}\right),
+\end{align*}
+which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot improve the outcome by misreporting $y'$.
+\\* Therefore, no agent can improve the outcome and the dataset is incentive compatible.
+\newline \newline
+\end{enumerate}
 
 
 
 
 \section{Naive Bayes Model} 
-The example given previously is incentive compatible with respect to Gaussian Naive Bayes. None of the agents have the incentive to misreport their labels. This is always true in general for multinomial Naive Bayes.
+The example given previously is incentive compatible with respect to Naive Bayes classifiers. None of the agents have the incentive to misreport their labels. This is always true in general for any parametric Bayesian classifier estimated using maximum likelihood.
 \newline \newline
-\begin{prop} \label{prop:mnb} 
-Multinomial Naive Bayes classifier is incentive compatible.
+\begin{prop} \label{prop:bc} 
+Bayesian classifiers are incentive compatible.
 \end{prop}
-\begin{proof} \label{proof:mnbpf} 
-For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, denote the total count of feature $j $ with label $c $ as $n_{j,c}$, and the number of points with label $c $ as $n_{c.}$
+\begin{proof} \label{proof:bcpf} 
+Suppose the loglikelihood function of class $y $ given the feature vector $x $ and the parameter $w $ is $\ell\left(x ; w \right)$, and define the optimal parameter, $w^\star $ for class $y_{i}$, of the truthful model as,
 \begin{align*}
-n_{j,c} &= \displaystyle\sum_{i=1}^{n} x_{i,j} \mathbbm{1}_{\left\{y_{i} = c\right\}}),
-\\ n_{c} &= \displaystyle\sum_{i=1}^{n} \mathbbm{1}_{\left\{y_{i} = c\right\}}.
+w^\star  &= \arg\displaystyle\max_{w} \displaystyle\sum_{i' : y_{i'} = y_{i}} \ell\left(x_{i'} ; w\right)
+\\ &= \arg\displaystyle\max_{w} \displaystyle\sum_{i' \neq  i : y_{i'} = y_{i}} \ell\left(x_{i'} ; w\right) + \ell\left(x_{i} ; w\right).
 \end{align*}
-The probability that $x_{i}$ is classified as $y_{i}$, if agent $i $ reports truthfully is,
+Let the optimal parameter when agent $i $ reports $y^{\dagger}_{i} \neq  y_{i}$ be $w^{\dagger,}$
 \begin{align*}
-\mathbb{P} \left\{Y = y_{i} | w^\star , x_{i}\right\} &= \dfrac{\mathbb{P} \left\{Y = y_{i}, w^\star \right\} \mathbb{P} \left\{ x_{i} | y_{i}, w^\star \right\}}{\mathbb{P}\left\{ x_{i}, w^\star  \right\}}
-\\ &= \dfrac{\dfrac{n_{y_{i}}}{n} \displaystyle\prod_{j=1}^{m} \left(\dfrac{n_{j, y_{i}}}{n_{y_{i}}}\right)^{x_{i}}}{C} ,
+w^{\dagger} &= \arg\displaystyle\max_{w} \displaystyle\sum_{i' \neq  i: y_{i'} = y_{i}} \ell\left(x_{i'} ; w\right).
 \end{align*}
-where $C $ is a scaling constant.
-\\* If agent $i $ misreports $y^{\dagger}_{i} \neq  y_{i,}$
+In particular, these implies the following optimality conditions,
 \begin{align*}
-\mathbb{P} \left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\} &= \dfrac{\mathbb{P} \left\{Y = y_{i}, w^\star \left(y^{\dagger}_{i}\right)\right\} \mathbb{P} \left\{ x_{i} | y_{i}, w^\star \left(y^{\dagger}_{i}\right)\right\}}{\mathbb{P}\left\{ x_{i}, w^\star \left(y^{\dagger}_{i}\right) \right\}}
-\\ &= \dfrac{\dfrac{n_{y_{i}} - 1}{n} \displaystyle\prod_{j=1}^{m} \left(\dfrac{n_{j, y_{i}} - x_{i}}{n_{y_{i}} - 1}\right)^{x_{i}}}{C} ,
+\displaystyle\sum_{i' \neq  i : y_{i'} = y_{i}} \ell\left(x_{i'} ; w^\star \right) + \ell\left(x_{i} ; w^\star \right) &\geq  \displaystyle\sum_{i' \neq  i : y_{i'} = y_{i}} \ell\left(x_{i'} ; w^{\dagger}\right) + \ell\left(x_{i} ; w^{\dagger}\right),
+\\ \displaystyle\sum_{i' \neq  i: y_{i'} = y_{i}} \ell\left(x_{i'} ; w^{\dagger}\right) &\geq  \displaystyle\sum_{i' \neq  i: y_{i'} = y_{i}} \ell\left(x_{i'}, w^\star \right).
 \end{align*}
-note that the constants are identical, so we have,
+Taking the difference between the two inequalities, we have,
 \begin{align*}
-\dfrac{n_{y_{i}} - 1}{n} &< \dfrac{n_{y_{i}}}{n} ,
-\\ \dfrac{n_{j, y_{i}} - 1}{n_{y_{i}} - x_{i}} &\leq  \dfrac{n_{j, y_{i}}}{n_{y_{i}}}, \text{\;for each\;} j  \in \left\{1, 2, ..., m \right\} ,
+\ell\left(x_{i} ; w^\star \right) &\geq  \ell\left(x_{i} ; w^{\dagger}\right).
 \end{align*}
-which implies,
+Note that the empirical prior probability for class $y_{i}$ is decreased if the number of data with label $y_{i}$ is decreased by $1$. Therefore, the posterior probabilities satisfy,
 \begin{align*}
-\mathbb{P} \left\{Y = y_{i} | w^\star , x_{i}\right\} &\geq  \mathbb{P} \left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\}.
+\mathbb{P}\left\{y_{i} | x_{i}, w^\star \right\} &\geq  \mathbb{P}\left\{y_{i} | x_{i}, w^{\dagger}\right\}.
 \end{align*}
-Therefore, the classifier is not incentive incompatible on this dataset.
-\newline \newline\end{proof}
-\begin{conj} \label{conj:gnb} 
-Gaussian Naive Bayes classifier is incentive compatible.
-\end{conj}
-\begin{proof} \label{proof:gnbpf} 
-The parameters of the Gaussian Naive Bayes $w  = \left(\mu, \Sigma, \pi\right)$ (mean, variance, prior) are estimated by,
-\begin{align*}
-\mu^\star _{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} x_{i'} \mathbbm{1}_{y_{i'} = c}}{n_{c}},
-\\ \Sigma^\star _{c} &= \dfrac{\displaystyle\sum_{i'=1}^{n} \left(x_{i'} - \mu^\star _{c}\right) \left(x_{i'} - \mu^\star _{c}\right)^{T} \mathbbm{1}_{y_{i'} = c}}{n_{c}},
-\\ \pi^\star _{c} &= \dfrac{n_{c}}{n} .
-\end{align*}
-If agent $i $ reports truthfully, the classification probability is,
-\begin{align*}
-\mathbb{P} \left\{Y = y_{i} | w^\star , x_{i}\right\} &\propto \pi^\star _{y_{i}} \dfrac{1}{\left| \Sigma^\star _{y_{i}} \right|} \exp\left(- \dfrac{1}{2} \left(x_{i} - \mu^\star _{y_{i}}\right)^{T} \left(\Sigma^\star _{y_{i}}\right)^{-1} \left(x_{i} - \mu^\star _{y_{i}}\right)\right).
-\end{align*}
-If agent $i $ misreports $y^{\dagger}_{i} \neq  y_{i,}$
-\begin{align*}
-\mu^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{\displaystyle\sum_{i' \neq  i} x_{i'} \mathbbm{1}_{y_{i'} = c}}{n_{c} - 1},
-\\ \Sigma^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{\displaystyle\sum_{i' \neq  i} \left(x_{i'} - \mu^\star _{c}\left(y^{\dagger}_{i}\right)\right) \left(x_{i'} - \mu^\star _{c}\left(y^{\dagger}_{i}\right)\right)^{T} \mathbbm{1}_{y_{i'} = c}}{n_{c} - 1},
-\\ \pi^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} - 1}{n} .
-\end{align*}
-The classification with the parameters $w^\star \left(y^{\dagger}_{i}\right)$ is,
-\begin{align*}
-\mathbb{P} \left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\} &\propto \pi^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \dfrac{1}{\left| \Sigma^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \right|} \exp\left(- \dfrac{1}{2} \left(x_{i} - \mu^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)^{T} \left(\Sigma^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)^{-1} \left(x_{i} - \mu^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)\right).
-\end{align*}
-To make the comparison, consider the one-dimensional case. The incentive compatibility condition is,
-\begin{align*}
-\pi^\star _{y_{i}} \dfrac{1}{\sigma^\star _{y_{i}} \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x_{i} - \mu^\star _{y_{i}}\right)^{2}}{2 \left(\sigma^\star _{y_{i}}\right)^{2}}\right) &\geq   \pi^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \dfrac{1}{\sigma^\star _{y_{i}}\left(y^{\dagger}_{i}\right) \sqrt{2 \pi}} \exp\left(- \dfrac{\left(x_{i} - \mu^\star _{y_{i}}\left(y^{\dagger}_{i}\right)\right)^{2}}{2 \left(\sigma^\star _{y_{i}}\right)^{2}\left(y^{\dagger}_{i}\right)}\right),
-\end{align*}
-where,
-\begin{align*}
-\pi^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} - 1}{n_{c}} \pi^\star _{c} ,
-\\ \mu^\star _{c}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} \mu^\star _{c}}{n_{c} - 1} - \dfrac{x_{i}}{n_{c} - 1} ,
-\\ \left(\sigma^\star _{c}\right)^{2}\left(y^{\dagger}_{i}\right) &= \dfrac{n_{c} \left(\sigma^\star _{c}\right)^{2}}{n_{c} - 1} - \dfrac{\left(x_{i} - \mu^\star _{c}\right) \left(x_{i} - \mu^\star _{c}\right)}{n_{c} - 1}
-\\ &= \dfrac{n_{c} \left(\sigma^\star _{c}\right)^{2}}{n_{c} - 1} - \dfrac{n_{c} \left(x_{i} - \mu^\star _{c}\right)^{2}}{\left(n_{c} - 1\right)^{2}} .
-\end{align*}
-Without the loss of generality, let $\mu^\star  = 0$ and $\sigma^\star  = \sigma$, the incentive incompatibility condition reduces to,
-\begin{align*}
-x_{i} &> \sqrt{n_{c} \cdot  \sigma^{2}}.
-\end{align*}
-Since $\mu^\star  = 0$,
-\begin{align*}
-\left(\sigma^\star \right)^{2} &\geq  \dfrac{1}{n_{c}} \left(x_{i} - 0\right)^{2}
-\\ &> \dfrac{1}{n_{c}} \left(\sqrt{n_{c} \cdot  \sigma^{2}}\right)^{2}
-\\ &= \sigma^{2} ,
-\end{align*}
-which leads to a contradiction. Therefore, in the one-dimensional case, Gaussian Naive Bayes is incentive compatible.
+Therefore, no agent can improve the outcome and the dataset is incentive compatible.
 \newline \newline\end{proof}
 
 
