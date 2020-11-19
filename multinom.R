@@ -96,6 +96,11 @@ predict.w <- function(object, newdata, ...)
   prob <- mle_activate(cbind(y = rep(0, nrow(newdata)),newdata), object[1:6])
   return(apply(prob, 1, function(x) which(x == max(x))))
 }
+
+gen_pred_new <- function(model, data, method = 0) {
+  xc <- data.frame(x1 = data)
+  return(predict(model, xc))
+}
  
 # model = either model or weight matrix
 # data = (y, x1, x2)
@@ -330,7 +335,11 @@ decisionplot <- function(model, data, class = NULL, sym = NULL, predict_type = "
 
 dplot <- function(model, data, sym)
 {
-  if (ncol(data) == 2) plot(as.numeric(y) ~ x1, data = data, col = c("red", "green", "blue")[y], pch = sym, xlim = c(-2, 2), ylim = c(0, nlevels(data$y) + 1))
+  if (ncol(data) == 2)
+  {
+    plot(as.numeric(y) ~ x1, data = data, col = c("red", "green", "blue")[y], pch = sym, xlim = c(-2, 2), ylim = c(0, nlevels(data$y) + 1))
+    for(i in seq(-1, 1, by = 0.01)) points(i, 0, col = c("red", "green", "blue")[gen_pred_new(model, i, 0)])
+  }
   if (ncol(data) == 3)
   {
     ndata <- cbind(data[,2:ncol(data)], y = as.numeric(data[,1]) * 1.0)
@@ -407,6 +416,18 @@ test_special <- function(n = 10, off = 0.05, type = 0)
   }
 }
 
+one_d_test <- function(n = c(5, 5, 5), y = c(1), x = c(-1)) 
+{
+  return(data.frame(y = as.factor(c(y, rep(1, n[1]), rep(2, n[2]), rep(3, n[3]))), x1 = c(x, rep(-1, n[1]), rep(0, n[2]), rep(1, n[3]))))
+}
+
+one_d_test_t <- function(n = c(5, 5, 5, 5, 5), ep = 0.01, y = c(1), x = c(-1))
+{
+  return(data.frame(y = as.factor(c(y, rep(1, n[1]), rep(2, n[2]), rep(1, n[3]), rep(2, n[4]), rep(3, n[5]))), x1 = c(x, rep(-1, n[1]), rep(-0.5 - ep, n[2]), rep(-0.5 + ep, n[3]), rep(0, n[4]), rep(1, n[5]))))
+}
+
+test(one_d_test_t(c(0, 3, 3, 0, 3), -0.01, c(2), c(-0.53)), 0, TRUE)
+
 #test_special(3, 0.01, 2)
 #data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
 #data[5,1] <- 1
@@ -418,7 +439,7 @@ test_special <- function(n = 10, off = 0.05, type = 0)
 
 #data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
 #data[5,1] <- 1
-#test(data, seed = 0, out = TRUE, method = 0, lam = 0.01)
+#test(data, seed = 0, out = TRUE, method = 1.2, lam = 0.01)
 
 #data <- circular_data(1, 11)
 #data[15,1] <- 1
