@@ -3,6 +3,7 @@ require(mlogit)
 require(naivebayes)
 require(e1071)
 
+# Test
 # seed = random seed
 # dim = 1 or 2
 # k = number of classes
