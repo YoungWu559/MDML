@@ -427,7 +427,7 @@ one_d_test_t <- function(n = c(5, 5, 5, 5, 5), ep = 0.01, y = c(1), x = c(-1))
   return(data.frame(y = as.factor(c(y, rep(1, n[1]), rep(2, n[2]), rep(1, n[3]), rep(2, n[4]), rep(3, n[5]))), x1 = c(x, rep(-1, n[1]), rep(-0.5 - ep, n[2]), rep(-0.5 + ep, n[3]), rep(0, n[4]), rep(1, n[5]))))
 }
 
-test(one_d_test_t(c(0, 3, 3, 0, 3), -0.01, c(2), c(-0.53)), 0, TRUE)
+# test(one_d_test_t(c(0, 3, 3, 0, 3), -0.01, c(2), c(-0.53)), 0, TRUE)
 
 #test_special(3, 0.01, 2)
 #data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
