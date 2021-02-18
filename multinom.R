@@ -3,7 +3,6 @@ require(mlogit)
 require(naivebayes)
 require(e1071)
 
-# Test
 # seed = random seed
 # dim = 1 or 2
 # k = number of classes
@@ -165,6 +164,26 @@ gen_pred_all <- function(model, data, method = 0)
   }
 }
 
+print_table <- function (pred, predp, col = 3) {
+  nr <- nrow(pred)
+  names <- rep("", nr * col)
+  out <- rep(0, nr * col)
+  outp <- rep(0, nr * col)
+  for (i in 1:nr) {
+    for (j in 3:(2 + col)) {
+      pre <- "P"
+      if (j - 2 == pred[i, 2]) pre <- "P*"
+      names[(i - 1) * col + j - 2] <- paste(pre, "(y=", j - 2, "|x=", pred[i, 1], ")", sep = "")
+      out[(i - 1) * col + j - 2] <- pred[i, j]
+      outp[(i - 1) * col + j - 2] <- predp[i, j]
+    }
+  }
+  combined <- rbind(out, outp)
+  colnames(combined) <- names
+  rownames(combined) <- c("Original", "Flipped")
+  return(combined)
+}
+
 # data = (y, x1, x2)
 # seed = seed
 # out = whether to output
@@ -179,10 +198,11 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
   {
     print("Original Model")
     print_model(ml, method)
-    pred <- cbind(data$y, gen_pred_all(ml, data, method))
-    colnames(pred) <- c("y", 1:(ncol(pred)-1))
+    pred <- cbind(data$x1, data$y, gen_pred_all(ml, data, method))
+    pred <- unique(pred)
+    colnames(pred) <- c("x", "y", 1:(ncol(pred)-2))
     rownames(pred) <- 1:nrow(pred)
-    print(round(pred, 6))
+    print(round(pred, 4))
   }
   for (i in 1:nrow(data))
   {
@@ -194,6 +214,11 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
       data$y[i] <- j
       mlj <- gen_model(data, method, lam)
       pyj <- gen_pred(mlj, data, i, yi, method)
+      if (out && i == 1 && j == 3) {
+        data$y[i] <- yi
+        predp <- cbind(data$x1, data$y, gen_pred_all(mlj, data, method))
+        predp <- unique(predp)
+      }
       if (pyj > py + 0.001) 
       {
         note <- "<- not IC"
@@ -204,10 +229,11 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
           print(paste("New Model if ", i, " reports ", j, " instead of ", yi))
           print_model(mlj, method)
           data$y[i] <- yi
-          pred <- cbind(data$y, gen_pred_all(mlj, data, method))
-          colnames(pred) <- c("y", 1:(ncol(pred)-1))
-          rownames(pred) <- 1:nrow(pred)
-          print(round(pred, 6))
+          predp <- cbind(data$x1, data$y, gen_pred_all(mlj, data, method))
+          predp <- unique(predp)
+          colnames(predp) <- c("x", "y", 1:(ncol(pred)-2))
+          rownames(predp) <- 1:nrow(pred)
+          print(round(predp, 4))
           if (out) dplot(mlj, data, sym)
         }
       }
@@ -218,6 +244,7 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
   if (ic == 0) print(paste(seed, " not IC"))
   if (out) dplot(ml, data, sym)
   if (out) print(data)
+  if (out) print(round(print_table(pred, predp, 3), 4))
 }
 
 # data = (y, x1, x2)
@@ -427,7 +454,23 @@ one_d_test_t <- function(n = c(5, 5, 5, 5, 5), ep = 0.01, y = c(1), x = c(-1))
   return(data.frame(y = as.factor(c(y, rep(1, n[1]), rep(2, n[2]), rep(1, n[3]), rep(2, n[4]), rep(3, n[5]))), x1 = c(x, rep(-1, n[1]), rep(-0.5 - ep, n[2]), rep(-0.5 + ep, n[3]), rep(0, n[4]), rep(1, n[5]))))
 }
 
-# test(one_d_test_t(c(0, 3, 3, 0, 3), -0.01, c(2), c(-0.53)), 0, TRUE)
+one_d_test_m <- function(x0, y0)
+{
+  return(data.frame(y = as.factor(y0), x1 = x0))
+}
+
+#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.51, -0.49, -0.49, -0.49, 1, 1, 1), c(2, 1, 1, 1, 2, 2, 2, 3, 3, 3)), 0, TRUE)
+#test(one_d_test_m(c(-0.53, -0.53, -0.51, -0.51, -0.51, -0.49, -0.49, 1, 1, 1), c(2, 2, 1, 1, 1, 2, 2, 3, 3, 3)), 0, TRUE)
+#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.49, -0.49, 1, 1, 1), c(2, 1, 1, 2, 2, 3, 3, 3)), 0, TRUE)
+#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.49, 1, 1, 1), c(2, 1, 1, 2, 3, 3, 3)), 0, TRUE)
+
+#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.51, -0.49, -0.49, -0.49, 1, 1, 1) * 2, c(2, 1, 1, 1, 2, 2, 2, 3, 3, 3)), 0, TRUE)
+#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.51, -0.49, -0.49, -0.49, 1, 1, 1) * 0.5, c(2, 1, 1, 1, 2, 2, 2, 3, 3, 3)), 0, TRUE)
+#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.51, -0.49, -0.49, -0.49, 1, 1, 1) + 1, c(2, 1, 1, 1, 2, 2, 2, 3, 3, 3)), 0, TRUE)
+
+#test(one_d_test_t(c(0, 3, 3, 0, 3), -0.01, c(2), c(-0.53)), 0, TRUE)
+
+#test(one_d_test_t(c(0, 4, 3, 0, 3), -0.01, c(2), c(-0.51)), 0, TRUE)
 
 #test_special(3, 0.01, 2)
 #data <- offset_boundary_data(1, 3, 0.004, pi * 0.5)
@@ -470,10 +513,13 @@ one_d_test_t <- function(n = c(5, 5, 5, 5, 5), ep = 0.01, y = c(1), x = c(-1))
 #test1d(seed = 421, out = TRUE, k = 3, n = 20, var = 1, sep = 1)
 #test1d(seed = 0, out = TRUE, k = 3, n = 20, var = 0, sep = 1)
 
-#x <- seq(-5, 5, length=1000)
-#y <- dnorm(x, mean=0, sd=1)
-#plot(x, y, type="l", lwd=1, col="green")
-#yp <- dnorm(x, mean=-1, sd=2)
-#lines(x, yp, type="l", lwd=1, col="blue")
-#abline(v = 3, col="red")
+x1 <- rnorm(1000)
+x2 <- x1 + 100
+xp <- x1 + rnorm(1000, 0, 0.1)
+y <- as.factor(xp > 0)
+m1 <- multinom(y ~ x1)
+m2 <- multinom(y ~ x2)
+p1 <- predict(m1, type = "prob")
+p2 <- predict(m2, type = "prob")
+round(cbind(p1, p2), 2)
 

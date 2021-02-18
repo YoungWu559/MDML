@@ -85,6 +85,7 @@ We study the incentive compatibility problem of multi-class logistic regression.
 
 
 
+
 \section{Introduction} 
 There are $n $ strategic agents each providing the label of one data point to the principal. The principal is the learner and builds a machine learning model based on the data points provided by the agents. An agent, $i $, has publicly known feature vector, $x_{i}$, and a private discrete label, $y_{i}$. The objective of the agent is to maximize the probability that her data point is labeled correctly by the principal's model, and the agent can choose to report $y^{\dagger}_{i}$ to achieve the objective, with the possibility of misreporting $y^{\dagger}_{i} \neq  y_{i}$. We say a dataset is incentive incompatible with respect to the learner, described by a parametric model, if at least one of the $n $ agents has the incentive to misreport.
 \newline \newline
@@ -210,6 +211,8 @@ and $w^\star \left(y^{\dagger}_{1} = 3\right)$ is given by,
 $2$ &$6.603135$ &$13.09844$\\ \hline
 $3$ &$8.231013$ &$18.48809$\\ \hline
 \end{tabular} \end{center}
+It turns out that the incentive incompatibility heavily depends the numerical stability of the weights-finding algorithm: using BFGS to maximize the likelihood shows that this dataset is actually incentive compatible for all points.
+\newline \newline\end{proof}
 The example described in Figure \ref{fig:ice} is a dataset that is also incentive incompatible.
 \\* In this example, agent $i $ reports $x_{i} \in \mathbb{R}^{2}$ and $y_{i}$ is one of $1$ (red), $2$ (green), or $3$ (blue). Suppose the red square point correspond to agent $1$ with $x_{1} = \left(-1.63, -1.17\right)$ and $y_{1} = 1$.
 \begin{align*}
@@ -232,7 +235,43 @@ and $w^\star \left(y^{\dagger}_{1} = 3\right)$ is given by,
 $2$ &-$0.1915645$ &$3.473426$ &-$5.507418$\\ \hline
 $3$ &$0.8273350$ &$4.309293$ &-$1.200060$\\ \hline
 \end{tabular} \end{center}
-\end{proof}
+Using BFGS to maximize likelihood leads to the same incentive incompatibility result. Currently there is no formal proof that the result is not due to numerical instability.
+\newline \newline
+
+
+\subsection{Binary Classification}
+\begin{prop} \label{prop:bin} 
+Binary classification using ERM with any loss function $\ell$ is incentive compatible.
+\end{prop}
+\begin{proof} \label{proof:binpf} 
+For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the hypothesis class $\mathcal{H}$, let the optimal classifier in the case every agent report truthfully be,
+\begin{align*}
+h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(h, x_{i'}, y_{i'}\right).
+\end{align*}
+Fix an agent $i $, her feature vector $x_{i}$, and fix other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the optimal classifier given the classifier $h $ and the misreport of agent $i , y^{\dagger}_{i} = 1 - y_{i}$ as,
+\begin{align*}
+h^\star \left(y^{\dagger}_{i}\right) &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h, x_{i'}, y_{i'}\right) + \ell\left(h, x_{i}, y^{\dagger}_{i}\right).
+\end{align*}
+Now suppose, for a contradiction, that agent $i $ prefers misreporting,
+\begin{align*}
+\ell\left(h^\star , x_{i}, y_{i}\right) &> \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i}, y_{i}\right),
+\end{align*}
+which implies, since $y^{\dagger}_{i} = 1 - y_{i,}$
+\begin{align*}
+\ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right) &< \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i}, y^{\dagger}_{i}\right).
+\end{align*}
+Note that the above implication only works for binary classification.
+\\* Due to the optimality of $h^\star \left(y^{\dagger}_{i}\right)$,
+\begin{align*}
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i'}, y_{i'}\right) + \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i}, y^{\dagger}_{i}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right) + \ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right),
+\end{align*}
+using the above inequalities, the comparison can be simplified to,
+\begin{align*}
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i'}, y_{i'}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right),
+\\ \displaystyle\sum_{i'=1}^{n} \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i'}, y_{i'}\right) &\leq  \displaystyle\sum_{i'=1}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right),
+\end{align*}
+which is a contradiction to the optimality of $h^\star $.
+\newline \newline\end{proof}
 
 
 \subsection{Zero-One Loss Logistic Regression}
@@ -319,6 +358,39 @@ Note that the empirical prior probability for class $y_{i}$ is decreased if the 
 \end{align*}
 Therefore, no agent can improve the outcome and the dataset is incentive compatible.
 \newline \newline\end{proof}
+One special case of this is the Bayes classifier for the Gaussian Mixture Model.
+\newline \newline
+
+
+
+\section{Kernel Density Estimators} 
+There are two general approaches to use kernel densities for classification, the first is to use all the points to estimate the density and the second is to estimate the densities for each class separately (see \citet*{taylor1997classification}).
+\newline \newline
+The first approach suggests that,
+\begin{align*}
+\mathbb{P}\left\{X = x\right\} &= \dfrac{1}{n h^{D}} \displaystyle\sum_{i'=1}^{n} w_{i'}, \text{\;where\;} w_{i'} = K\left(\dfrac{x - x_{i'}}{h}\right).
+\end{align*}
+Define $w^\star $ to be the weight function when all agents report truthfully, then the classification probabilities for agent $i $ from dividing up the sum based on the class is,
+\begin{align*}
+\mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \right\} &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}}
+\\ &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}, i' \neq  i} + \dfrac{1}{n} w^\star _{i}
+\\ &= \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\} + \dfrac{1}{n} K\left(0\right), \text{\;since\;} y^{\dagger}_{i} \neq  y_{i}
+\\ &\leq  \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\},
+\end{align*}
+meaning reporting truthfully results in a larger probability compared to reporting $y^{\dagger}_{i}$ instead.
+\newline \newline
+Alternative if the classification probabilities are computed based on \citet*{taylor1997classification},
+\begin{align*}
+\mathbb{P}\left\{X = x | Y = y\right\} &= \dfrac{1}{n_{y} h^{D}} \displaystyle\sum_{i'=1}^{n} w_{i'} \mathbbm{1}_{\hat{y}_{i'} = y}, n_{y} = \displaystyle\sum_{i'=1}^{n} \mathbbm{1}_{\hat{y}_{i'} = y}
+\end{align*}
+Similar to the above derivation (and also as a special case of a Bayes estimator),
+\begin{align*}
+\mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \right\} &= \dfrac{1}{n_{y}} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}}
+\\ &= \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\} + \dfrac{1}{n_{y}} K\left(0\right)
+\\ &\leq  \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\}.
+\end{align*}
+K-Nearest Neighbor is a special case of this with a uniform kernel.
+\newline \newline
 \bibliographystyle{te}
 \bibliography{cs}
 
