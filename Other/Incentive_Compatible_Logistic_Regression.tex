@@ -391,6 +391,101 @@ Similar to the above derivation (and also as a special case of a Bayes estimator
 \end{align*}
 K-Nearest Neighbor is a special case of this with a uniform kernel.
 \newline \newline
+
+
+
+\section{Artificial Examples} 
+One intuition behind why the above classifiers are always incentive-compatible is that one-vs-one classification decisions are made independently for classifiers. The classifiers like logistic regression have highly interdependent one-vs-one decisions. The following example is one in which $1$-vs-$2$ decisions are completely determined by the $2$-vs-$3$ decisions, and as a result, a class-$1$ point that is misclassified as class-$2$ could misreport as class-$3$ to influence the $2$-vs-$3$ decision boundary and indirectly change the $1$-vs-$2$ decision boundary in its favor.
+\newline \newline
+Consider the three-class $1D$ threshold classifiers in the form,
+\[ \hat{y}\left(x; t\right) =\left\{ \begin{array}{ll}
+1& \text{\;if\;} x < -t \\
+2& \text{\;if\;} -t \leq  x \leq  t \\
+3& \text{\;if\;} x > t \\
+\end{array}\right. \]
+\begin{align*}
+\ell\left(x_{i}, y_{i}; t\right) &= \left(x_{i} - t\right)^{2} \mathbbm{1}_{\hat{y}\left(x_{i}; t\right) \neq  y_{i}}.
+\end{align*}
+Then, the maximization problem is,
+\begin{align*}
+&\displaystyle\min_{t \in \mathbb{R}} \ell\left(x_{i}, y_{i}; t\right).
+\end{align*}
+For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-4, 1\right), \left(-3, 2\right), \left(-2, 1\right), \left(3, 2\right), \left(4, 3\right)\right\}$, the minimum loss is $1$ and it occurs when $t  = 3$ when every agent reports truthfully. In this case, agent (-$2, 1$) is misclassified as (-$2, 2$). However, if (-$2, 1$) misreports as (-$2, 3$), the loss from $t  = 3$ is $25$ and the minimum loss is $22$ and it occurs when $t  = 0$. In this case, agent (-$2, 1$) is classified correctly.
+\newline \newline
+
+\begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
+\draw[thick] (-4.0, 0.0) -- (4.0, 0.0);
+\draw[fill = green, thick] (-4.0, 0.0) circle [radius = 0.1];
+\draw[fill = green, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
+\draw[fill = red, thick] (-3.0, 0.0) circle [radius = 0.1];
+\draw[fill = red, thick] (3.0, 0.0) circle [radius = 0.1];
+\draw[fill = blue, thick] (4.0, 0.0) circle [radius = 0.1];
+\draw[green, thick] (-4.0, -0.2) -- (-3.0, -0.2);
+\draw[red, thick] (-3.0, -0.2) -- (3.0, -0.2);
+\draw[blue, thick] (3.0, -0.2) -- (4.0, -0.2);
+\node[below] at (0.0, -0.2){$0$};
+\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive Incompatible Example (Truthful)}\label{fig:1dat}
+\end{figure}
+
+\begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
+\draw[thick] (-4.0, 0.0) -- (4.0, 0.0);
+\draw[fill = green, thick] (-4.0, 0.0) circle [radius = 0.1];
+\draw[fill = blue, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
+\draw[fill = red, thick] (-3.0, 0.0) circle [radius = 0.1];
+\draw[fill = red, thick] (3.0, 0.0) circle [radius = 0.1];
+\draw[fill = blue, thick] (4.0, 0.0) circle [radius = 0.1];
+\draw[green, thick] (-4.0, -0.2) -- (0.0, -0.2);
+\draw[red, thick] (0.0, -0.2) -- (0.0, -0.2);
+\draw[blue, thick] (0.0, -0.2) -- (4.0, -0.2);
+\node[below] at (0.0, -0.2){$0$};
+\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive Incompatible Example (Misreport)}\label{fig:1dam}
+\end{figure}
+Intuitively, when the misclassified class-$1$ point pretends to be a class-$3$ point with a large loss, the classifier modifies the $2$-vs-$3$ decision boundary to minimize that loss and the point benefits from the interdependence between the $2$-vs-$3$ decision and the $1$-vs-$2$ decision.
+\newline \newline
+Consider another three-class $2D$ threshold classifier in the form,
+\[ \hat{y}\left(x_{1}, x_{2}; a, b, c, d\right) =\left\{ \begin{array}{ll}
+1& \text{\;if\;} a x_{1} + b x_{2} + c \leq  0 \text{\;and\;} b x_{1} - a x_{2} + d > 0 \\
+2& \text{\;if\;} a x_{1} + b x_{2} + c \leq  0 \text{\;and\;} b x_{1} - a x_{2} + d \leq  0 \\
+3& \text{\;if\;} a x_{1} + b x_{2} + c > 0 \\
+\end{array}\right. \]
+\begin{align*}
+\ell\left(x_{i}, y_{i}; t\right) &= d\left(x_{i}, t\right) \mathbbm{1}_{\hat{y}\left(x_{i}; t\right) \neq  y_{i}}, t = \left(a, b, c, d\right) \in \mathbb{R}^{4}
+\end{align*}
+where $d\left(x_{i}, t \right) $ is the minimum distance from $x_{i}$ to one of the lines $a  x_{1} + b x_{2} + c = 0$ and $b  x_{1} - a x_{2} + d = 0$, or,
+\begin{align*}
+d\left(x_{i}, t \right)  &= \dfrac{\displaystyle\min\left(| a x_{1} + b x_{2} + c |, | b x_{1} - a x_{2} + d |\right)}{\sqrt{a^{2} + b^{2}}}.
+\end{align*}
+For the dataset $\left\{\left(x_{i1}, x_{i2}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(0, 0, 1\right), \left(0, 0, 3\right), \left(0, -1, 1\right), \left(0, -1, 2\right), \left(1, 0, 2\right)\right\}$, the minimum loss is $0$ and it occurs when $a  = b  = c  = d  = 0$ when every agent reports truthfully. In this case, agent $\left(0, -1, 1\right)$ is misclassified as $\left(0, -1, 2\right)$. However, if $\left(0, -1, 1\right)$ misreports as $\left(0, -1, 3\right)$, the loss from $a  = b  = c  = d  = 0$ is $1$ and the minimum loss is $\dfrac{\sqrt{2}}{2}$ and it occurs when $a  = -1, b   = c  = d  = 1$. In this case, agent $\left(0, -1, 1\right)$ is classified correctly.
+\newline \newline
+
+\begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
+\draw[blue, thick] (-4.0, 0.1) -- (4.0, 0.1);
+\draw[green, thick] (-4.0, 0.0) -- (-0.1, 0.0) -- (-0.1, -4.0);
+\draw[red, thick] (4.0, 0.0) -- (0.0, 0.0) -- (0.0, -4.0);
+\draw[fill = green, thick] (-0.1, 0.0) circle [radius = 0.1];
+\draw[fill = red, thick] (0.0, -1.9) circle [radius = 0.1];
+\draw[fill = green, thick] (-0.1, -2.2) rectangle (0.1, -2.0);
+\draw[fill = red, thick] (1.9, 0.0) circle [radius = 0.1];
+\draw[fill = blue, thick] (0.1, 0.1) circle [radius = 0.1];
+\node[above right] at (0.0, 0.2){$\left(0, 0\right)$};
+\end{tikzpicture} \captionof{figure}{$2D$ Artificial Incentive Incompatible Example (Truthful)}\label{fig:2dat}
+\end{figure}
+
+\begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
+\draw[blue, dashed, thick] (-4.0, 0.1) -- (4.0, 0.1);
+\draw[green, dashed, thick] (-4.0, 0.0) -- (-0.1, 0.0) -- (-0.1, -4.0);
+\draw[red, dashed, thick] (4.0, 0.0) -- (0.0, 0.0) -- (0.0, -4.0);
+\draw[blue, thick] (2.0, 0.3) -- (-2.0, -3.7);
+\draw[green, thick] (-2.0, -3.9) -- (-0.1, -2.0) -- (2.0, -4.1);
+\draw[red, thick] (2.0, 0.1) -- (0.0, -1.9) -- (2.0, -3.9);
+\draw[fill = green, thick] (-0.1, 0.0) circle [radius = 0.1];
+\draw[fill = red, thick] (0.0, -1.9) circle [radius = 0.1];
+\draw[fill = blue, thick] (-0.1, -2.2) rectangle (0.1, -2.0);
+\draw[fill = red, thick] (1.9, 0.0) circle [radius = 0.1];
+\draw[fill = blue, thick] (0.1, 0.1) circle [radius = 0.1];
+\node[above right] at (0.0, 0.2){$\left(0, 0\right)$};
+\end{tikzpicture} \captionof{figure}{$2D$ Artificial Incentive Incompatible Example (Misreport)}\label{fig:2dam}
+\end{figure}
 \bibliographystyle{te}
 \bibliography{cs}
 
