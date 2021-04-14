@@ -192,7 +192,7 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
 {
   dim <- 1
   ml <- gen_model(data, method, lam)
-  ic <- 1
+  ic <- 0
   sym <- rep(20, nrow(data))
   if (out) 
   {
@@ -223,7 +223,10 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
       {
         note <- "<- not IC"
         sym[i] <- 15
-        ic <- 0
+        ic <- ic + 1
+        defend <- 0
+        if (seed >= 0) defend <- test(data, -1, FALSE, method, lam);
+        if (defend > 0) print("can defend");
         if (out) 
         {
           print(paste("New Model if ", i, " reports ", j, " instead of ", yi))
@@ -241,10 +244,11 @@ test <- function (data, seed = 0, out = FALSE, method = 0, lam = 0)
     }
     data$y[i] <- yi
   }
-  if (ic == 0) print(paste(seed, " not IC"))
+  if (ic > 0) print(paste(seed, " not IC * ", ic))
   if (out) dplot(ml, data, sym)
   if (out) print(data)
   if (out) print(round(print_table(pred, predp, 3), 4))
+  return(ic)
 }
 
 # data = (y, x1, x2)
@@ -289,7 +293,7 @@ mle_activate <- function(data, weights)
   if (ncol(data) == 2) design <- cbind(data$x1, rep(1, nrow(data)))                
   w <- cbind(rep(0, ncol(data)), matrix(weights, ncol(data), length(weights) / ncol(data)))
   z <- design %*% w
-  ez <- exp(z)
+  #ez <- exp(z)
   ps <- ez / rowSums(ez)
   return(ps)
 }
@@ -378,15 +382,18 @@ dplot <- function(model, data, sym)
 # n number of iterations
 repeat_test <- function()
 {
-  for (s in 1:1000)
+  total <- 0
+  for (s in 7000:10000)
   {
-    if(s %% 10 == 0) print(s)
-    data <- gen_data(seed = s, dim = 2, k = 3, n = 20, sep = 1, var = 1)
-    test(data, seed = s, out = FALSE, method = 0, lam = 0.1)
+    if(s %% 100 == 0) print(s)
+    data <- gen_data(seed = s, dim = 2, k = 3, n = 100, sep = 0, var = 0.01)
+    ic <- test(data, seed = s, out = FALSE, method = 0, lam = 0.1)
+    if (ic > 0) total <- total + 1
   }
+  print(total)
 }
 
-#repeat_test()
+repeat_test()
 
 #data <- gen_data(seed = 217, dim = 2, k = 3, n = 20, sep = 1, var = 1)
 #test(data, seed = 217, out = FALSE, method = 1, lam = 0.01)
@@ -459,7 +466,7 @@ one_d_test_m <- function(x0, y0)
   return(data.frame(y = as.factor(y0), x1 = x0))
 }
 
-#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.51, -0.49, -0.49, -0.49, 1, 1, 1), c(2, 1, 1, 1, 2, 2, 2, 3, 3, 3)), 0, TRUE)
+#test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.51, -0.49, -0.49, -0.49, 1, 1, 1), c(2, 1, 1, 1, 2, 2, 2, 3, 3, 3)), 1, TRUE)
 #test(one_d_test_m(c(-0.53, -0.53, -0.51, -0.51, -0.51, -0.49, -0.49, 1, 1, 1), c(2, 2, 1, 1, 1, 2, 2, 3, 3, 3)), 0, TRUE)
 #test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.49, -0.49, 1, 1, 1), c(2, 1, 1, 2, 2, 3, 3, 3)), 0, TRUE)
 #test(one_d_test_m(c(-0.53, -0.51, -0.51, -0.49, 1, 1, 1), c(2, 1, 1, 2, 3, 3, 3)), 0, TRUE)
@@ -510,13 +517,13 @@ one_d_test_m <- function(x0, y0)
 #test1d(seed = 421, out = TRUE, k = 3, n = 20, var = 1, sep = 1)
 #test1d(seed = 0, out = TRUE, k = 3, n = 20, var = 0, sep = 1)
 
-x1 <- rnorm(1000)
-x2 <- x1 + 100
-xp <- x1 + rnorm(1000, 0, 0.1)
-y <- as.factor(xp > 0)
-m1 <- multinom(y ~ x1)
-m2 <- multinom(y ~ x2)
-p1 <- predict(m1, type = "prob")
-p2 <- predict(m2, type = "prob")
-round(cbind(p1, p2), 2)
+# x1 <- rnorm(1000)
+# x2 <- x1 + 100
+# xp <- x1 + rnorm(1000, 0, 0.1)
+# y <- as.factor(xp > 0)
+# m1 <- multinom(y ~ x1)
+# m2 <- multinom(y ~ x2)
+# p1 <- predict(m1, type = "prob")
+# p2 <- predict(m2, type = "prob")
+# round(cbind(p1, p2), 2)
 
