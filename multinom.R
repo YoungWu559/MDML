@@ -383,7 +383,7 @@ dplot <- function(model, data, sym)
 repeat_test <- function()
 {
   total <- 0
-  for (s in 7000:10000)
+  for (s in 1:10000)
   {
     if(s %% 100 == 0) print(s)
     data <- gen_data(seed = s, dim = 2, k = 3, n = 100, sep = 0, var = 0.01)

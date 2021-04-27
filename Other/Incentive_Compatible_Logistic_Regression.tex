@@ -125,11 +125,11 @@ The example provides insight on the general incentive incompatibility issue of m
 \newline \newline
 Previous work on mechanism design for machine learning with strategic data sources focus on designing robust algorithms to incentivize the data providers to report their private data truthfully. Their models mainly differ in the objective and the possible actions of the data providers (agents) and the learner (principal).
 \newline \newline
-The first group of papers focuses on principal-agent problems in which each agent's private data point is the agent's type that the agent cannot change. The only action the agents can take is whether to report their private information truthfully.
+The first group of papers focuses on principal-agent problems similar to our paper in which each agent's private data point is the agent's type that the agent cannot change. The only action the agents can take is whether to report their private information truthfully.
 \begin{enumerate}
-\item Some models assume the agents' feature vectors are public, but their labels are private. \citet*{perote2004strategy}, \citet*{chen2018strategyproof}, and \citet*{gast2013linear} focus on strategy-proof linear regression algorithms and introduced clockwise repeated median estimators, generalized resistant hyperplane estimators, and modified generalized linear squares estimators. \citet*{dekel2010incentive} investigates the general regression problem with empirical risk minimization and absolute value loss. All the previously mentioned papers assume the labels are continuous variables (regression problems), and \citet*{meir2012algorithms} assumes the labels are discrete variables (classification problems) and proposes a class of random dictator mechanisms.
-\item Some models assume the agents' feature vectors are also private. \citet*{chen2019grinding} investigates such problems for linear regressions.
-\item Other models do not distinguish between feature vectors and labels. Each agent has a private valuation. These problems are usually modeled as facility locations problems and the solution involves some variant of the Vickrey-Clarke-Groves or Meyerson auction. These include \citet*{dutting2017optimal}, \citet*{golowich2018deep}, \citet*{epasto2018incentive}, and \citet*{procaccia2009approximate}.
+\item Some models assume the agents' data points (or feature vectors) are public, but their labels are private. \citet*{perote2004strategy}, \citet*{chen2018strategyproof}, and \citet*{gast2013linear} focus on strategy-proof linear regression algorithms and introduced clockwise repeated median estimators, generalized resistant hyperplane estimators, and modified generalized linear squares estimators. \citet*{dekel2010incentive} investigates the general regression problem with empirical risk minimization and absolute value loss. All the previously mentioned papers assume the labels are continuous variables (regression problems), and \citet*{meir2012algorithms} assumes the labels are discrete variables (classification problems) and proposes a class of random dictator mechanisms.
+\item Some models assume the agents' data points are also private. \citet*{chen2019grinding} investigates such problems for linear regressions.
+\item Other models do not involve labels. Each agent has a private valuation. These problems are usually modeled as facility locations problems and the solution involves some variant of the Vickrey-Clarke-Groves or Meyerson auction. They include \citet*{dutting2017optimal}, \citet*{golowich2018deep}, \citet*{epasto2018incentive}, and \citet*{procaccia2009approximate}.
 \end{enumerate}
 
 
@@ -143,18 +143,18 @@ The last group of papers uses machine learning or robust statistics techniques w
 \section{Logistic Regression} 
 
 \subsection{Model}
-In this section, we introduce the model using logistic regression as an example. We assume the principal is training a multi-class logistic (softmax) regression. There are $n $ strategic agents each providing the label of one data point to the principal. An agent, $i $, with public $x_{i} \in \mathbb{R}^{m}$, and private discrete $y_{i} \in \left\{1, 2, ..., k \right\}$, has the objective of maximizing the probability that her data point is labeled correctly by the principal's model, parameterized by the $m  \times \left(k  + 1\right)$ weights (and bias) matrix $w $. The agent can choose to report $y^{\dagger}_{i}$ to achieve the objective, with possibly $y^{\dagger}_{i} \neq  y_{i}$. Denoting the weights of the model resulting from the false report from agent $i $ by $w^\star \left(y^{\dagger}_{i}\right)$, and $w^{\dagger}$ when the agent the her report is clear, the agent's objective can be written as,
+In this section, we introduce the model using logistic regression as an example. We assume the principal is training a multi-class logistic (softmax) regression. There are $n $ strategic agents each providing the label of one data point to the principal. An agent, $i $, with public $x_{i} \in \mathbb{R}^{m}$, and private discrete $y_{i} \in \left\{1, 2, ..., k \right\}$, has the objective of maximizing the probability that her data point is labeled correctly by the principal's classifier, parameterized by the $m  \times \left(k  + 1\right)$ weights (and bias) matrix $w $. The agent can choose to report $y^{\dagger}_{i}$ to achieve the objective, with possibly $y^{\dagger}_{i} \neq  y_{i}$. Denoting the weights of the model resulting from the false report from agent $i $ by $w^\star \left(y^{\dagger}_{i}\right)$ (and $w^{\dagger}$ when the identity and the report of the agent is unambiguous), the agent's objective can be written as,
 \begin{align*}
-&  \displaystyle\max_{y^{\dagger} \in \left\{1, 2, ..., k \right\}} \mathbb{P}\left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\},
+&  \displaystyle\max_{y^{\dagger} \in \left\{1, 2, ..., k \right\}} \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \left(y^{\dagger}_{i}\right)\right\},
 \end{align*}
 where,
 \begin{align*}
-&  \mathbb{P}\left\{Y = c | w, x_{i}\right\} = \dfrac{e^{z_{i,c}}}{\displaystyle\sum_{c'=1}^{k} e^{z_{i,c'}}},
+&  \mathbb{P}\left\{Y = c | x_{i} ; w\right\} = \dfrac{e^{z_{i,c}}}{\displaystyle\sum_{c'=1}^{k} e^{z_{i,c'}}},
 \\ &  z_{i,c} = \displaystyle\sum_{j=1}^{m} w_{j,c} x_{i,j} + b_{c} , \text{\;for\;} c \in \left\{1, 2, ..., k\right\}.
 \end{align*}
 The principal is not strategic and he maximizes the likelihood of the data,
 \begin{align*}
-&\displaystyle\max_{w} \displaystyle\sum_{i=1}^{n} \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | w, x_{i}\right\}\right).
+&\displaystyle\max_{w} \displaystyle\sum_{i=1}^{n} \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w\right\}\right).
 \end{align*}
 We consider the case without a coalition of a group of agents, so only one agent is misreporting at a time, and use the following notations,
 \begin{align*}
@@ -172,16 +172,17 @@ A classifier is incentive compatible if there does not exist a dataset that is i
 Multi-class logistic regression is not incentive compatible.
 \newline \newline\end{conj}
 The example described in Figure \ref{fig:ice} is a dataset that is numerically incentive incompatible.
-\\* In this example, agent $i $ reports $x_{i} \in \mathbb{R}^{2}$ and $y_{i}$ is one of $1$ (red), $2$ (green), or $3$ (blue). Suppose the red square point correspond to agent $1$ with $x_{1} = \left(-1.63, -1.17\right)$ and $y_{1} = 1$.
+\\* In this example, agent $i $ reports $x_{i} \in \mathbb{R}^{2}$ and $y_{i}$ is one of $1$ (red), $2$ (green), or $3$ (blue). Suppose the red square point corresponds to agent $1$ with $x_{1} = \left(-1.63, -1.17\right)$ and $y_{1} = 1$, then
 \begin{align*}
-\mathbb{P}\left\{Y = 1 | w^\star , x_{1}\right\} &= 0.3290,
-\\ \mathbb{P}\left\{Y = 1 | w^\star \left(y^{\dagger}_{1} = 3\right), x_{1}\right\} &= 0.4966.
+\mathbb{P}\left\{Y = 1 | x_{1} ; w^\star \right\} &= 0.3290,
+\\ \mathbb{P}\left\{Y = 1 | x_{1} ; w^\star \left(y^{\dagger}_{1} = 3\right)\right\} &= 0.4966.
 \end{align*}
 Here, parameter estimation is done using maximum likelihood estimation with BFGS, and $w^\star $ is given by, with class $1$ weights normalized to $0$,
 
 \begin{center} \begin{tabular}{|c|c|c|c|c|}
 \hline
  Class &(Intercept) &x1 &x2\\ \hline
+$1$ &$0$ &$0$ &$0$\\ \hline
 $2$ &-$0.6053178$ &$104.9925$ &-$181.3391914$\\ \hline
 $3$ &-$0.2852057$ &$209.4190$ &$0.3656777$\\ \hline
 \end{tabular} \end{center}
@@ -190,50 +191,16 @@ and $w^\star \left(y^{\dagger}_{1} = 3\right)$ is given by,
 \begin{center} \begin{tabular}{|c|c|c|c|c|}
 \hline
  Class &(Intercept) &x1 &x2\\ \hline
+$1$ &$0$ &$0$ &$0$\\ \hline
 $2$ &-$0.1915645$ &$3.473426$ &-$5.507418$\\ \hline
 $3$ &$0.8273350$ &$4.309293$ &-$1.200060$\\ \hline
 \end{tabular} \end{center}
-Using BFGS to maximize likelihood leads to the same incentive incompatibility result. Currently there is no formal proof that the result is not due to numerical instability, therefore, @(logit) is stated as a conjecture. Numerical experiments indicates that incentive incompatible datasets are rare. If the data points are two dimensional and standard normally distributed, and the labels are created using randomly generated weights with a small probability of error, then such a dataset is incentive incompatible with a probability of $0.005$.
+Currently there is no formal proof that the result is not due to numerical instability, therefore, @(logit) is stated as a conjecture. Numerical experiments indicates that incentive incompatible datasets are rare. If the data points are two dimensional and standard normally distributed, and the labels are created using randomly generated weights with a small probability of error, then such a dataset is incentive incompatible with a probability of $0.005$.
 \newline \newline
 
 
-\subsection{Binary Classification}
-\begin{prop} \label{prop:bin} 
-Binary empirical risk minimization (ERM) classifiers are incentive compatible.
-\end{prop}
-\begin{proof} \label{proof:binpf} 
-For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the hypothesis class $\mathcal{H}$, let the optimal classifier in the case every agent report truthfully be,
-\begin{align*}
-h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(h, x_{i'}, y_{i'}\right).
-\end{align*}
-Fix an agent $i $, her feature vector $x_{i}$, and fix other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the optimal classifier given the classifier $h $ and the misreport of agent $i , y^{\dagger}_{i} = 1 - y_{i}$ as,
-\begin{align*}
-h^\star \left(y^{\dagger}_{i}\right) &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h, x_{i'}, y_{i'}\right) + \ell\left(h, x_{i}, y^{\dagger}_{i}\right).
-\end{align*}
-Now suppose, for a contradiction, that agent $i $ prefers misreporting,
-\begin{align*}
-\ell\left(h^\star , x_{i}, y_{i}\right) &> \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i}, y_{i}\right),
-\end{align*}
-which implies, since $y^{\dagger}_{i} = 1 - y_{i,}$
-\begin{align*}
-\ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right) &< \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i}, y^{\dagger}_{i}\right).
-\end{align*}
-Note that the above implication only works for binary classification.
-\\* Due to the optimality of $h^\star \left(y^{\dagger}_{i}\right)$,
-\begin{align*}
-\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i'}, y_{i'}\right) + \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i}, y^{\dagger}_{i}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right) + \ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right),
-\end{align*}
-using the above inequalities, the comparison can be simplified to,
-\begin{align*}
-\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i'}, y_{i'}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right),
-\\ \displaystyle\sum_{i'=1}^{n} \ell\left(h^\star \left(y^{\dagger}_{i}\right), x_{i'}, y_{i'}\right) &\leq  \displaystyle\sum_{i'=1}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right),
-\end{align*}
-which is a contradiction to the optimality of $h^\star $.
-\newline \newline\end{proof}
-
-
-\subsection{Zero-One Loss Logistic Regression}
-It is, however, possible to change the loss function so that logistic regression is incentive compatible. Changing the loss function to absolute value $L^{1}$ loss is one possibility, due to \citet*{dekel2010incentive}. Their result on incentive compatibility of empirical risk minimization in the regression setting is applicable in our model. In addition to absolute value loss, which is not a meaningful loss function for multi-class logistic regression, zero-one loss logistic regression with deterministic predictions is also incentive compatible.
+\subsection{Loss Functions}
+It is, however, possible to change the loss function so that logistic regression is incentive compatible. Changing the loss function to absolute value $L^{1}$ loss is one possibility, due to \citet*{dekel2010incentive}. Their result on incentive compatibility of empirical risk minimization in the regression setting is applicable in our model. In addition to absolute value loss, empirical risk minimizers with zero-one loss is also always incentive compatible.
 \newline \newline
 \begin{prop} \label{prop:zolog} 
 Multi-class deterministic empirical risk minimization classifiers with zero-one loss are incentive compatible.
@@ -243,39 +210,39 @@ For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the hy
 \begin{align*}
 h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \mathbbm{1}_{\left\{y_{i'} \neq  h\left(x_{i'}\right)\right\}}.
 \end{align*}
-Fix an agent $i $, her feature vector $x_{i}$, and fix other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the loss function given the classifier $h $ and report of agent $i , y^{\dagger}_{i}$ as,
+Fix an agent $i $ with $x_{i}$, and fix the other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the loss function given the classifier $h $ and report of agent $i , y^{\dagger}_{i}$, as,
 \begin{align*}
-\mathcal{L}\left(h, y^{\dagger}_{i}\right) &= \displaystyle\sum_{i' \neq  i} \mathbbm{1}_{\left\{y_{i'} \neq  h\left(x_{i'}\right)\right\}} + \mathbbm{1}_{\left\{y^{\dagger}_{i} \neq  h\left(x_{i}\right)\right\}}.
+\ell\left(y^{\dagger}_{i}; h\right) &= \displaystyle\sum_{i' \neq  i} \mathbbm{1}_{\left\{y_{i'} \neq  h\left(x_{i'}\right)\right\}} + \mathbbm{1}_{\left\{y^{\dagger}_{i} \neq  h\left(x_{i}\right)\right\}}.
 \end{align*}
-If $y_{i} = h^\star \left(x_{i}\right)$, then the classifier is already classifying $x_{i}$ correctly, misreporting will not improve the outcome for $i $. Now let the prediction be $h^\star \left(x_{i}\right) = y^\star  \neq  y_{i}$, and suppose $h^\star $ is making $k $ mistakes, meaning,
+If $y_{i} = h^\star \left(x_{i}\right)$, then the classifier is already classifying $x_{i}$ correctly, misreporting will not improve the outcome for $i $. Assume the prediction is $h^\star \left(x_{i}\right) = y^\star  \neq  y_{i}$, and suppose $h^\star $ is making $q $ mistakes, meaning,
 \begin{align*}
-k  &= \displaystyle\min_{h \in \mathcal{H}} \mathcal{L}\left(h^\star , y_{i}\right).
+q  &= \displaystyle\min_{h \in \mathcal{H}} \ell\left(y_{i} ; h^\star \right).
 \end{align*}
 Agent $i $ can misreport in the following two ways:
 \end{proof}
 \begin{enumerate}
 \item If agent $i $ reports $y^{\dagger}_{i} = y^\star $, let the new classifier be $h^{\dagger}$, note that we must have,
 \begin{align*}
-\mathcal{L}\left(h^{\dagger}, y^\star \right) &\leq  k - 1,
+\ell\left(y^\star  ; h^{\dagger}\right) &\leq  q - 1,
 \end{align*}
-because $\mathcal{L}\left(h^{\dagger}, y^\star \right) > k - 1 = \mathcal{L}\left(h^\star , y^\star \right)$ contradicts the optimality of $h^{\dagger.}$
-\\* Now suppose that agent $i $ could get her true label with $h^{\dagger}$, meaning $h^{\dagger}\left(x_{i}\right) = y_{i}$, then,
+since $\ell\left(y^\star  ; h^{\dagger}\right) > q - 1 = \ell\left(y^\star  ; h^\star \right)$ contradicts the optimality of $h^{\dagger.}$
+\\* Suppose that agent $i $ could get her true label with $h^{\dagger}$, meaning $h^{\dagger}\left(x_{i}\right) = y_{i}$, then,
 \begin{align*}
-\mathcal{L}\left(h^{\dagger}, y_{i}\right) &= \mathcal{L}\left(h^{\dagger}, y^\star \right) - 1
+\ell\left(y_{i} ; h^{\dagger}\right) &= \ell\left(y^\star  ; h^{\dagger}\right) - 1
 \\ &\leq  k - 2
-\\ &< \mathcal{L}\left(h^\star , y_{i}\right),
+\\ &< \ell\left(y_{i} ; h^\star \right),
 \end{align*}
 which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot improve the outcome by misreporting $y^\star $.
 \item If agent $i $ reports $y^{\dagger}_{i} = y' \neq  y^\star $, let the new classifier be $h^{\dagger}$, note that we must have,
 \begin{align*}
-\mathcal{L}\left(h^{\dagger}, y'\right) &\leq  k,
+\ell\left(y' ; h^{\dagger}\right) &\leq  q,
 \end{align*}
-because if $\mathcal{L}\left(h^{\dagger}, y'\right) > k = \mathcal{L}\left(h^\star , y'\right)$ contradicts the optimality of $h^{\dagger.}$
-\\* Now suppose that agent $i $ could get her true label with $h^{\dagger}$, then,
+since $\ell\left(y' ; h^{\dagger}\right) > q = \ell\left(y' ; h^\star \right)$ contradicts the optimality of $h^{\dagger.}$
+\\* Suppose that agent $i $ could get her true label with $h^{\dagger}$, then,
 \begin{align*}
-\mathcal{L}\left(h^{\dagger}, y_{i}\right) &= \mathcal{L}\left(h^{\dagger}, y_{i}\right) - 1
-\\ &\leq  k - 1
-\\ &< \mathcal{L}\left(h^\star , y_{i}\right),
+\ell\left(y_{i} ; h^{\dagger}\right) &= \ell\left(y_{i} ; h^{\dagger}\right) - 1
+\\ &\leq  q - 1
+\\ &< \ell\left(y_{i} ; h^\star \right),
 \end{align*}
 which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot improve the outcome by misreporting $y'$.
 \\* Therefore, no agent can improve the outcome and the dataset is incentive compatible.
@@ -283,82 +250,49 @@ which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot imp
 \end{enumerate}
 
 
+\subsection{Binary Logistic Regression}
+Binary logistic regression is always incentive compatible, and agents with one label does not want to pretend to have the other label. This is not true in general for binary empirical risk minimization classifiers, and additional normalization condition on the loss function is required. The result is discussed in the next section. In the special case of logistic regression, since $\ell\left(0 ; h\right) + \ell\left(1 ; h\right) = 1$ holds for any $h  \in \mathcal{H}$, the following Proposition holds.
+\newline \newline
+\begin{prop} \label{prop:bin} 
+Binary logistic classifiers are incentive compatible.
+\end{prop}
+\begin{proof} \label{proof:binpf} 
+For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the logistic hypothesis class $\mathcal{H}$, let the optimal classifier in the case every agent reports truthfully be,
+\begin{align*}
+h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'}; h\right).
+\end{align*}
+Fix an agent $i $ with $x_{i}$, and fix other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the optimal classifier given the misreport of agent $i , y^{\dagger}_{i} = 1 - y_{i}$ as,
+\begin{align*}
+h^{\dagger} &= h^\star \left(y^{\dagger}_{i}\right) = \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
+\end{align*}
+Now suppose, for a contradiction, that agent $i $ prefers misreporting,
+\begin{align*}
+\ell\left(y_{i} ; h^\star \right) &> \ell\left(y_{i} ; h^{\dagger}\right),
+\end{align*}
+which implies, since $y^{\dagger}_{i} = 1 - y_{i}$, and the special property of the logistic loss function $\ell\left(0 ; h\right) + \ell\left(1 ; h\right) = 1$,
+\begin{align*}
+\ell\left(y^{\dagger}_{i} ; h^\star \right) &< \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right).
+\end{align*}
+Note that the above implication only works for binary classification.
+\\* Due to the optimality of $h^{\dagger,}$
+\begin{align*}
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^{\dagger}\right) + \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^\star \right) + \ell\left(y^{\dagger}_{i} ; h^\star \right),
+\end{align*}
+using the above inequalities, the comparison can be simplified to,
+\begin{align*}
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^{\dagger}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^\star \right),
+\\ \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h^\star \right) &\leq  \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h^\star \right),
+\end{align*}
+which is a contradiction to the optimality of $h^\star $.
+\newline \newline\end{proof}
+
+
 
 
 \section{Other Classifiers} 
 
-\subsection{Bayes Classifiers}
-The example given previously is incentive compatible with respect to the Naive Bayes classifier. None of the agents have the incentive to misreport their labels. This is always true in general for any parametric Bayes classifier estimated using maximum likelihood.
-\newline \newline
-\begin{lem} \label{lem:bc} 
-Bayes classifiers estimated by maximum likelihood are incentive compatible.
-\end{lem}
-\begin{proof} \label{proof:bcpf} 
-Suppose the loglikelihood function of class $y $ given the feature vector $x $ and the parameter $w $ is $\ell\left(x ; w \right)$, and define the optimal parameter, $w^\star $ for class $y_{i}$, of the truthful model as,
-\begin{align*}
-w^\star  &= \arg\displaystyle\max_{w} \displaystyle\sum_{i' : y_{i'} = y_{i}} \ell\left(x_{i'} ; w\right)
-\\ &= \arg\displaystyle\max_{w} \displaystyle\sum_{i' \neq  i : y_{i'} = y_{i}} \ell\left(x_{i'} ; w\right) + \ell\left(x_{i} ; w\right).
-\end{align*}
-Let the optimal parameter when agent $i $ reports $y^{\dagger}_{i} \neq  y_{i}$ be $w^{\dagger,}$
-\begin{align*}
-w^{\dagger} &= \arg\displaystyle\max_{w} \displaystyle\sum_{i' \neq  i: y_{i'} = y_{i}} \ell\left(x_{i'} ; w\right).
-\end{align*}
-In particular, these implies the following optimality conditions,
-\begin{align*}
-\displaystyle\sum_{i' \neq  i : y_{i'} = y_{i}} \ell\left(x_{i'} ; w^\star \right) + \ell\left(x_{i} ; w^\star \right) &\geq  \displaystyle\sum_{i' \neq  i : y_{i'} = y_{i}} \ell\left(x_{i'} ; w^{\dagger}\right) + \ell\left(x_{i} ; w^{\dagger}\right),
-\\ \displaystyle\sum_{i' \neq  i: y_{i'} = y_{i}} \ell\left(x_{i'} ; w^{\dagger}\right) &\geq  \displaystyle\sum_{i' \neq  i: y_{i'} = y_{i}} \ell\left(x_{i'}, w^\star \right).
-\end{align*}
-Taking the difference between the two inequalities, we have,
-\begin{align*}
-\ell\left(x_{i} ; w^\star \right) &\geq  \ell\left(x_{i} ; w^{\dagger}\right).
-\end{align*}
-Note that the empirical prior probability for class $y_{i}$ is decreased if the number of data with label $y_{i}$ is decreased by $1$. Therefore, the posterior probabilities satisfy,
-\begin{align*}
-\mathbb{P}\left\{y_{i} | x_{i}, w^\star \right\} &\geq  \mathbb{P}\left\{y_{i} | x_{i}, w^{\dagger}\right\}.
-\end{align*}
-Therefore, no agent can improve the outcome and the dataset is incentive compatible.
-\newline \newline\end{proof}
-One special case of this is the Bayes classifier for the Gaussian Mixture Model.
-\newline \newline
-
-
-\subsection{Kernel Density Estimators}
-There are two general approaches to use kernel densities for classification, the first is to use all the points to estimate the density and the second is to estimate the densities for each class separately (see \citet*{taylor1997classification}).
-\newline \newline
-The first approach suggests that,
-\begin{align*}
-\mathbb{P}\left\{X = x\right\} &= \dfrac{1}{n h^{D}} \displaystyle\sum_{i'=1}^{n} w_{i'}, \text{\;where\;} w_{i'} = K\left(\dfrac{x - x_{i'}}{h}\right).
-\end{align*}
-Define $w^\star $ to be the weight function when all agents report truthfully, then the classification probabilities for agent $i $ from dividing up the sum based on the class is,
-\begin{align*}
-\mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \right\} &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}}
-\\ &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}, i' \neq  i} + \dfrac{1}{n} w^\star _{i}
-\\ &= \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\} + \dfrac{1}{n} K\left(0\right), \text{\;since\;} y^{\dagger}_{i} \neq  y_{i}
-\\ &\leq  \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\},
-\end{align*}
-meaning reporting truthfully results in a larger probability compared to reporting $y^{\dagger}_{i}$ instead.
-\newline \newline
-Alternative if the classification probabilities are computed based on \citet*{taylor1997classification},
-\begin{align*}
-\mathbb{P}\left\{X = x | Y = y\right\} &= \dfrac{1}{n_{y} h^{D}} \displaystyle\sum_{i'=1}^{n} w_{i'} \mathbbm{1}_{\hat{y}_{i'} = y}, n_{y} = \displaystyle\sum_{i'=1}^{n} \mathbbm{1}_{\hat{y}_{i'} = y}
-\end{align*}
-Similar to the above derivation (and also as a special case of a Bayes estimator),
-\begin{align*}
-\mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \right\} &= \dfrac{1}{n_{y}} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}}
-\\ &= \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\} + \dfrac{1}{n_{y}} K\left(0\right)
-\\ &\leq  \mathbb{P}\left\{Y = y_{i}, X = x_{i} | w^\star \left(y^{\dagger}_{i}\right)\right\}.
-\end{align*}
-The above results will be referenced as the following lemma.
-\newline \newline
-\begin{lem} \label{lem:kde} 
-Kernel density estimators are incentive compatible.
-\newline \newline\end{lem}
-K-Nearest Neighbor is a special case of this with a uniform kernel.
-\newline \newline
-
-
 \subsection{Artificial Examples}
-One intuition behind why the above classifiers are always incentive-compatible is that one-vs-one classification decisions are made independently for classifiers. The classifiers like logistic regression have highly interdependent one-vs-one decisions. The following example is one in which $1$-vs-$2$ decisions are completely determined by the $2$-vs-$3$ decisions, and as a result, a class-$1$ point that is misclassified as class-$2$ could misreport as class-$3$ to influence the $2$-vs-$3$ decision boundary and indirectly change the $1$-vs-$2$ decision boundary in its favor.
+In this section, we show that classifiers, including Bayes classifiers and kernel density estimators, that satisfy some separability conditions are always incentive compatible. One intuition behind why some classifiers are incentive incompatible is that one-vs-one classification decisions are not made independently. Logistic regression has highly interdependent one-vs-one decisions. The following example is one in which $1$-vs-$2$ decisions are completely determined by the $2$-vs-$3$ decisions, and as a result, a class-$1$ point that is misclassified as class-$2$ could misreport as class-$3$ to influence the $2$-vs-$3$ decision boundary and indirectly change the $1$-vs-$2$ decision boundary in its favor.
 \newline \newline
 Consider the three-class $1D$ threshold classifiers in the form,
 \[ \hat{y}\left(x; t\right) =\left\{ \begin{array}{ll}
@@ -418,14 +352,14 @@ To generalize the above observations, suppose the learner is a probabilistic cla
 \begin{df} \label{df:mono} 
 (Monotonic Condition) A multi-class probabilistic classifier is monotonic if, given a training set $S $, for any point $x $ with labels $a $ and $b, $
 \begin{align*}
-\dfrac{\mathbb{P}\left\{Y = a | x, w^\star \left(S\right)\right\}}{\mathbb{P}\left\{Y = b | x, w^\star \left(S\right)\right\}} &\geq  \dfrac{\mathbb{P}\left\{Y = a | x, w^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right\}}{\mathbb{P}\left\{Y = b | x, w^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right\}}.
+\dfrac{\mathbb{P}\left\{Y = a | x ; w^\star \left(S\right)\right\}}{\mathbb{P}\left\{Y = b | x ; w^\star \left(S\right)\right\}} &\geq  \dfrac{\mathbb{P}\left\{Y = a | x ; w^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right\}}{\mathbb{P}\left\{Y = b | x ; w^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right\}}.
 \end{align*}\end{df}
 The assumption says that the probability that $x $ is classified as $a $ increases when there is an additional point $\left(x , a \right)$ in the training set.
 \newline \newline
 \begin{df} \label{df:iia} 
 (Independence of Irrelevant Alternatives (IIA) Condition) A multi-class classifier is independent of irrelevant alternatives if, given a training set $S $, for any point $x $ and any pair of labels $a $ and $b, $
 \begin{align*}
-\dfrac{\mathbb{P}\left\{Y = a | x, w^\star \left(S\right)\right\}}{\mathbb{P}\left\{Y = b | x, w^\star \left(S\right)\right\}} &= \dfrac{\mathbb{P}\left\{Y = a | x, w^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right\}}{\mathbb{P}\left\{Y = b | x, w^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right\}}.
+\dfrac{\mathbb{P}\left\{Y = a | x ; w^\star \left(S\right)\right\}}{\mathbb{P}\left\{Y = b | x ; w^\star \left(S\right)\right\}} &= \dfrac{\mathbb{P}\left\{Y = a | x ; w^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right\}}{\mathbb{P}\left\{Y = b | x ; w^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right\}}.
 \end{align*}\end{df}
 The assumption says that the ratio between the classification probabilities of $x $ of any two classes is not changed by adding a point at $x $ with a third class.
 \newline \newline
@@ -437,108 +371,125 @@ Multi-class probabilistic classifiers estimated by maximum likelihood is incenti
 \begin{proof} \label{proof:marginpf} 
 Fix a dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, let the maximum likelihood estimates in the case every agent report truthfully be,
 \begin{align*}
-w^\star  &= \arg\displaystyle\max_{w} \displaystyle\sum_{i'=1}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w\right\}\right).
+w^\star  &= \arg\displaystyle\max_{w} \displaystyle\sum_{i'=1}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w\right\}\right).
 \end{align*}
 Fix an agent $i $, her feature vector $x_{i}$, and fix other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the maximum likelihood estimate given the misreport of agent $i , y^{\dagger}_{i}$ as,
 \begin{align*}
-w^{\dagger} &= \arg\displaystyle\max_{w} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w\right\}\right) + \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w\right\}\right).
+w^{\dagger} &= \arg\displaystyle\max_{w} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w\right\}\right) + \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w\right\}\right).
 \end{align*}
 Now suppose, for a contradiction, that agent $i $ prefers misreporting, assume the following incentive inequality,
 \begin{align*}
-\mathbb{P}\left\{Y = y_{i} | x_{i}, w^\star \right\} &> \mathbb{P}\left\{Y = y_{i} | x_{i}, w^{\dagger}\right\}.
+\mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \right\} &> \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^{\dagger}\right\}.
 \end{align*}
 If there are only two classes, then by symmetry,
 \begin{align*}
-\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^\star \right\} &< \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^{\dagger}\right\}.
+\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^\star \right\} &< \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^{\dagger}\right\}.
 \end{align*}
 If there are more than two classes, fix a third $y'_{i} \notin \left\{y_{i}, y^{\dagger}_{i}\right\}$, and define an intermediate maximum likelihood estimate from removing the point $\left(x_{i}, y_{i}\right)$,
 \begin{align*}
-w' &= \arg\displaystyle\max_{w} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w\right\}\right),
+w' &= \arg\displaystyle\max_{w} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w\right\}\right),
 \end{align*}
 then the Monotonic Condition implies,
 \begin{align*}
-\dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i}, w^\star \right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i}, w^\star \right\}} &\leq  \dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i}, w'\right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i}, w'\right\}},
+\dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i} ; w^\star \right\}} &\leq  \dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i} ; w'\right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i} ; w'\right\}},
 \end{align*}
 and the IIA Condition implies,
 \begin{align*}
-\dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i}, w'\right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i}, w'\right\}} &= \dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i}, w^{\dagger}\right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i}, w^{\dagger}\right\}}.
+\dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i} ; w'\right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i} ; w'\right\}} &= \dfrac{\mathbb{P}\left\{Y = y_{i} | x_{i} ; w^{\dagger}\right\}}{\mathbb{P}\left\{Y = y'_{i} | x_{i} ; w^{\dagger}\right\}}.
 \end{align*}
 Combining the above two inequalities with the incentive inequality, we have,
 \begin{align*}
-\mathbb{P}\left\{Y = y'_{i} | x_{i}, w^\star \right\} &> \mathbb{P}\left\{Y = y'_{i} | x_{i}, w^{\dagger}\right\}.
+\mathbb{P}\left\{Y = y'_{i} | x_{i} ; w^\star \right\} &> \mathbb{P}\left\{Y = y'_{i} | x_{i} ; w^{\dagger}\right\}.
 \end{align*}
 Note that the above inequality is true for all $y'_{i} \notin \left\{y_{i}, y^{\dagger}_{i}\right\}$, summing over all such $y'_{i}$ results in,
 \begin{align*}
-\displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \mathbb{P}\left\{Y = y'_{i} | x_{i}, w^\star \right\} &> \displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \mathbb{P}\left\{Y = y'_{i} | x_{i}, w^{\dagger}\right\},
+\displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \mathbb{P}\left\{Y = y'_{i} | x_{i} ; w^\star \right\} &> \displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \mathbb{P}\left\{Y = y'_{i} | x_{i} ; w^{\dagger}\right\},
 \end{align*}
 given that the class probabilities sum up to $1$,
 \begin{align*}
-1 - \mathbb{P}\left\{Y = y_{i} | x_{i}, w^\star \right\} - \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^\star \right\} &> 1 - \mathbb{P}\left\{Y = y_{i} | x_{i}, w^{\dagger}\right\} - \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^{\dagger}\right\},
+1 - \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \right\} - \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^\star \right\} &> 1 - \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^{\dagger}\right\} - \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^{\dagger}\right\},
 \end{align*}
 and using the incentive inequality again,
 \begin{align*}
-\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^\star \right\} &< \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^{\dagger}\right\}.
+\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^\star \right\} &< \mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^{\dagger}\right\}.
 \end{align*}
 Now, due to the optimality of $h^{\dagger,}$
 \begin{align*}
-&  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w^{\dagger}\right\}\right) + \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^{\dagger}\right\}\right)
-\\ &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w^\star \right\}\right) + \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}, w^\star \right\}\right),
+&  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w^{\dagger}\right\}\right) + \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^{\dagger}\right\}\right)
+\\ &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w^\star \right\}\right) + \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i} ; w^\star \right\}\right),
 \end{align*}
 using the above inequalities, the comparison can be simplified to,
 \begin{align*}
-\displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w^{\dagger}\right\}\right) &< \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w^\star \right\}\right),
-\\ \displaystyle\sum_{i'=1}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w^{\dagger}\right\}\right) &< \displaystyle\sum_{i'=1}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}, w^\star \right\}\right),
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w^{\dagger}\right\}\right) &< \displaystyle\sum_{i'=1, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w^\star \right\}\right),
+\\ \displaystyle\sum_{i'=1}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w^{\dagger}\right\}\right) &< \displaystyle\sum_{i'=1}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'} ; w^\star \right\}\right),
 \end{align*}
 which is a contradiction to the optimality of $w^\star $.
 \newline \newline\end{proof}
 The assumptions Definition \ref{df:mono} (MC) and Definition \ref{df:iia} (IIA) can be significantly simplified for a separable class of the classifiers.
 \newline \newline
 \begin{df} \label{df:sep} 
-A probabilistic classifier is separable if the parameters $w^\star $ can be partitioned into $K $ classes, $w^\star _{1}, w^\star _{2}, ..., w^\star _{K}$, one set of parameters for each class, such that for given training sets $S $ and $S'$ and any label $k $ if,
+A probabilistic classifier is separable if the parameters $w^\star $ can be partitioned into $k $ classes, $w^\star _{1}, w^\star _{2}, ..., w^\star _{k}$, one set of parameters for each class, such that for given training sets $S $ and $S'$ and any label $a $ if,
 \begin{align*}
-\left\{\left(x_{i}, y_{i}\right) \in S : y_{i} = k\right\} &= \left\{\left(x_{i}, y_{i}\right) \in S' : y_{i} = k\right\},
+\left\{\left(x_{i}, y_{i}\right) \in S : y_{i} = a\right\} &= \left\{\left(x_{i}, y_{i}\right) \in S' : y_{i} = a\right\},
 \end{align*}
 then,
 \begin{align*}
-w^\star _{k}\left(S\right) &= w^\star _{k}\left(S'\right),
+w^\star _{a}\left(S\right) &= w^\star _{a}\left(S'\right),
 \end{align*}
-and if there is a value function $v_{k}\left(x\right)$ that only depends on $w^\star _{k}$ such that,
+and if there is a value function $v_{a}\left(x; w^\star _{a}\right)$ that are independent of $w^\star _{b}, b \neq  a $ such that,
 \begin{align*}
-\mathbb{P}\left\{Y = y | x; w^\star \right\} &= \dfrac{v_{k}\left(x\right)}{\displaystyle\sum_{k' = 1}^{K} v_{k'}\left(x\right)},
+\mathbb{P}\left\{Y = y | x; w^\star \right\} &= \dfrac{v_{a}\left(x; w^\star _{a}\right)}{\displaystyle\sum_{b=1}^{K} v_{b}\left(x; w^\star _{b}\right)},
 \end{align*}
 then the classifier is separable.
 \newline \newline\end{df}
-For separable classifiers, Definition \ref{df:iia} (IIA) is always satisfied since we have, for any label $a, $
-\begin{align*}
-\mathbb{P}\left\{Y = a|x, w^\star \left(S\right)\right\} &= \mathbb{P}\left\{Y = a|x, w^\star _{a}\left(S\right)\right\} = \mathbb{P}\left\{Y = a|x, w^\star _{a}\left(S \cup \left\{\left(x, y \neq  a\right)\right\}\right)\right\},
-\end{align*}
-and Definition \ref{df:mono} (MC) is reduced to the following inequality,
-\begin{align*}
-\mathbb{P}\left\{Y = a | x, w^\star \left(S\right)\right\} &\geq  \mathbb{P}\left\{Y = a | x, w^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right\},
-\end{align*}
-which is always true implied by the difference between the optimality conditions of $w^\star \left(S\right)$ and $w^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)$.
+Logistic regression satisfies the value function requirement, but fails the separability condition since training $w^\star _{a}$ uses data with labels that are not $a $. On the other hand, Bayes type classifiers are separable. For separable classifiers, Definition \ref{df:mono} (MC) and Definition \ref{df:iia} (IIA) are always satisfied.
 \newline \newline
 \begin{cor} \label{cor:sepmargin} 
 A separable multi-class probabilistic classifier estimated by maximum likelihood is incentive compatible.
-\newline \newline\end{cor}
-It immediately follows Lemma \ref{lem:bc} and Lemma \ref{lem:kde} hold, because the parameters for different classes are estimated separately, and the probabilities are computed as proportions.
+\end{cor}
+\begin{proof} \label{proof:sepmarginpf} 
+Due to separability,
+\begin{align*}
+v_{a}\left(x; w^\star \left(S\right)\right) &= v_{a}\left(x; w^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right), \text{\;and\;}
+\\ v_{b}\left(x; w^\star \left(S\right)\right) &= v_{b}\left(x; w^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right) = v_{b}\left(x; w^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right).
+\end{align*}
+MC follows from the optimality condition of $w^\star \left(S\right)$ and IIA follows immediately.
+\newline \newline\end{proof}
+\begin{cor} \label{cor:bc} 
+Bayes classifiers estimated by maximum likelihood are incentive compatible.
+\end{cor}
+\begin{proof} \label{proof:bcpf} 
+Follows from Corollary \ref{cor:sepmargin}.
+\newline \newline\end{proof}
+One special case of this is the Bayes classifier for the Gaussian Mixture Model.
 \newline \newline
-A similar result can be obtained for empirical risk minimization. We could either add an assumption that the loss function can be normalized so that the sum is constant and it behaves the same way as a probabilistic classifier, or we could use stronger Monotonic and IIA Conditions.
+\begin{cor} \label{cor:kde} 
+Kernel density estimators are incentive compatible.
+\end{cor}
+\begin{proof} \label{proof:kdepf} 
+Follows from Corollary \ref{cor:sepmargin}.
+\newline \newline\end{proof}
+There are two general approaches to use kernel densities for classification, the first is to use all the points to estimate the density and the second is to estimate the densities for each class separately (see \citet*{taylor1997classification}). The above result assumes the second approach. K-Nearest Neighbor is a special case of this with a uniform kernel.
+\newline \newline
+
+
+\subsection{Empirical Risk Minimization}
+A similar result can be obtained for empirical risk minimization. We could either add an assumption that the loss function can be normalized so that the sum is constant and it behaves the same way as a probabilistic classifier, or we could use stronger Monotonic and IIA Conditions. Here, we state the additional normalization condition.
 \newline \newline
 \begin{df} \label{df:nrml} 
-(Normalized Loss) A loss function $\ell$ is normalized if given a hypothesis $h $, for any point $x, $
+(Normalized Loss) A loss function $\ell$ is normalized if given a hypothesis $h $, for any point,
 \begin{align*}
-\displaystyle\sum_{y} \ell\left(h, x, y\right) &= C , \text{\;constant\;} .
+\displaystyle\sum_{y} \ell\left(y ; h\right) &= C , \text{\;constant\;} .
 \end{align*}\end{df}
 \begin{df} \label{df:monoerm} 
 (Monotonic Condition for ERM) Multi-class empirical risk minimization classifiers are monotonic if, given a training set $S $, for any point $x $ with labels $a $ and $b, $
 \begin{align*}
-\dfrac{\ell\left(h^\star \left(S\right), x, y = a\right)}{\ell\left(h^\star \left(S\right), x, y = b\right)} &\geq  \dfrac{\ell\left(h^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right), x, y = a\right)}{\ell\left(h^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right), x, y = b\right)}.
+\dfrac{\ell\left(y = a ; h^\star \left(S\right)\right)}{\ell\left(y = b ; h^\star \left(S\right)\right)} &\geq  \dfrac{\ell\left(y = a ; h^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right)}{\ell\left(y = b ; h^\star \left(S \cup \left\{\left(x, y = a\right)\right\}\right)\right)}.
 \end{align*}\end{df}
 \begin{df} \label{df:iiaerm} 
 (IIA Condition for ERM) Multi-class empirical risk minimization classifiers are independent of irrelevant alternatives if, given a training set $S $, for any point $x $ and any pair of labels $a $ and $b, $
 \begin{align*}
-\dfrac{\ell\left(h^\star \left(S\right), x, y = a\right)}{\ell\left(h^\star \left(S\right), x, y = b\right)} &= \dfrac{\ell\left(h^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right), x, y = a\right)}{\ell\left(h^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right), x, y = b\right)}.
+\dfrac{\ell\left(y = a ; h^\star \left(S\right)\right)}{\ell\left(y = b ; h^\star \left(S\right)\right)} &= \dfrac{\ell\left(y = a ; h^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right)}{\ell\left(y = b ; h^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right)}.
 \end{align*}\end{df}
 \begin{cor} \label{cor:marginerm} 
 Multi-class empirical risk minimization classifiers with normalized loss functions are incentive compatible if it is monotonic and independent of irrelevant alternatives.
@@ -546,67 +497,59 @@ Multi-class empirical risk minimization classifiers with normalized loss functio
 \begin{proof} \label{proof:marginermpf} 
 For a fixed dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the hypothesis class $\mathcal{H}$, let the optimal classifier in the case every agent report truthfully be,
 \begin{align*}
-h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(h, x_{i'}, y_{i'}\right).
+h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h\right).
 \end{align*}
 Fix an agent $i $, her feature vector $x_{i}$, and fix other agents' reports, $\left(x_{-i}, y_{-i}\right)$, define the optimal classifier given the classifier $h $ and the misreport of agent $i , y^{\dagger}_{i}$ as,
 \begin{align*}
-h^{\dagger} &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h, x_{i'}, y_{i'}\right) + \ell\left(h, x_{i}, y^{\dagger}_{i}\right).
+h^{\dagger} &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
 \end{align*}
 Now suppose, for a contradiction, that agent $i $ prefers misreporting, assume the following incentive inequality,
 \begin{align*}
-\ell\left(h^\star , x_{i}, y_{i}\right) &> \ell\left(h^{\dagger}, x_{i}, y_{i}\right).
+\ell\left(y_{i} ; h^\star \right) &> \ell\left(y_{i} ; h^{\dagger}\right).
 \end{align*}
 If there are only two classes, then by symmetry,
 \begin{align*}
-\ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right) &< \ell\left(h^{\dagger}, x_{i}, y^{\dagger}_{i}\right).
+\ell\left(y^{\dagger}_{i} ; h^\star \right) &< \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right).
 \end{align*}
 If there are more than two classes, fix a third $y'_{i} \notin \left\{y_{i}, y^{\dagger}_{i}\right\}$, and define an intermediate maximum likelihood estimate from removing the point $\left(x_{i}, y_{i}\right)$,
 \begin{align*}
-h' &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i' = 1, i' \neq  i}^{n} \ell\left(h, x_{i'}, y_{i'}\right),
+h' &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i' = 1, i' \neq  i}^{n} \ell\left(y_{i'} ; h\right),
 \end{align*}
 then the Monotonic Condition for ERM implies,
 \begin{align*}
-\dfrac{\ell\left(h^\star , x_{i}, y_{i}\right)}{\ell\left(h^\star , x_{i}, y'_{i}\right)} &\leq  \dfrac{\ell\left(h', x_{i}, y_{i}\right)}{\ell\left(h', x_{i}, y'_{i}\right)},
+\dfrac{\ell\left(y_{i} ; h^\star \right)}{\ell\left(y'_{i} ; h^\star \right)} &\leq  \dfrac{\ell\left(y_{i} ; h'\right)}{\ell\left(y'_{i} ; h'\right)},
 \end{align*}
 and the IIA Condition implies,
 \begin{align*}
-\dfrac{\ell\left(h', x_{i}, y_{i}\right)}{\ell\left(h', x_{i}, y'_{i}\right)} &= \dfrac{\ell\left(h^{\dagger}, x_{i}, y_{i}\right)}{\ell\left(h^{\dagger}, x_{i}, y'_{i}\right)}.
+\dfrac{\ell\left(y_{i} ; h'\right)}{\ell\left(y'_{i} ; h'\right)} &= \dfrac{\ell\left(y_{i} ; h^{\dagger}\right)}{\ell\left(y'_{i} ; h^{\dagger}\right)}.
 \end{align*}
 Combining the above two inequalities with the incentive inequality, we have,
 \begin{align*}
-\ell\left(h^\star , x_{i}, y'_{i}\right) &> \ell\left(h^{\dagger}, x_{i}, y'_{i}\right).
+\ell\left(y'_{i} ; h^\star \right) &> \ell\left(y'_{i} ; h^{\dagger}\right).
 \end{align*}
 Note that the above inequality is true for all $y'_{i} \notin \left\{y_{i}, y^{\dagger}_{i}\right\}$, summing over all such $y'_{i}$ results in,
 \begin{align*}
-\displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \ell\left(h^\star , x_{i}, y'_{i}\right) &> \displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \ell\left(h^{\dagger}, x_{i}, y'_{i}\right),
+\displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \ell\left(y'_{i} ; h^\star \right) &> \displaystyle\sum_{y \notin \left\{y_{i}, y^{\dagger}_{i}\right\}} \ell\left(y'_{i} ; h^{\dagger}\right),
 \end{align*}
 and given the losses are normalized,
 \begin{align*}
-C  - \ell\left(h^\star , x_{i}, y_{i}\right) - \ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right) &> C  - \ell\left(h^{\dagger}, x_{i}, y_{i}\right) - \ell\left(h^{\dagger}, x_{i}, y^{\dagger}_{i}\right),
+C  - \ell\left(y_{i} ; h^\star \right) - \ell\left(y^{\dagger}_{i} ; h^\star \right) &> C  - \ell\left(y_{i} ; h^{\dagger}\right) - \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right),
 \end{align*}
 and using the incentive inequality again,
 \begin{align*}
-\ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right) &< \ell\left(h^{\dagger}, x_{i}, y^{\dagger}_{i}\right).
+\ell\left(y^{\dagger}_{i} ; h^\star \right) &< \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right).
 \end{align*}
 Now, due to the optimality of $h^{\dagger,}$
 \begin{align*}
-\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^{\dagger}, x_{i'}, y_{i'}\right) + \ell\left(h^{\dagger}, x_{i}, y^{\dagger}_{i}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right) + \ell\left(h^\star , x_{i}, y^{\dagger}_{i}\right),
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^{\dagger}\right) + \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^\star \right) + \ell\left(y^{\dagger}_{i} ; h^\star \right),
 \end{align*}
 using the above inequalities, the comparison can be simplified to,
 \begin{align*}
-\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^{\dagger}, x_{i'}, y_{i'}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right),
-\\ \displaystyle\sum_{i'=1}^{n} \ell\left(h^{\dagger}, x_{i'}, y_{i'}\right) &\leq  \displaystyle\sum_{i'=1}^{n} \ell\left(h^\star , x_{i'}, y_{i'}\right),
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^{\dagger}\right) &\leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'} ; h^\star \right),
+\\ \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h^{\dagger}\right) &\leq  \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h^\star \right),
 \end{align*}
 which is a contradiction to the optimality of $h^\star $.
 \newline \newline\end{proof}
-
-
-
-
-\section{Conclusion} 
-
-TBA
-\newline \newline
 \bibliographystyle{te}
 \bibliography{cs}
 
