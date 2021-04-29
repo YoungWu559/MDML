@@ -58,7 +58,7 @@
 \newtheorem{rmk}{Remark}
 \maketitle \allowdisplaybreaks \raggedbottom
 \begin{abstract}
-We study the incentive compatibility of multi-class logistic regression. We provide a numerical example in which a strategic data provider has the incentive to misreport her private label to increase the classification probability of her true label. In particular, the model trained given her true label classifies her data point incorrectly, whereas the model trained given her misreported label classifies her data point correctly. We show that this incentive incompatibility disappears for classifiers that satisfy a monotonicity condition and an independence of irrelevant alternatives condition. Examples of such classifiers include Bayes classifiers, kernel density estimators, and empirical risk minimization classifiers with zero-one loss.
+We study the incentive compatibility of multi-class logistic regression. We provide a numerical example in which a strategic data provider has the incentive to misreport her private label to increase the classification probability of her true label. In particular, the model trained given her true label classifies her data point incorrectly, whereas the model trained given her misreported label classifies her data point correctly. We show that this incentive incompatibility disappears for classifiers that satisfy a monotonicity condition and independence of irrelevant alternatives condition. Examples of such classifiers include Bayes classifiers, kernel density estimators, and empirical risk minimization classifiers with zero-one loss.
 \newline \newline
 
 \end{abstract}
@@ -87,11 +87,11 @@ We study the incentive compatibility of multi-class logistic regression. We prov
 
 
 \section{Introduction} 
-Consider an insurance company that makes its pricing decisions based on the customers' public observable characteristics, but the decision models are built using information on private unobservable characteristics the customers report. If the insurance company is transparent about its models, they might worry that customers have incentives to misreport their private information to get the contract that is the most beneficial to themselves. Similar examples include other rating systems that depend on the report of private information, such as loan applications, school grades, and employee screening.
+Consider an insurance company that makes its pricing decisions based on the customers' public observable characteristics, but the decision models are built using the information on private unobservable characteristics the customers' report. If the insurance company is transparent about its models, they might worry that customers have incentives to misreport their private information to get the contract that is the most beneficial to them. Similar examples include other rating systems that depend on the report of private information, such as loan applications, school grades, and employee screening.
 \newline \newline
-In a general mechanism design problem, each of many strategic agents owns one public data point, and reports her private label to the principal. The principal is the learner and builds a classifier based on the labels provided by the agents. Each agent chooses a label to report, not necessarily her true label, to maximize the probability that her data point is classified correctly by the principal. We say that a dataset is incentive incompatible with respect to the classifier if at least one of the agents has the incentive to misreport, and we characterize classifiers that are incentive compatible with all possible datasets.
+In a general mechanism design problem, each of many strategic agents owns one public data point and reports her private label to the principal. The principal is the learner and builds a classifier based on the labels provided by the agents. Each agent chooses a label to report, not necessarily her true label, to maximize the probability that her data point is classified correctly by the principal. We say that a dataset is incentive-incompatible for the classifier if at least one of the agents has the incentive to misreport, and we characterize classifiers that are incentive-compatible with all possible datasets.
 \newline \newline
-We start with an example dataset that is incentive incompatible with respect to the multi-class logistic regression classifier. In the dataset, each of the $18$ agents owns a two dimensional data point and a private label with one of three values: "red", "green", or "blue".
+We start with an example dataset that is incentive-incompatible for the multi-class logistic regression classifier. In the dataset, each of the $18$ agents owns a two-dimensional data point and a private label with one of three values: "red", "green", or "blue".
 \newline \newline
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
@@ -117,19 +117,19 @@ We start with an example dataset that is incentive incompatible with respect to 
 \draw[fill = green, thick] (-0.77, -0.67) circle [radius = 0.1];
 \draw[fill = red, thick] (-1.73, -1.27) rectangle (-1.53, -1.07);
 \draw[fill = green, thick] (-2.5, -1.67) circle [radius = 0.1];
-\end{tikzpicture} \captionof{figure}{Incentive Incompatible Example}\label{fig:ice}
+\end{tikzpicture} \captionof{figure}{Incentive-incompatible Example}\label{fig:ice}
 \end{figure}
 The $18$ points are located inside a unit circle, and each point is $0.004$ away from the three line segments through the origin that forms angles of $120$ degrees between them. There is one red point, drawn as a square in the diagram, that is on the "incorrect" side of the boundary. For the agent represented by the red square, truthfully reporting her label will lead to a multi-class logistic regression model that classifies her point as "green". The probability that this model classifies her point as "red" is $0.3290$. However, if the agent misreports her label as "blue", the resulting model classifies her point as "red", and with a probability of $0.4966$. By lying about her label, the agent can make the principal learn an incorrect model that classifies her point correctly and with a higher probability.
 \newline \newline
-The example provides insight on the general incentive incompatibility issue of many classification models used in machine learning. The "red" agent that gets incorrectly classified as "green", does not want to misreport her label as "green", but instead has incentive to misreport her label as the third alternative "blue" to influence the classifier in a way that changes the decision between "red" and "green". Intuitively, if there are only two classes, then the agent would not be willing to misreport her label if the classifier is monotonic, in the sense that adding a point from one class increases the probability that this point is classified as a member of that class; and if there are more than two classes, then the agent would not be willing to misreport her label if the classifier is independent of irrelevant alternatives, in the sense that adding a point from a third class would not affect the decisions between the two classes.
+The example provides insight into the general incentive incompatibility issue of many classification models used in machine learning. The "red" agent that gets incorrectly classified as "green", does not want to misreport her label as "green" but instead has the incentive to misreport her label as the third alternative "blue" to influence the classifier in a way that changes the decision between "red" and "green". Intuitively, if there are only two classes, then the agent would not be willing to misreport her label if the classifier is monotonic, in the sense that adding a point from one class increases the probability that this point is classified as a member of that class; and if there are more than two classes, then the agent would not be willing to misreport her label if the classifier is independent of irrelevant alternatives, in the sense that adding a point from a third class would not affect the decisions between the two classes.
 \newline \newline
-Previous work on mechanism design for machine learning with strategic data sources focus on designing robust algorithms to incentivize the data providers to report their private data truthfully. Their models mainly differ in the objective and the possible actions of the data providers (agents) and the learner (principal).
+Previous work on mechanism design for machine learning with strategic data sources focuses on designing robust algorithms to incentivize the data providers to report their private data truthfully. Their models mainly differ in the objective and the possible actions of the data providers (agents) and the learner (principal).
 \newline \newline
 The first group of papers focuses on principal-agent problems similar to our paper in which each agent's private data point is the agent's type that the agent cannot change. The only action the agents can take is whether to report their private information truthfully.
 \begin{enumerate}
 \item Some models assume the agents' data points (or feature vectors) are public, but their labels are private. \citet*{perote2004strategy}, \citet*{chen2018strategyproof}, and \citet*{gast2013linear} focus on strategy-proof linear regression algorithms and introduced clockwise repeated median estimators, generalized resistant hyperplane estimators, and modified generalized linear squares estimators. \citet*{dekel2010incentive} investigates the general regression problem with empirical risk minimization and absolute value loss. All the previously mentioned papers assume the labels are continuous variables (regression problems), and \citet*{meir2012algorithms} assumes the labels are discrete variables (classification problems) and proposes a class of random dictator mechanisms.
 \item Some models assume the agents' data points are also private. \citet*{chen2019grinding} investigates such problems for linear regressions.
-\item Other models do not involve labels. Each agent has a private valuation. These problems are usually modeled as facility locations problems and the solution involves some variant of the Vickrey-Clarke-Groves or Meyerson auction. They include \citet*{dutting2017optimal}, \citet*{golowich2018deep}, \citet*{epasto2018incentive}, and \citet*{procaccia2009approximate}.
+\item Other models do not involve labels. Each agent has a private valuation. These problems are usually modeled as facility location problems and the solution involves some variant of the Vickrey-Clarke-Groves or Meyerson auction. They include \citet*{dutting2017optimal}, \citet*{golowich2018deep}, \citet*{epasto2018incentive}, and \citet*{procaccia2009approximate}.
 \end{enumerate}
 
 
@@ -162,16 +162,16 @@ w^\star  &= \arg\displaystyle\max_{w} \displaystyle\sum_{i=1}^{n} \log\left(\mat
 \\ w^{\dagger} &= w^\star \left(y^{\dagger}_{i}\right) = \arg\displaystyle\max_{w} \log\left(\mathbb{P}\left\{Y = y^{\dagger}_{i} | x_{i}; w\right) + \displaystyle\sum_{i' = 0, i' \neq  i}^{n} \log\left(\mathbb{P}\left\{Y = y_{i'} | x_{i'}; w\right\}\right).\right.
 \end{align*}
 \begin{df} \label{df:ic} 
-A dataset is incentive incompatible with respect to a classifier if there exists at least one agent $i $, and some $y^{\dagger}_{i} \neq  y_{i}$ such that,
+A dataset is incentive-incompatible for a classifier if there exists at least one agent $i $, and some $y^{\dagger}_{i} \neq  y_{i}$ such that,
 \begin{align*}
 \mathbb{P}\left\{Y = y_{i} | x_{i}; w^\star \right\} &< \mathbb{P}\left\{Y = y_{i} | x_{i}; w^\star \left(y^{\dagger}_{i}\right)\right\}.
 \end{align*}
-A classifier is incentive compatible if there does not exist a dataset that is incentive incompatible with respect to the classifier.
+A classifier is incentive-compatible if there does not exist a dataset that is incentive-incompatible for the classifier.
 \newline \newline\end{df}
 \begin{conj} \label{conj:logit} 
-Multi-class logistic regression is not incentive compatible.
+Multi-class logistic regression is not incentive-compatible.
 \newline \newline\end{conj}
-The example described in Figure \ref{fig:ice} is a dataset that is numerically incentive incompatible.
+The example described in Figure \ref{fig:ice} is a dataset that is numerically incentive-incompatible.
 \\* In this example, agent $i $ reports $x_{i} \in \mathbb{R}^{2}$ and $y_{i}$ is one of $1$ (red), $2$ (green), or $3$ (blue). Suppose the red square point corresponds to agent $1$ with $x_{1} = \left(-1.63, -1.17\right)$ and $y_{1} = 1$, then
 \begin{align*}
 \mathbb{P}\left\{Y = 1 | x_{1} ; w^\star \right\} &= 0.3290,
@@ -195,15 +195,15 @@ $1$ &$0$ &$0$ &$0$\\ \hline
 $2$ &-$0.1915645$ &$3.473426$ &-$5.507418$\\ \hline
 $3$ &$0.8273350$ &$4.309293$ &-$1.200060$\\ \hline
 \end{tabular} \end{center}
-Currently there is no formal proof that the result is not due to numerical instability, therefore, @(logit) is stated as a conjecture. Numerical experiments indicates that incentive incompatible datasets are rare. If the data points are two dimensional and standard normally distributed, and the labels are created using randomly generated weights with a small probability of error, then such a dataset is incentive incompatible with a probability of $0.005$.
+Currently, there is no formal proof that the result is not due to numerical instability, therefore, @(logit) is stated as a conjecture. Numerical experiments indicate that incentive-incompatible datasets are rare. If the data points are two-dimensional and standard normally distributed, and the labels are created using randomly generated weights with a small probability of error, then such a dataset is incentive-incompatible with a probability of $0.005$.
 \newline \newline
 
 
 \subsection{Loss Functions}
-It is, however, possible to change the loss function so that logistic regression is incentive compatible. Changing the loss function to absolute value $L^{1}$ loss is one possibility, due to \citet*{dekel2010incentive}. Their result on incentive compatibility of empirical risk minimization in the regression setting is applicable in our model. In addition to absolute value loss, empirical risk minimizers with zero-one loss is also always incentive compatible.
+It is, however, possible to change the loss function so that logistic regression is incentive-compatible. Changing the loss function to absolute value $L^{1}$ loss is one possibility, due to \citet*{dekel2010incentive}. Their result on incentive compatibility of empirical risk minimization in the regression setting is applicable in our model. In addition to absolute value loss, empirical risk minimizers with zero-one loss are also always incentive-compatible.
 \newline \newline
 \begin{prop} \label{prop:zolog} 
-Multi-class deterministic empirical risk minimization classifiers with zero-one loss are incentive compatible.
+Multi-class deterministic empirical risk minimization classifiers with zero-one loss are incentive-compatible.
 \end{prop}
 \begin{proof} \label{proof:zologpf} 
 For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the hypothesis class $\mathcal{H}$, let the optimal classifier be,
@@ -245,16 +245,16 @@ since $\ell\left(y' ; h^{\dagger}\right) > q = \ell\left(y' ; h^\star \right)$ c
 \\ &< \ell\left(y_{i} ; h^\star \right),
 \end{align*}
 which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot improve the outcome by misreporting $y'$.
-\\* Therefore, no agent can improve the outcome and the dataset is incentive compatible.
+\\* Therefore, no agent can improve the outcome and the dataset is incentive-compatible.
 \newline \newline
 \end{enumerate}
 
 
 \subsection{Binary Logistic Regression}
-Binary logistic regression is always incentive compatible, and agents with one label does not want to pretend to have the other label. This is not true in general for binary empirical risk minimization classifiers, and additional normalization condition on the loss function is required. The result is discussed in the next section. In the special case of logistic regression, since $\ell\left(0 ; h\right) + \ell\left(1 ; h\right) = 1$ holds for any $h  \in \mathcal{H}$, the following Proposition holds.
+Binary logistic regression is always incentive-compatible, and agents with one label do not want to pretend to have the other label. This is not true in general for binary empirical risk minimization classifiers, and additional normalization condition on the loss function is required. The result is discussed in the next section. In the special case of logistic regression, since $\ell\left(0 ; h\right) + \ell\left(1 ; h\right) = 1$ holds for any $h  \in \mathcal{H}$, the following Proposition holds.
 \newline \newline
 \begin{prop} \label{prop:bin} 
-Binary logistic classifiers are incentive compatible.
+Binary logistic classifiers are incentive-compatible.
 \end{prop}
 \begin{proof} \label{proof:binpf} 
 For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the logistic hypothesis class $\mathcal{H}$, let the optimal classifier in the case every agent reports truthfully be,
@@ -292,7 +292,7 @@ which is a contradiction to the optimality of $h^\star $.
 \section{Other Classifiers} 
 
 \subsection{Artificial Examples}
-In this section, we show that classifiers, including Bayes classifiers and kernel density estimators, that satisfy some separability conditions are always incentive compatible. One intuition behind why some classifiers are incentive incompatible is that one-vs-one classification decisions are not made independently. Logistic regression has highly interdependent one-vs-one decisions. The following example is one in which $1$-vs-$2$ decisions are completely determined by the $2$-vs-$3$ decisions, and as a result, a class-$1$ point that is misclassified as class-$2$ could misreport as class-$3$ to influence the $2$-vs-$3$ decision boundary and indirectly change the $1$-vs-$2$ decision boundary in its favor.
+In this section, we show that classifiers, including Bayes classifiers and kernel density estimators, that satisfy some separability conditions are always incentive-compatible. One intuition behind why some classifiers are incentive-incompatible is that one-vs-one classification decisions are not made independently. Logistic regression has highly interdependent one-vs-one decisions. The following example is one in which $1$-vs-$2$ decisions are completely determined by the $2$-vs-$3$ decisions, and as a result, a class-$1$ point that is misclassified as class-$2$ could misreport as class-$3$ to influence the $2$-vs-$3$ decision boundary and indirectly change the $1$-vs-$2$ decision boundary in its favor.
 \newline \newline
 Consider the three-class $1D$ threshold classifiers in the form,
 \[ \hat{y}\left(x; t\right) =\left\{ \begin{array}{ll}
@@ -310,7 +310,7 @@ Then, the learner's maximization problem is,
 \begin{align*}
 &\displaystyle\min_{t \in \mathbb{R}} \ell\left(x_{i}, y_{i}; t\right).
 \end{align*}
-The agents' problem is to minimize the loss for their point with their true label. The loss can be either the margin loss or zero-one loss, here, for simplicity, assume the agents also want to minimize the margin,
+The agent's problem is to minimize the loss for their point with their true label. The loss can be either the margin loss or zero-one loss, here, for simplicity, assume the agents also want to minimize the margin,
 \begin{align*}
 &\displaystyle\max_{y^{\dagger}_{i} \in \left\{1, 2, 3\right\}} \ell\left(x_{i}, y_{i}; t^\star \left(y^{\dagger}_{i}\right)\right),
 \end{align*}
@@ -329,7 +329,7 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \draw[red, thick] (-3.0, -0.2) -- (3.0, -0.2);
 \draw[blue, thick] (3.0, -0.2) -- (4.0, -0.2);
 \node[below] at (0.0, -0.2){$0$};
-\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive Incompatible Example (Truthful)}\label{fig:1dat}
+\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example (Truthful)}\label{fig:1dat}
 \end{figure}
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
@@ -343,11 +343,11 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \draw[red, thick] (0.0, -0.2) -- (0.0, -0.2);
 \draw[blue, thick] (0.0, -0.2) -- (4.0, -0.2);
 \node[below] at (0.0, -0.2){$0$};
-\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive Incompatible Example (Misreport)}\label{fig:1dam}
+\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example (Misreport)}\label{fig:1dam}
 \end{figure}
-Intuitively, when the misclassified class-$1$ point pretends to be a class-$3$ point with a large loss, the classifier modifies the $2$-vs-$3$ decision boundary to minimize that loss and the point benefits from the interdependence between the $2$-vs-$3$ decision and the $1$-vs-$2$ decision.
+Intuitively, when the misclassified class-$1$ point pretends to be a class-$3$ point with a large loss, the classifier modifies the $2$-vs-$3$ decision boundary to minimize that loss, and the point benefits from the interdependence between the $2$-vs-$3$ decision and the $1$-vs-$2$ decision.
 \newline \newline
-To generalize the above observations, suppose the learner is a probabilistic classifier with parameters estimated by maximum likelihood, and the agents report their labels to maximize the classification probability of their true labels. Then the following two conditions guarantee that the classification is incentive compatible.
+To generalize the above observations, suppose the learner is a probabilistic classifier with parameters estimated by maximum likelihood, and the agents report their labels to maximize the classification probability of their true labels. Then the following two conditions guarantee that the classification is incentive-compatible.
 \newline \newline
 \begin{df} \label{df:mono} 
 (Monotonic Condition) A multi-class probabilistic classifier is monotonic if, given a training set $S $, for any point $x $ with labels $a $ and $b, $
@@ -366,7 +366,7 @@ The assumption says that the ratio between the classification probabilities of $
 Combining the two assumptions MC and IIA, we have that an agent with label $a $ cannot change the decision of $a $ vs $b $ by misreporting its label as a third class $c $. This observation is formalized in the following proposition.
 \newline \newline
 \begin{thm} \label{thm:margin} 
-A multi-class probabilistic classifier estimated by maximum likelihood is incentive compatible if it is monotonic and independent of irrelevant alternatives.
+A multi-class probabilistic classifier estimated by maximum likelihood is incentive-compatible if it is monotonic and independent of irrelevant alternatives.
 \end{thm}
 \begin{proof} \label{proof:marginpf} 
 Fix a dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, let the maximum likelihood estimates in the case every agent report truthfully be,
@@ -426,7 +426,7 @@ using the above inequalities, the comparison can be simplified to,
 which is a contradiction to the optimality of $w^\star $.
 \newline \newline\end{proof}
 \begin{cor} \label{cor:binpr} 
-Binary probabilistic classifiers estimated by maximum likelihood are incentive compatible.
+Binary probabilistic classifiers estimated by maximum likelihood are incentive-compatible.
 \end{cor}
 \begin{proof} \label{proof:binpr} 
 MC holds due to the optimality conditions and IIA holds since there are only two classes.
@@ -448,10 +448,10 @@ and if there is a value function $v_{a}\left(x; w^\star _{a}\right)$ that are in
 \end{align*}
 then the classifier is separable.
 \newline \newline\end{df}
-Logistic regression satisfies the value function requirement, but fails the separability condition since training $w^\star _{a}$ uses data with labels that are not $a $. On the other hand, Bayes type classifiers are separable. For separable classifiers, Definition \ref{df:mono} (MC) and Definition \ref{df:iia} (IIA) are always satisfied.
+Logistic regression satisfies the value function requirement but fails the separability condition since training $w^\star _{a}$ uses data with labels that are not $a $. On the other hand, Bayes-type classifiers are separable. For separable classifiers, Definition \ref{df:mono} (MC) and Definition \ref{df:iia} (IIA) are always satisfied.
 \newline \newline
 \begin{cor} \label{cor:sepmargin} 
-A separable multi-class probabilistic classifier estimated by maximum likelihood is incentive compatible.
+A separable multi-class probabilistic classifier estimated by maximum likelihood is incentive-compatible.
 \end{cor}
 \begin{proof} \label{proof:sepmarginpf} 
 Due to separability,
@@ -462,15 +462,15 @@ v_{a}\left(x; w^\star \left(S\right)\right) &= v_{a}\left(x; w^\star \left(S \cu
 MC follows from the optimality condition of $w^\star \left(S\right)$ and IIA follows immediately.
 \newline \newline\end{proof}
 \begin{cor} \label{cor:bc} 
-Bayes classifiers estimated by maximum likelihood are incentive compatible.
+Bayes classifiers estimated by maximum likelihood are incentive-compatible.
 \end{cor}
 \begin{proof} \label{proof:bcpf} 
 Follows from Corollary \ref{cor:sepmargin}.
 \newline \newline\end{proof}
-Kernel density estimator are not estimated by maximum likelihood, so the previous results do not hold, although the proof is similar. There are two general approaches to use kernel densities for classification, the first is to use all the points to estimate the density and the second is to estimate the densities for each class separately (see \citet*{taylor1997classification}). The second approach is similar to a separable classifier. K-Nearest Neighbor is a special case of this with a uniform kernel.
+Kernel density estimators are not estimated by maximum likelihood, so the previous results do not hold, although the proof is similar. There are two general approaches to use kernel densities for classification, the first is to use all the points to estimate the density and the second is to estimate the densities for each class separately (see \citet*{taylor1997classification}). The second approach is similar to a separable classifier. K-Nearest Neighbor is a special case of this with a uniform kernel.
 \newline \newline
 \begin{cor} \label{cor:kde} 
-Kernel density estimators are incentive compatible.
+Kernel density estimators are incentive-compatible.
 \end{cor}
 \begin{proof} \label{proof:kdepf} 
 The first approach suggests that,
@@ -516,7 +516,7 @@ A similar result can be obtained for empirical risk minimization. We could eithe
 \dfrac{\ell\left(y = a ; h^\star \left(S\right)\right)}{\ell\left(y = b ; h^\star \left(S\right)\right)} &= \dfrac{\ell\left(y = a ; h^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right)}{\ell\left(y = b ; h^\star \left(S \cup \left\{\left(x', y' \notin \left\{a, b\right\}\right)\right\}\right)\right)}.
 \end{align*}\end{df}
 \begin{cor} \label{cor:marginerm} 
-Multi-class empirical risk minimization classifiers with normalized loss functions are incentive compatible if it is monotonic and independent of irrelevant alternatives.
+Multi-class empirical risk minimization classifiers with normalized loss functions are incentive-compatible if it is monotonic and independent of irrelevant alternatives.
 \end{cor}
 \begin{proof} \label{proof:marginermpf} 
 For a fixed dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the hypothesis class $\mathcal{H}$, let the optimal classifier in the case every agent report truthfully be,
