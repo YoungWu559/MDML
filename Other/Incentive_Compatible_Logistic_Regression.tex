@@ -366,7 +366,7 @@ The assumption says that the ratio between the classification probabilities of $
 Combining the two assumptions MC and IIA, we have that an agent with label $a $ cannot change the decision of $a $ vs $b $ by misreporting its label as a third class $c $. This observation is formalized in the following proposition.
 \newline \newline
 \begin{thm} \label{thm:margin} 
-Multi-class probabilistic classifiers estimated by maximum likelihood is incentive compatible if it is monotonic and independent of irrelevant alternatives.
+A multi-class probabilistic classifier estimated by maximum likelihood is incentive compatible if it is monotonic and independent of irrelevant alternatives.
 \end{thm}
 \begin{proof} \label{proof:marginpf} 
 Fix a dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, let the maximum likelihood estimates in the case every agent report truthfully be,
@@ -425,6 +425,12 @@ using the above inequalities, the comparison can be simplified to,
 \end{align*}
 which is a contradiction to the optimality of $w^\star $.
 \newline \newline\end{proof}
+\begin{cor} \label{cor:binpr} 
+Binary probabilistic classifiers estimated by maximum likelihood are incentive compatible.
+\end{cor}
+\begin{proof} \label{proof:binpr} 
+MC holds due to the optimality conditions and IIA holds since there are only two classes.
+\newline \newline\end{proof}
 The assumptions Definition \ref{df:mono} (MC) and Definition \ref{df:iia} (IIA) can be significantly simplified for a separable class of the classifiers.
 \newline \newline
 \begin{df} \label{df:sep} 
@@ -461,16 +467,34 @@ Bayes classifiers estimated by maximum likelihood are incentive compatible.
 \begin{proof} \label{proof:bcpf} 
 Follows from Corollary \ref{cor:sepmargin}.
 \newline \newline\end{proof}
-One special case of this is the Bayes classifier for the Gaussian Mixture Model.
+Kernel density estimator are not estimated by maximum likelihood, so the previous results do not hold, although the proof is similar. There are two general approaches to use kernel densities for classification, the first is to use all the points to estimate the density and the second is to estimate the densities for each class separately (see \citet*{taylor1997classification}). The second approach is similar to a separable classifier. K-Nearest Neighbor is a special case of this with a uniform kernel.
 \newline \newline
 \begin{cor} \label{cor:kde} 
 Kernel density estimators are incentive compatible.
 \end{cor}
 \begin{proof} \label{proof:kdepf} 
-Follows from Corollary \ref{cor:sepmargin}.
-\newline \newline\end{proof}
-There are two general approaches to use kernel densities for classification, the first is to use all the points to estimate the density and the second is to estimate the densities for each class separately (see \citet*{taylor1997classification}). The above result assumes the second approach. K-Nearest Neighbor is a special case of this with a uniform kernel.
-\newline \newline
+The first approach suggests that,
+\begin{align*}
+\mathbb{P}\left\{X = x\right\} &= \dfrac{1}{n h^{D}} \displaystyle\sum_{i'=1}^{n} w_{i'}, \text{\;where\;} w_{i'} = K\left(\dfrac{x - x_{i'}}{h}\right).
+\end{align*}
+Define $w^\star $ as the weight function when all agents report truthfully, and $w^{\dagger} = w^\star \left(y^{\dagger}_{i}\right)$ as the weight if agent $i $ misreports, then the classification probabilities for agent $i $ from dividing up the sum based on the class is,
+\begin{align*}
+\mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \right\} &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}}
+\\ &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}, i' \neq  i} + \dfrac{1}{n} w^\star _{i}
+\\ &= \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^{\dagger}\right\} + \dfrac{1}{n} K\left(0\right), \text{\;since\;} y^{\dagger}_{i} \neq  y_{i}
+\\ &\leq  \mathbb{P}\left\{Y = y_{i} | x = x_{i} ; w^\star \dagger\right\},
+\end{align*}
+meaning reporting truthfully results in a larger probability compared to reporting $y^{\dagger}_{i}$ instead.
+\\* Alternatively, the second approach suggests that, if the classification probabilities are computed based on \citet*{taylor1997classification},
+\begin{align*}
+\mathbb{P}\left\{X = x | Y = y\right\} &= \dfrac{1}{n_{y} h^{D}} \displaystyle\sum_{i'=1}^{n} w_{i'} \mathbbm{1}_{\hat{y}_{i'} = y}, n_{y} = \displaystyle\sum_{i'=1}^{n} \mathbbm{1}_{\hat{y}_{i'} = y}
+\end{align*}
+Similar to the above derivation (and also as a special case of a Bayes estimator),
+\begin{align*}
+\mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \right\} &= \dfrac{1}{n_{y}} \displaystyle\sum_{i'=1}^{n} w^\star _{i'} \mathbbm{1}_{\hat{y}_{i'} = y_{i}}
+\\ &= \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \dagger\right\} + \dfrac{1}{n_{y}} K\left(0\right)
+\\ &\leq  \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \dagger\right\}.
+\end{align*}\end{proof}
 
 
 \subsection{Empirical Risk Minimization}

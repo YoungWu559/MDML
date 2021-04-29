@@ -55,9 +55,9 @@
 
 \begin{frame} \frametitle{Incentive Compatibility}
 \begin{itemize}
-\item A dataset is incentive compatible (IC) given a classifier if there is an $i $ and some $y^{\dagger}_{i} \neq  y_{i}$ such that,
+\item A dataset is incentive compatible (IC) given a classifier $w^\star $ if there is an $i $ and some $y^{\dagger}_{i} \neq  y_{i}$ such that,
 \end{itemize}\begin{align*}
-\mathbb{P}\left\{Y = y_{i} | w^\star , x_{i}\right\} &< \mathbb{P}\left\{Y = y_{i} | w^\star \left(y^{\dagger}_{i}\right), x_{i}\right\}.
+\mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \right\} &< \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \left(y^{\dagger}_{i}\right)\right\}.
 \end{align*}
 \begin{itemize}
 \item A classifier is incentive compatible if all datasets are incentive compatible given this classifier.
@@ -72,8 +72,8 @@
 \begin{itemize}
 \item One numerical example dataset is not incentive compatible,
 \end{itemize}\begin{align*}
-\mathbb{P}\left\{Y = \text{\;red\;} | w^\star , x_{\text{\;square\;}}\right\} &= 0.3290, \text{\;but\;}
-\\ \mathbb{P}\left\{Y = \text{\;red\;} | w^\star \left(y^{\dagger}_{\text{\;square\;}} = \text{\;blue\;}\right), x_{\text{\;square\;}}\right\} &= 0.4966.
+\mathbb{P}\left\{Y = \text{\;red\;} | x_{\text{\;square\;}} ; w^\star \right\} &= 0.3290, \text{\;but\;}
+\\ \mathbb{P}\left\{Y = \text{\;red\;} | x_{\text{\;square\;}} ; w^\star \left(y^{\dagger}_{\text{\;square\;}} = \text{\;blue\;}\right)\right\} &= 0.4966.
 \end{align*}
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
 \draw[thick] (0.0, 0.0) circle [radius = 3.0];
@@ -104,13 +104,13 @@
 
 \begin{frame} \frametitle{Logistic Regression Experiments}
 \begin{itemize}
-\item R nnet package is used to estimate the logistic regression coefficients on $10000$ datasets of $100$ iid standard normally distributed points. If the labels are assigned at random, none of the datasets are incentive incompatible. If the random weights are used to create the labels (but with small error), then among the $10000$ dataset:
+\item R nnet package is used to estimate the logistic regression coefficients on $10000$ datasets of $100$ iid standard normally distributed points. If the labels are assigned at random, none of the datasets are incentive incompatible. If the random weights are used to create the labels (but with some error), then among the $10000$ dataset:
 \end{itemize}
 \begin{enumerate}
-\item $99952$ are IC.
-\item $48$ are not IC.
-\item $7$ are not IC for two or more agents.
-\item for $4$ datasets from the $48$, after one agent misreports, at least one other agent has the incentive to also misreport as a "defense".
+\item $99952$ are IC
+\item $48$ are not IC
+\item $7$ are not IC for two or more agents
+\item for $4$ datasets from the $48$, after one agent misreports, at least one other agent has the incentive to also misreport as a "defense"
 \end{enumerate}
 
 \end{frame}
@@ -120,20 +120,21 @@
 \section{Other Classifiers} \subsection{Main}
 
 \begin{frame} \frametitle{IC ERM Classifiers}
-\begin{itemize}
+\begin{enumerate}
 \item Binary classifiers (Proposition $2$, requires a technical condition on a loss function. The condition is satisfied for the standard logistic regression)
-\item ERM with zero-one loss (Proposition $3$)
+\item ERM with zero-one loss (Proposition $1$)
 \item ERM with $L_{1}$ loss (Dekel, Fischer, Procaccia $2010$)
-\end{itemize}
+\end{enumerate}
+
 \end{frame}
 
 \begin{frame} \frametitle{IC Probabilistic Classifiers}
-\begin{itemize}
-\item Binary classifiers (Corollary $1$, does not require additional distributional assumptions)
-\item Bayes classifiers (Proposition $4$)
-\item Gaussian mixture model (A special case of Bayes classifier)
-\item Kernel density estimators (Corollary $2$)
-\end{itemize}
+\begin{enumerate}
+\item Binary classifiers (Corollary $1$, parameters estimated by maximum likelihood)
+\item Bayes classifiers (Corollary $3$, parameters estimated by maximum likelihood)
+\item Kernel density estimators (Corollary $4$)
+\end{enumerate}
+
 \end{frame}
 
 \begin{frame} \frametitle{Artificial Example}
@@ -213,15 +214,17 @@
 
 \begin{frame} \frametitle{Separable Classifiers}
 \begin{itemize}
-\item If separate parameters are estimated for separate classes (independent of the points from other classes), and the classification probabilities can be written as a fraction of the values from different classes, then MC and IIA are always satisfied, therefore always IC.
-\item Examples include Bayes classifiers and kernel density estimators (Taylor $1997$ form).
+\item If separate parameters are estimated for separate classes (independent of the points from other classes), then MC and IIA are always satisfied, therefore these classifiers are always IC.
+\item Bayes classifiers with parameters estimated by maximum likelihood, including commonly used naive Bayes classifiers, are separable.
+\item Mixture of Gaussian classifier is not separable.
+\item The proof for kernel density estimators is similar.
 \end{itemize}
 \end{frame}
 
 \begin{frame} \frametitle{Separable Logistic Regression}
 \begin{itemize}
-\item Logistic Regression is not separable.
-\item One-vs-one and One-vs-all Logistic Regressions are also not separable, but they are IC (because the binary classifiers are IC).
+\item Multi-class logistic regression is not separable.
+\item One-vs-one and one-vs-all logistic regressions are also not separable, but they are IC (because the binary classifiers are IC).
 \end{itemize}
 \end{frame}
 
