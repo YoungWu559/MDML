@@ -294,7 +294,7 @@ which is a contradiction to the optimality of $h^\star $.
 \subsection{Artificial Examples}
 In this section, we show that classifiers, including Bayes classifiers and kernel density estimators, that satisfy some separability conditions are always incentive-compatible. One intuition behind why some classifiers are incentive-incompatible is that one-vs-one classification decisions are not made independently. Logistic regression has highly interdependent one-vs-one decisions. The following example is one in which $1$-vs-$2$ decisions are completely determined by the $2$-vs-$3$ decisions, and as a result, a class-$1$ point that is misclassified as class-$2$ could misreport as class-$3$ to influence the $2$-vs-$3$ decision boundary and indirectly change the $1$-vs-$2$ decision boundary in its favor.
 \newline \newline
-Consider the three-class $1D$ threshold classifiers in the form,
+Consider the three-class threshold classifiers with thresholds symmetric around $0$ in the form,
 \[ \hat{y}\left(x; t\right) =\left\{ \begin{array}{ll}
 1& \text{\;if\;} x < -t \\
 2& \text{\;if\;} -t \leq  x \leq  t \\
@@ -302,9 +302,9 @@ Consider the three-class $1D$ threshold classifiers in the form,
 \end{array}\right. \]
 This is effectively a one-vs-one threshold classifier with the $1$-vs-$2$ threshold of $-t $, with the $2$-vs-$3$ threshold of $t $ and the $1$-vs-$3$ threshold of any value between $-t $ and $t $. Now define the loss function as the squared error margin,
 \[ \ell\left(x_{i}, y_{i}; t\right) =\left\{ \begin{array}{ll}
-\left(x_{i} - \left(-t\right)\right)^{2} \mathbbm{1}_{\hat{y}\left(x_{i}; t\right) \neq  y_{i}}& \text{\;if\;} y_{i} = 1 \\
-\displaystyle\min\left\{\left(x_{i} - \left(-t\right)\right)^{2}, \left(x_{i} - t\right)^{2}\right\} \mathbbm{1}_{\hat{y}\left(x_{i}; t\right) \neq  y_{i}}& \text{\;if\;} y_{i} = 2 \\
-\left(x_{i} - t\right)^{2} \mathbbm{1}_{\hat{y}\left(x_{i}; t\right) \neq  y_{i}}& \text{\;if\;} y_{i} = 3 \\
+\left(\displaystyle\max\left\{x_{i} - \left(-t\right), 0\right\}\right)^{2}& \text{\;if\;} y_{i} = 1 \\
+\left(\displaystyle\min\left\{\displaystyle\max\left\{-t - x_{i}, 0\right\}, \displaystyle\max\left\{x_{i} - t, 0\right\}\right\}\right)^{2}& \text{\;if\;} y_{i} = 2 \\
+\left(\displaystyle\max\left\{t - x_{i}, 0\right\}\right)^{2}& \text{\;if\;} y_{i} = 3 \\
 \end{array}\right. \]
 Then, the learner's maximization problem is,
 \begin{align*}
@@ -315,7 +315,7 @@ The agent's problem is to minimize the loss for their point with their true labe
 &\displaystyle\max_{y^{\dagger}_{i} \in \left\{1, 2, 3\right\}} \ell\left(x_{i}, y_{i}; t^\star \left(y^{\dagger}_{i}\right)\right),
 \end{align*}
 where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for the learner when agent $i $ misreports the label as $y^{\dagger}_{i.}$
-\\* For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-5, 1\right), \left(-3, 2\right), \left(-2, 1\right), \left(4, 2\right), \left(5, 3\right)\right\}$, the minimum loss is $2$ and it occurs when $t  = 3$ when every agent reports truthfully. In this case, agent (-$2, 1$) is misclassified as (-$2, 2$). However, if (-$2, 1$) misreports as (-$2, 3$), the loss from $t  = 3$ is $26$ and the minimum loss is smaller than $21$ and it occurs when $t  = \dfrac{5}{3}$. In this case, agent (-$2, 1$) is classified correctly. In particular, the agent (-$2, 1$) improves the loss from $1$ to $0$.
+\\* For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, 1\right), \left(-g, 2\right), \left(-r, 1\right), \left(g, 2\right), \left(1, 3\right)\right\}$, with some $r , g \in \left(0, 1\right)$ and $r  < g < 2 r $, the minimum loss is $\dfrac{2}{3} \left(g - r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g + \dfrac{1}{3} r > r $ when every agent reports truthfully. In this case, agent (-$2, 1$) is misclassified as (-$2, 2$). However, if (-$2, 1$) misreports as (-$2, 3$), the minimum loss is $\dfrac{2}{3} \left(g + r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g - \dfrac{1}{3} r < r $. In this case, agent (-$2, 1$) is classified correctly. In particular, the agent (-$2, 1$) improves the loss from $g  - r $ to $0$.
 \newline \newline
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
@@ -323,12 +323,17 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \draw[fill = red, thick] (-5.0, 0.0) circle [radius = 0.1];
 \draw[fill = green, thick] (-3.0, 0.0) circle [radius = 0.1];
 \draw[fill = red, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
-\draw[fill = green, thick] (4.0, 0.0) circle [radius = 0.1];
+\draw[fill = green, thick] (3.0, 0.0) circle [radius = 0.1];
 \draw[fill = blue, thick] (5.0, 0.0) circle [radius = 0.1];
 \draw[red, thick] (-5.0, -0.2) -- (-3.0, -0.2);
 \draw[green, thick] (-3.0, -0.2) -- (3.0, -0.2);
 \draw[blue, thick] (3.0, -0.2) -- (5.0, -0.2);
+\node[below] at (-5.0, -0.2){-$1$};
+\node[below] at (-3.0, -0.2){-$g $};
+\node[below] at (-2.0, -0.2){-$r $};
 \node[below] at (0.0, -0.2){$0$};
+\node[below] at (3.0, -0.2){+$g $};
+\node[below] at (5.0, -0.2){+$1$};
 \end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $1$ (Truthful)}\label{fig:1dat}
 \end{figure}
 
@@ -337,14 +342,98 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \draw[fill = red, thick] (-5.0, 0.0) circle [radius = 0.1];
 \draw[fill = green, thick] (-3.0, 0.0) circle [radius = 0.1];
 \draw[fill = blue, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
-\draw[fill = green, thick] (4.0, 0.0) circle [radius = 0.1];
+\draw[fill = green, thick] (3.0, 0.0) circle [radius = 0.0];
 \draw[fill = blue, thick] (5.0, 0.0) circle [radius = 0.1];
 \draw[red, thick] (-5.0, -0.2) -- (-1.67, -0.2);
 \draw[green, thick] (-1.67, -0.2) -- (1.67, -0.2);
 \draw[blue, thick] (1.67, -0.2) -- (5.0, -0.2);
+\node[below] at (-5.0, -0.2){-$1$};
+\node[below] at (-3.0, -0.2){-$g $};
+\node[below] at (-2.0, -0.2){-$r $};
 \node[below] at (0.0, -0.2){$0$};
+\node[below] at (3.0, -0.2){+$g $};
+\node[below] at (5.0, -0.2){+$1$};
 \end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $1$ (Misreport)}\label{fig:1dam}
 \end{figure}
+\begin{df} \label{df:sqm} 
+A squared margin classifier with thresholds symmetric around $0$ is an empirical risk minimizer on the hypothesis class,
+\begin{align*}
+\mathcal{H} &= \left\{ h_{t} : \mathbb{R} \to  \left\{1, 2, 3\right\}, h_{t}\left(x\right) = 1 + \mathbbm{1}_{\left\{x \geq  -t\right\}} + \mathbbm{1}_{\left\{x > t\right\}} | t \geq  0\right\},
+\end{align*}
+with loss function, for $h  \in \mathcal{H}$,
+\begin{align*}
+\ell\left(x_{i}, y_{i}; h\right) &= d\left(x_{i}, \left\{x : h\left(x\right) = y_{i}\right\}\right)^{2,}
+\end{align*}
+where $d\left(x, S \right) $ is the shortest distance from the point $x  \in \mathbb{R}$ to a set $S  \subseteq \mathbb{R}$.
+\newline \newline\end{df}
+\begin{lem} \label{lem:ex1} 
+The dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, 1\right), \left(-g, 2\right), \left(-r, 1\right), \left(g, 2\right), \left(1, 3\right)\right\}$, with r, $g \in \left(0, 1\right)$ and $r  < g < 2 r $, is incentive incompatible for the squared margin classifier with thresholds symmetric around $0$.
+\end{lem}
+\begin{proof} \label{proof:ex1pf} 
+The optimal threshold for the original dataset is,
+\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+(t - r)^{2}& \text{\;if\;} t \geq  g \\
+2 \left(t - g\right)^{2} + \left(t - r\right)^{2}& \text{\;if\;} r < t < g \\
+2 \left(t - g\right)^{2}& \text{\;if\;} t \leq  r \\
+\end{array}\right. \]
+or,
+\[ t^\star  = \arg\displaystyle\min_{t}\left\{ \begin{array}{ll}
+(g - r)^{2}& \text{\;if\;} t = g \\
+\dfrac{2}{3} \left(g - r\right)^{2}& \text{\;if\;} t = \dfrac{2}{3} g + \dfrac{1}{3} r \\
+2 \left(g - r\right)^{2}& \text{\;if\;} t = r \\
+\end{array}\right. \]
+implying,
+\begin{align*}
+t^\star  &= \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
+\end{align*}
+which classifies (-$r , 1$) as a class-$2$ point, which is incorrect.
+\\* Similarly, the optimal threshold if the agent misreports her label as $3 $ is,
+\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+(t + r)^{2}& \text{\;if\;} t \geq  g \\
+2 \left(t - g\right)^{2} + \left(t + r\right)^{2}& \text{\;if\;} r \leq  t < g \\
+2 \left(t - g\right)^{2} + \left(t + r\right)^{2}& \text{\;if\;} t < r \\
+\end{array}\right. \]
+or,
+\[ t^\star  = \arg\displaystyle\min_{t}\left\{ \begin{array}{ll}
+(g + r)^{2}& \text{\;if\;} t = g \\
+> \dfrac{2}{3} \left(g + r\right)^{2}& \text{\;if\;} t = r \\
+\dfrac{2}{3} \left(g + r\right)^{2}& \text{\;if\;} t = \dfrac{2}{3} g - \dfrac{1}{3} r \\
+\end{array}\right. \]
+implying,
+\begin{align*}
+t^\star  &= \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
+\end{align*}
+which classifies (-$r , 1$) as a class-$1$ point, which is correct.
+\\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
+\newline \newline\end{proof}
+\begin{lem} \label{lem:ex1g} 
+The dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, 1\right), \left(-g, 2\right), \left(-r, 1\right), \left(g, 2\right), \left(1, 3\right)\right\}$, with $r  < g  \in \left(0, 1\right)$. For some $r $ sufficiently close to $g $, the dataset is incentive incompatible for the classifier that minimizes a function, $f $, of the margin with thresholds symmetric around $0$, if $f $ is strictly convex and has a minimum of $0$ at $0$.
+\end{lem}
+\begin{proof} \label{proof:ex1gpf} 
+The optimal threshold for the original dataset is,
+\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+f(t - r)& \text{\;if\;} t \geq  g \\
+2 f\left(t - g\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
+2 f\left(t - g\right)& \text{\;if\;} t \leq  r \\
+\end{array}\right. \]
+Since $f\left(t - r\right) $ is minimized at $r  < g$ and $f\left(t - g\right) $ is minimized at $g  > r$,
+\begin{align*}
+&t^\star  \in \left(r , g \right),
+\end{align*}
+which classifies (-$r , 1$) as a class-$2$ point, which is incorrect.
+\\* Similarly, the optimal threshold if the agent misreports her label as $3 $ is,
+\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+f(t + r)& \text{\;if\;} t \geq  g \\
+2 f\left(t - g\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
+2 f\left(t - g\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
+\end{array}\right. \]
+Since $f\left(t + r\right) $ is minimized at $t  = -r < g $ and $f\left(t - g\right) $ is minimized at $g $, for $r $ sufficiently close to $g $ (need more details?)
+\begin{align*}
+&t^\star  \in \left(0, r \right),
+\end{align*}
+which classifies (-$r , 1$) as a class-$1$ point, which is correct.
+\\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
+\newline \newline\end{proof}
 Intuitively, when the misclassified class-$1$ point pretends to be a class-$3$ point with a large loss, the classifier modifies the $2$-vs-$3$ decision boundary to minimize that loss, and the point benefits from the interdependence between the $2$-vs-$3$ decision and the $1$-vs-$2$ decision.
 \newline \newline
 The decision boundaries can be related in more complicated ways. Consider the three-class $1D$ threshold classifiers in the form,
