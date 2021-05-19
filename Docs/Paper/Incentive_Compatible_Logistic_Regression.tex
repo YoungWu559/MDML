@@ -30,7 +30,21 @@
 \usepackage{caption}
 \usepackage{float}
 \usepackage{setspace}
+\usepackage{color}
 \usetikzlibrary{patterns}
+
+
+\def\E{\mathbb E}
+\def\H{\mathcal H}
+\def\R{\mathbb R}
+\def\bfx{\mathbf x}
+\def\argmax{\mathrm{argmax}}
+\def\argmin{\mathrm{argmin}}
+\def\sgn{\mathrm{sgn}}
+\newcommand{\comment}[1]{\textcolor{red}{#1}}
+
+
+
 \title{Incentive Incompatibility of Logistic Regression}
 % The \author macro works with any number of authors. There are two commands
 % used to separate the names and addresses of multiple authors: \And and \AND.
@@ -355,37 +369,55 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \node[below] at (5.0, -0.2){+$1$};
 \end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $1$ (Misreport)}\label{fig:1dam}
 \end{figure}
-\begin{df} \label{df:sqm} 
-A strictly convex loss margin classifier, $h^\star $, for three classes with thresholds symmetric around $0$, is an empirical risk learning algorithm, $\left(\mathcal{H}, \ell, S \right)$, with hypothesis class,
-\begin{align*}
-\mathcal{H} &= \left\{ h_{t} : \mathbb{R} \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\} \right\}_{t \geq  0},
-\end{align*}
-where,
-\[ h_{t}\left(x\right) =\left\{ \begin{array}{ll}
+
+\section{A good example}
+Consider a 3-way classifier $h_t: \R \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\} $ parametrized by $t\ge 0$:
+\begin{equation}
+h_{t}\left(x\right) =\left\{ \begin{array}{ll}
 \text{\;red\;}& \text{\;if\;} x < t  \\
 \text{\;green\;}& \text{\;if\;} -t \leq  x \leq  t \\
-\text{\;blue\;}& \text{\;if\;} x  > t, \\
-\end{array}\right. \]
-and loss function $\ell$,
-\begin{align*}
-\ell\left(x_{i}, y_{i}; h\right) &= f\left(d\left(x_{i}, \left\{x : h\left(x\right) = y_{i}\right\}\right), h \in \mathcal{H},\right.
-\end{align*}
-where $d\left(x, S \right) $ is the shortest distance from the point $x  \in \mathbb{R}$ to a set $S  \subseteq \mathbb{R}$,
-\\* and $f $ is strictly convex, minimized at $0$, with $f\left(0\right)  = 0$,
-\\* and training set $S  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}, x_{i} \in \mathbb{R}, y_{i} \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$,
-\begin{align*}
-h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i=1}^{n} \ell\left(x_{i}, y_{i}; h\right).
-\end{align*}\end{df}
-The example described previously is a squared loss margin classifier with convex function $f\left(\cdot \right)  = \cdot ^{2.}$
-\newline \newline
-Define the dataset,
-\begin{align*}
-S_{1} &= \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
-\end{align*}
-with r, $g \in \left(0, 1\right)$.
-\begin{lem} \label{lem:ex1} 
-$S_{1}$ is incentive incompatible for the squared margin classifier with thresholds symmetric around $0$ if $r  < g < 2 r. $
-\end{lem}
+\text{\;blue\;}& \text{\;if\;} x  > t. \\
+\end{array}\right. 
+\end{equation}
+Let the hypothesis space be
+\begin{equation}
+\H = \left\{ h_t : t \geq  0\right\}.
+\end{equation}
+Equivalently, a hypothesis $h_t$ partitions $\R$ into three sets: 
+$X^\text{red}_t = (-\infty, -t)$,
+$X^\text{green}_t = [-t, t]$,
+$X^\text{blue}_t = (t, \infty)$.
+Given a labeled point $(x,y)$ with  $y \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$, it could be outside the ``color region'' suggested by $h_t$. 
+Accordingly, we define a loss function $\ell$ based on the distance it takes to move the point to the corresponding color region suggested by $h_t$.
+Concretely,
+\begin{equation}
+\ell\left(x, y, h_t\right) = f(d(x, X^y_t))
+\end{equation}
+where 
+\begin{equation}
+d(x, X^y_t) = \min_{x' \in X^y_t} \|x-x'\|
+\end{equation}
+is the shortest distance from the point $x$ to the set (color region) $X^y_t$.
+$f \ge 0$ is strictly convex with minimum at 0: $f(0) = 0$.
+For example, $f$ can be the square function $f(z)=z^2$.
+
+Given a training set $S=\{(x_1,y_1), \ldots (x_n, y_n)\}$, consider the Empiricial Risk Minimizer (ERM)
+\begin{equation}
+\hat h \in \argmin_{h \in \H} \sum_{i=1}^n \ell(x_i, y_i, h).
+\end{equation}
+
+We now exhibit a family of IIC datasets $S$, see Figure~\ref{fig:1dat}.
+$S$ consists of five labeled points:
+\begin{equation}
+S = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
+\end{equation}
+with $0< r  < g < 2 r.$
+\comment{Do we need $g < 1$ or $2r <1$?}
+
+%---
+\begin{prop} \label{prop:ex1} 
+$S$ is incentive incompatible with respect to ERM on $\H$ and $\ell$.
+\end{prop}
 \begin{proof} \label{proof:ex1pf} 
 The optimal threshold for the original dataset is,
 \[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
