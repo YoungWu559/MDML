@@ -315,7 +315,7 @@ The agent's problem is to minimize the loss for their point with their true labe
 &\displaystyle\max_{y^{\dagger}_{i} \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}} \ell\left(x_{i}, y_{i}; t^\star \left(y^{\dagger}_{i}\right)\right),
 \end{align*}
 where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for the learner when agent $i $ misreports the label as $y^{\dagger}_{i.}$
-\\* For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\}$, with some $r , g \in \left(0, 1\right)$ and $r  < g < 2 r $, the minimum loss is $\dfrac{2}{3} \left(g - r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g + \dfrac{1}{3} r > r $ when every agent reports truthfully. In this case, agent (-$2, \text{\;red\;}$) is misclassified as green. However, if (-$2, \text{\;red\;}$) misreports as blue, the minimum loss is $\dfrac{2}{3} \left(g + r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g - \dfrac{1}{3} r < r $. In this case, agent (-$2, \text{\;red\;}$) is classified correctly, and in particular, she improves the loss from $g  - r $ to $0$.
+\\* For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\}$, with some $r , g \in \left(0, 1\right)$ and $r  < g < 2 r $, the minimum loss is $\dfrac{2}{3} \left(g - r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g + \dfrac{1}{3} r > r $ when every agent reports truthfully. In this case, agent (-r, $\text{\;red\;}$) is misclassified as green. However, if (-r, $\text{\;red\;}$) misreports as blue, the minimum loss is $\dfrac{2}{3} \left(g + r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g - \dfrac{1}{3} r < r $. In this case, agent (-r, $\text{\;red\;}$) is classified correctly, and in particular, she improves the loss from $g  - r $ to $0$.
 \newline \newline
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
@@ -378,12 +378,13 @@ h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i=1}^{n
 \end{align*}\end{df}
 The example described previously is a squared loss margin classifier with convex function $f\left(\cdot \right)  = \cdot ^{2.}$
 \newline \newline
-\begin{lem} \label{lem:ex1} 
 Define the dataset,
 \begin{align*}
 S_{1} &= \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
 \end{align*}
-with r, $g \in \left(0, 1\right). S_{1}$ is incentive incompatible for the squared margin classifier with thresholds symmetric around $0$ if $r  < g < 2 r. $
+with r, $g \in \left(0, 1\right)$.
+\begin{lem} \label{lem:ex1} 
+$S_{1}$ is incentive incompatible for the squared margin classifier with thresholds symmetric around $0$ if $r  < g < 2 r. $
 \end{lem}
 \begin{proof} \label{proof:ex1pf} 
 The optimal threshold for the original dataset is,
@@ -436,7 +437,7 @@ Since $f\left(0\right)  = 0$, the objective is continuous at $t  = g $ and $t  =
 \begin{align*}
 &t^\star  \in \left(r , g \right),
 \end{align*}
-which classifies (-$r , 1$) as a class-$2$ point, which is incorrect.
+which classifies (-$r , \text{\;red\;}$) as a green point, which is incorrect.
 \\* Similarly, the optimal threshold if the agent misreports her label as $\text{\;blue\;}$ is,
 \[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 f(t + r)& \text{\;if\;} t \geq  g \\
