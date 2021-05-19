@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.5.7)  19 MAY 2021 03:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.5.7)  19 MAY 2021 03:04
 entering extended mode
 **./Incentive_Compatible_Logistic_Regression.tex
 (Incentive_Compatible_Logistic_Regression.tex
@@ -1147,72 +1147,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 122--129
 
  []
 
-
-Package natbib Warning: Citation `perote2004strategy' on page 2 undefined on in
-put line 130.
-
-
-Package natbib Warning: Citation `chen2018strategyproof' on page 2 undefined on
- input line 130.
-
-
-Package natbib Warning: Citation `gast2013linear' on page 2 undefined on input 
-line 130.
-
-
-Package natbib Warning: Citation `dekel2010incentive' on page 2 undefined on in
-put line 130.
-
-
-Package natbib Warning: Citation `meir2012algorithms' on page 2 undefined on in
-put line 130.
-
-
-Package natbib Warning: Citation `chen2019grinding' on page 2 undefined on inpu
-t line 131.
-
-
-Package natbib Warning: Citation `dutting2017optimal' on page 2 undefined on in
-put line 132.
-
-
-Package natbib Warning: Citation `golowich2018deep' on page 2 undefined on inpu
-t line 132.
-
-
-Package natbib Warning: Citation `epasto2018incentive' on page 2 undefined on i
-nput line 132.
-
-
-Package natbib Warning: Citation `procaccia2009approximate' on page 2 undefined
- on input line 132.
-
 [2]
-
-Package natbib Warning: Citation `richardsonprivately' on page 3 undefined on i
-nput line 136.
-
-
-Package natbib Warning: Citation `cai2015optimum' on page 3 undefined on input 
-line 136.
-
-
-Package natbib Warning: Citation `shah2016double' on page 3 undefined on input 
-line 136.
-
-
-Package natbib Warning: Citation `mihailescu2010strategy' on page 3 undefined o
-n input line 136.
-
-
-Package natbib Warning: Citation `dekel2009vox' on page 3 undefined on input li
-ne 138.
-
-
-Package natbib Warning: Citation `dekel2009good' on page 3 undefined on input l
-ine 138.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 136--140
 
  []
@@ -1224,31 +1159,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 136--140
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 136--140
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 168--170
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 168--170
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 172--173
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 198--200
+Underfull \hbox (badness 10000) in paragraph at lines 168--170
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 168--170
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
@@ -1258,8 +1188,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 198--200
  []
 
 
-Package natbib Warning: Citation `dekel2010incentive' on page 4 undefined on in
-put line 203.
+Underfull \hbox (badness 10000) in paragraph at lines 198--200
+
+ []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 203--205
@@ -1311,17 +1242,17 @@ Underfull \hbox (badness 1648) in paragraph at lines 295--298
 esh-olds sym-met-ric around $\OT1/cmr/m/n/10 0$ \T1/ptm/m/n/10 (+20) in the
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 316--320
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 316--320
-
- []
-
 [6]
+Underfull \hbox (badness 10000) in paragraph at lines 316--320
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 316--320
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 379--382
 
  []
@@ -1331,12 +1262,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 422--425
 
  []
 
-
+[8]
 Underfull \hbox (badness 10000) in paragraph at lines 466--469
 
  []
 
-[8]
+
 Underfull \hbox (badness 10000) in paragraph at lines 470--473
 
  []
@@ -1437,10 +1368,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 641--642
  []
 
 
-Package natbib Warning: Citation `taylor1997classification' on page 12 undefine
-d on input line 643.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 643--645
 
  []
@@ -1451,11 +1378,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 643--645
  []
 
 [12]
-
-Package natbib Warning: Citation `taylor1997classification' on page 13 undefine
-d on input line 661.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 674--676
 
  []
@@ -1465,51 +1387,47 @@ Underfull \hbox (badness 10000) in paragraph at lines 674--676
 
  []
 
-[13]
+[13] [14]
 Underfull \hbox (badness 10000) in paragraph at lines 747--749
 
  []
 
-(Incentive_Compatible_Logistic_Regression.bbl [14])
+(Incentive_Compatible_Logistic_Regression.bbl [15]) [16]
+(Incentive_Compatible_Logistic_Regression.aux)
 
-Package natbib Warning: There were undefined citations.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-[15] (Incentive_Compatible_Logistic_Regression.aux
-
-Package natbib Warning: Citation(s) may have changed.
-(natbib)                Rerun to get citations correct.
-
-) ) 
+ ) 
 Here is how much of TeX's memory you used:
- 19285 strings out of 480971
- 356804 string characters out of 2909169
- 606701 words of memory out of 3000000
+ 19294 strings out of 480971
+ 356876 string characters out of 2909169
+ 606323 words of memory out of 3000000
  34609 multiletter control sequences out of 15000+200000
- 568152 words of font info for 145 fonts, out of 3000000 for 9000
+ 568542 words of font info for 151 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,14n,61p,1001b,655s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/public/bbm/dpi6
-00\bbm10.pk>{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc} <C:\Users
-\Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/public/mathabx/dpi600\matha5
-.pk> <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/public/mathabx
-/dpi600\mathx10.pk> <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour
-/public/mathabx/dpi600\matha7.pk> <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\f
-onts/pk/ljfour/public/mathabx/dpi600\matha10.pk><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
-amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.p
-fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files
-/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Program Files/MiK
-TeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/typ
-e1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr
-i8a.pfb>
-Output written on Incentive_Compatible_Logistic_Regression.pdf (15 pages, 21318
-7 bytes).
+ <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/public/bbm/dpi60
+0\bbm10.pk>{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc} <C:\Users\
+Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/public/mathabx/dpi600\matha5.
+pk> <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/public/mathabx/
+dpi600\mathx10.pk> <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/
+public/mathabx/dpi600\matha7.pk> <C:\Users\Young Wu\AppData\Local\MiKTeX\2.9\fo
+nts/pk/ljfour/public/mathabx/dpi600\matha10.pk><C:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pf
+b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Fil
+es/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files/
+MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri
+8a.pfb>
+Output written on Incentive_Compatible_Logistic_Regression.pdf (16 pages, 21334
+6 bytes).
 PDF statistics:
- 178 PDF objects out of 1000 (max. 8388607)
+ 181 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  18957 words of extra memory for PDF output out of 20736 (max. 10000000)
 
