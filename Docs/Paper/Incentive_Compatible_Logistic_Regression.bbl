@@ -1,0 +1,120 @@
+\begin{thebibliography}{17}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\bibAnnoteFile}[1]{%
+  \IfFileExists{#1}{\begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ \input{#1}\end{quotation}}{}}
+\providecommand{\bibAnnote}[2]{%
+  \begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ #2\end{quotation}}
+
+\bibitem[{Cai et~al.(2015)Cai, Daskalakis, and Papadimitriou}]{cai2015optimum}
+Cai, Yang, Constantinos Daskalakis, and Christos Papadimitriou (2015),
+  \enquote{Optimum statistical estimation with strategic data sources.} In
+  \emph{Conference on Learning Theory}, 280--296.
+\bibAnnoteFile{cai2015optimum}
+
+\bibitem[{Chen et~al.(2019)Chen, Liu, and Podimata}]{chen2019grinding}
+Chen, Yiling, Yang Liu, and Chara Podimata (2019), \enquote{Grinding the space:
+  Learning to classify against strategic agents.} \emph{arXiv preprint
+  arXiv:1911.04004}.
+\bibAnnoteFile{chen2019grinding}
+
+\bibitem[{Chen et~al.(2018)Chen, Podimata, Procaccia, and
+  Shah}]{chen2018strategyproof}
+Chen, Yiling, Chara Podimata, Ariel~D Procaccia, and Nisarg Shah (2018),
+  \enquote{Strategyproof linear regression in high dimensions.} In
+  \emph{Proceedings of the 2018 ACM Conference on Economics and Computation},
+  9--26.
+\bibAnnoteFile{chen2018strategyproof}
+
+\bibitem[{Dekel et~al.(2010)Dekel, Fischer, and Procaccia}]{dekel2010incentive}
+Dekel, Ofer, Felix Fischer, and Ariel~D Procaccia (2010), \enquote{Incentive
+  compatible regression learning.} \emph{Journal of Computer and System
+  Sciences}, 76, 759--777.
+\bibAnnoteFile{dekel2010incentive}
+
+\bibitem[{Dekel and Shamir(2009{\natexlab{a}})}]{dekel2009good}
+Dekel, Ofer and Ohad Shamir (2009{\natexlab{a}}), \enquote{Good learners for
+  evil teachers.} In \emph{Proceedings of the 26th annual international
+  conference on machine learning}, 233--240.
+\bibAnnoteFile{dekel2009good}
+
+\bibitem[{Dekel and Shamir(2009{\natexlab{b}})}]{dekel2009vox}
+Dekel, Ofer and Ohad Shamir (2009{\natexlab{b}}), \enquote{Vox populi:
+  Collecting high-quality labels from a crowd.} In \emph{COLT}.
+\bibAnnoteFile{dekel2009vox}
+
+\bibitem[{D{\"u}tting et~al.(2017)D{\"u}tting, Feng, Narasimhan, Parkes, and
+  Ravindranath}]{dutting2017optimal}
+D{\"u}tting, Paul, Zhe Feng, Harikrishna Narasimhan, David~C Parkes, and
+  Sai~Srivatsa Ravindranath (2017), \enquote{Optimal auctions through deep
+  learning.} \emph{arXiv preprint arXiv:1706.03459}.
+\bibAnnoteFile{dutting2017optimal}
+
+\bibitem[{Epasto et~al.(2018)Epasto, Mahdian, Mirrokni, and
+  Zuo}]{epasto2018incentive}
+Epasto, Alessandro, Mohammad Mahdian, Vahab Mirrokni, and Song Zuo (2018),
+  \enquote{Incentive-aware learning for large markets.} In \emph{Proceedings of
+  the 2018 World Wide Web Conference}, 1369--1378.
+\bibAnnoteFile{epasto2018incentive}
+
+\bibitem[{Gast et~al.(2013)Gast, Ioannidis, Loiseau, and
+  Roussillon}]{gast2013linear}
+Gast, Nicolas, Stratis Ioannidis, Patrick Loiseau, and Benjamin Roussillon
+  (2013), \enquote{Linear regression from strategic data sources.} \emph{arXiv
+  preprint arXiv:1309.7824}.
+\bibAnnoteFile{gast2013linear}
+
+\bibitem[{Golowich et~al.(2018)Golowich, Narasimhan, and
+  Parkes}]{golowich2018deep}
+Golowich, Noah, Harikrishna Narasimhan, and David~C Parkes (2018),
+  \enquote{Deep learning for multi-facility location mechanism design.} In
+  \emph{IJCAI}, 261--267.
+\bibAnnoteFile{golowich2018deep}
+
+\bibitem[{Meir et~al.(2012)Meir, Procaccia, and
+  Rosenschein}]{meir2012algorithms}
+Meir, Reshef, Ariel~D Procaccia, and Jeffrey~S Rosenschein (2012),
+  \enquote{Algorithms for strategyproof classification.} \emph{Artificial
+  Intelligence}, 186, 123--156.
+\bibAnnoteFile{meir2012algorithms}
+
+\bibitem[{Mihailescu and Teo(2010)}]{mihailescu2010strategy}
+Mihailescu, Marian and Yong~Meng Teo (2010), \enquote{Strategy-proof dynamic
+  resource pricing of multiple resource types on federated clouds.} In
+  \emph{International Conference on Algorithms and Architectures for Parallel
+  Processing}, 337--350, Springer.
+\bibAnnoteFile{mihailescu2010strategy}
+
+\bibitem[{Perote and Perote-Pena(2004)}]{perote2004strategy}
+Perote, Javier and Juan Perote-Pena (2004), \enquote{Strategy-proof estimators
+  for simple regression.} \emph{Mathematical Social Sciences}, 47, 153--176.
+\bibAnnoteFile{perote2004strategy}
+
+\bibitem[{Procaccia and Tennenholtz(2009)}]{procaccia2009approximate}
+Procaccia, Ariel~D and Moshe Tennenholtz (2009), \enquote{Approximate mechanism
+  design without money.} In \emph{Proceedings of the 10th ACM conference on
+  Electronic commerce}, 177--186.
+\bibAnnoteFile{procaccia2009approximate}
+
+\bibitem[{Richardson et~al.(2019)Richardson, Rokvic, Filos-Ratsikas, and
+  Faltings}]{richardsonprivately}
+Richardson, Adam, Ljubomir Rokvic, Aris Filos-Ratsikas, and Boi Faltings
+  (2019), \enquote{Privately computing influence in regression models.}
+\bibAnnoteFile{richardsonprivately}
+
+\bibitem[{Shah and Zhou(2016)}]{shah2016double}
+Shah, Nihar~B and Dengyong Zhou (2016), \enquote{Double or nothing:
+  Multiplicative incentive mechanisms for crowdsourcing.} \emph{The Journal of
+  Machine Learning Research}, 17, 5725--5776.
+\bibAnnoteFile{shah2016double}
+
+\bibitem[{Taylor(1997)}]{taylor1997classification}
+Taylor, Charles (1997), \enquote{Classification and kernel density estimation.}
+  \emph{Vistas in Astronomy}, 41, 411--417.
+\bibAnnoteFile{taylor1997classification}
+
+\end{thebibliography}

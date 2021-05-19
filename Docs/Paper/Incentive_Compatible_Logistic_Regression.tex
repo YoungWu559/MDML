@@ -296,15 +296,15 @@ In this section, we show that classifiers, including Bayes classifiers and kerne
 \newline \newline
 Consider the three-class threshold classifiers with thresholds symmetric around $0$ in the form,
 \[ \hat{y}\left(x; t\right) =\left\{ \begin{array}{ll}
-1& \text{\;if\;} x < -t \\
-2& \text{\;if\;} -t \leq  x \leq  t \\
-3& \text{\;if\;} x > t \\
+\text{\;red\;}& \text{\;if\;} x < -t \\
+\text{\;green\;}& \text{\;if\;} -t \leq  x \leq  t \\
+\text{\;blue\;}& \text{\;if\;} x > t \\
 \end{array}\right. \]
-This is effectively a one-vs-one threshold classifier with the $1$-vs-$2$ threshold of $-t $, with the $2$-vs-$3$ threshold of $t $ and the $1$-vs-$3$ threshold of any value between $-t $ and $t $. Now define the loss function as the squared error margin,
+This is effectively a one-vs-one threshold classifier with the red-vs-green threshold of $-t $, with the green-vs-blue threshold of $t $ and the red-vs-blue threshold of any value between $-t $ and $t $. Now define the loss function as the squared error margin,
 \[ \ell\left(x_{i}, y_{i}; t\right) =\left\{ \begin{array}{ll}
-\left(\displaystyle\max\left\{x_{i} - \left(-t\right), 0\right\}\right)^{2}& \text{\;if\;} y_{i} = 1 \\
-\left(\displaystyle\min\left\{\displaystyle\max\left\{-t - x_{i}, 0\right\}, \displaystyle\max\left\{x_{i} - t, 0\right\}\right\}\right)^{2}& \text{\;if\;} y_{i} = 2 \\
-\left(\displaystyle\max\left\{t - x_{i}, 0\right\}\right)^{2}& \text{\;if\;} y_{i} = 3 \\
+\left(\displaystyle\max\left\{x_{i} - \left(-t\right), 0\right\}\right)^{2}& \text{\;if\;} y_{i} = \text{\;red\;} \\
+\left(\displaystyle\min\left\{\displaystyle\max\left\{-t - x_{i}, 0\right\}, \displaystyle\max\left\{x_{i} - t, 0\right\}\right\}\right)^{2}& \text{\;if\;} y_{i} = \text{\;green\;} \\
+\left(\displaystyle\max\left\{t - x_{i}, 0\right\}\right)^{2}& \text{\;if\;} y_{i} = \text{\;blue\;} \\
 \end{array}\right. \]
 Then, the learner's maximization problem is,
 \begin{align*}
@@ -312,10 +312,10 @@ Then, the learner's maximization problem is,
 \end{align*}
 The agent's problem is to minimize the loss for their point with their true label. The loss can be either the margin loss or zero-one loss, here, for simplicity, assume the agents also want to minimize the margin,
 \begin{align*}
-&\displaystyle\max_{y^{\dagger}_{i} \in \left\{1, 2, 3\right\}} \ell\left(x_{i}, y_{i}; t^\star \left(y^{\dagger}_{i}\right)\right),
+&\displaystyle\max_{y^{\dagger}_{i} \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}} \ell\left(x_{i}, y_{i}; t^\star \left(y^{\dagger}_{i}\right)\right),
 \end{align*}
 where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for the learner when agent $i $ misreports the label as $y^{\dagger}_{i.}$
-\\* For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, 1\right), \left(-g, 2\right), \left(-r, 1\right), \left(g, 2\right), \left(1, 3\right)\right\}$, with some $r , g \in \left(0, 1\right)$ and $r  < g < 2 r $, the minimum loss is $\dfrac{2}{3} \left(g - r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g + \dfrac{1}{3} r > r $ when every agent reports truthfully. In this case, agent (-$2, 1$) is misclassified as (-$2, 2$). However, if (-$2, 1$) misreports as (-$2, 3$), the minimum loss is $\dfrac{2}{3} \left(g + r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g - \dfrac{1}{3} r < r $. In this case, agent (-$2, 1$) is classified correctly. In particular, the agent (-$2, 1$) improves the loss from $g  - r $ to $0$.
+\\* For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\}$, with some $r , g \in \left(0, 1\right)$ and $r  < g < 2 r $, the minimum loss is $\dfrac{2}{3} \left(g - r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g + \dfrac{1}{3} r > r $ when every agent reports truthfully. In this case, agent (-$2, \text{\;red\;}$) is misclassified as green. However, if (-$2, \text{\;red\;}$) misreports as blue, the minimum loss is $\dfrac{2}{3} \left(g + r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g - \dfrac{1}{3} r < r $. In this case, agent (-$2, \text{\;red\;}$) is classified correctly, and in particular, she improves the loss from $g  - r $ to $0$.
 \newline \newline
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
@@ -342,7 +342,7 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \draw[fill = red, thick] (-5.0, 0.0) circle [radius = 0.1];
 \draw[fill = green, thick] (-3.0, 0.0) circle [radius = 0.1];
 \draw[fill = blue, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
-\draw[fill = green, thick] (3.0, 0.0) circle [radius = 0.0];
+\draw[fill = green, thick] (3.0, 0.0) circle [radius = 0.1];
 \draw[fill = blue, thick] (5.0, 0.0) circle [radius = 0.1];
 \draw[red, thick] (-5.0, -0.2) -- (-1.67, -0.2);
 \draw[green, thick] (-1.67, -0.2) -- (1.67, -0.2);
@@ -356,18 +356,34 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $1$ (Misreport)}\label{fig:1dam}
 \end{figure}
 \begin{df} \label{df:sqm} 
-A squared margin classifier with thresholds symmetric around $0$ is an empirical risk minimizer on the hypothesis class,
+A strictly convex loss margin classifier, $h^\star $, for three classes with thresholds symmetric around $0$, is an empirical risk learning algorithm, $\left(\mathcal{H}, \ell, S \right)$, with hypothesis class,
 \begin{align*}
-\mathcal{H} &= \left\{ h_{t} : \mathbb{R} \to  \left\{1, 2, 3\right\}, h_{t}\left(x\right) = 1 + \mathbbm{1}_{\left\{x \geq  -t\right\}} + \mathbbm{1}_{\left\{x > t\right\}} | t \geq  0\right\},
+\mathcal{H} &= \left\{ h_{t} : \mathbb{R} \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\} \right\}_{t \geq  0},
 \end{align*}
-with loss function, for $h  \in \mathcal{H}$,
+where,
+\[ h_{t}\left(x\right) =\left\{ \begin{array}{ll}
+\text{\;red\;}& \text{\;if\;} x < t  \\
+\text{\;green\;}& \text{\;if\;} -t \leq  x \leq  t \\
+\text{\;blue\;}& \text{\;if\;} x  > t, \\
+\end{array}\right. \]
+and loss function $\ell$,
 \begin{align*}
-\ell\left(x_{i}, y_{i}; h\right) &= d\left(x_{i}, \left\{x : h\left(x\right) = y_{i}\right\}\right)^{2,}
+\ell\left(x_{i}, y_{i}; h\right) &= f\left(d\left(x_{i}, \left\{x : h\left(x\right) = y_{i}\right\}\right), h \in \mathcal{H},\right.
 \end{align*}
-where $d\left(x, S \right) $ is the shortest distance from the point $x  \in \mathbb{R}$ to a set $S  \subseteq \mathbb{R}$.
-\newline \newline\end{df}
+where $d\left(x, S \right) $ is the shortest distance from the point $x  \in \mathbb{R}$ to a set $S  \subseteq \mathbb{R}$,
+\\* and $f $ is strictly convex, minimized at $0$, with $f\left(0\right)  = 0$,
+\\* and training set $S  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}, x_{i} \in \mathbb{R}, y_{i} \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$,
+\begin{align*}
+h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i=1}^{n} \ell\left(x_{i}, y_{i}; h\right).
+\end{align*}\end{df}
+The example described previously is a squared loss margin classifier with convex function $f\left(\cdot \right)  = \cdot ^{2.}$
+\newline \newline
 \begin{lem} \label{lem:ex1} 
-The dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, 1\right), \left(-g, 2\right), \left(-r, 1\right), \left(g, 2\right), \left(1, 3\right)\right\}$, with r, $g \in \left(0, 1\right)$ and $r  < g < 2 r $, is incentive incompatible for the squared margin classifier with thresholds symmetric around $0$.
+Define the dataset,
+\begin{align*}
+S_{1} &= \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
+\end{align*}
+with r, $g \in \left(0, 1\right). S_{1}$ is incentive incompatible for the squared margin classifier with thresholds symmetric around $0$ if $r  < g < 2 r. $
 \end{lem}
 \begin{proof} \label{proof:ex1pf} 
 The optimal threshold for the original dataset is,
@@ -375,63 +391,79 @@ The optimal threshold for the original dataset is,
 (t - r)^{2}& \text{\;if\;} t \geq  g \\
 2 \left(t - g\right)^{2} + \left(t - r\right)^{2}& \text{\;if\;} r < t < g \\
 2 \left(t - g\right)^{2}& \text{\;if\;} t \leq  r \\
-\end{array}\right. \]
+\end{array},\right. \]
 or,
 \[ t^\star  = \arg\displaystyle\min_{t}\left\{ \begin{array}{ll}
 (g - r)^{2}& \text{\;if\;} t = g \\
 \dfrac{2}{3} \left(g - r\right)^{2}& \text{\;if\;} t = \dfrac{2}{3} g + \dfrac{1}{3} r \\
 2 \left(g - r\right)^{2}& \text{\;if\;} t = r \\
-\end{array}\right. \]
+\end{array},\right. \]
 implying,
 \begin{align*}
 t^\star  &= \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
 \end{align*}
-which classifies (-$r , 1$) as a class-$2$ point, which is incorrect.
-\\* Similarly, the optimal threshold if the agent misreports her label as $3 $ is,
+which classifies (-$r , \text{\;red\;}$) as a green point, which is incorrect.
+\\* Similarly, the optimal threshold if the agent misreports her label as blue is,
 \[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 (t + r)^{2}& \text{\;if\;} t \geq  g \\
 2 \left(t - g\right)^{2} + \left(t + r\right)^{2}& \text{\;if\;} r \leq  t < g \\
 2 \left(t - g\right)^{2} + \left(t + r\right)^{2}& \text{\;if\;} t < r \\
-\end{array}\right. \]
+\end{array},\right. \]
 or,
 \[ t^\star  = \arg\displaystyle\min_{t}\left\{ \begin{array}{ll}
 (g + r)^{2}& \text{\;if\;} t = g \\
 > \dfrac{2}{3} \left(g + r\right)^{2}& \text{\;if\;} t = r \\
 \dfrac{2}{3} \left(g + r\right)^{2}& \text{\;if\;} t = \dfrac{2}{3} g - \dfrac{1}{3} r \\
-\end{array}\right. \]
+\end{array},\right. \]
 implying,
 \begin{align*}
 t^\star  &= \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
 \end{align*}
-which classifies (-$r , 1$) as a class-$1$ point, which is correct.
+which classifies (-$r , \text{\;red\;}$) as a red point, which is correct.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
 \newline \newline\end{proof}
 \begin{lem} \label{lem:ex1g} 
-The dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, 1\right), \left(-g, 2\right), \left(-r, 1\right), \left(g, 2\right), \left(1, 3\right)\right\}$, with $r  < g  \in \left(0, 1\right)$. For some $r $ sufficiently close to $g $, the dataset is incentive incompatible for the classifier that minimizes a function, $f $, of the margin with thresholds symmetric around $0$, if $f $ is strictly convex and has a minimum of $0$ at $0$.
+$S_{1}$ is incentive incompatible for a strictly convex loss margin with thresholds symmetric around $0$ if $r  = g  - \delta$, for some small $\delta > 0$.
 \end{lem}
 \begin{proof} \label{proof:ex1gpf} 
 The optimal threshold for the original dataset is,
 \[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 f(t - r)& \text{\;if\;} t \geq  g \\
-2 f\left(t - g\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
-2 f\left(t - g\right)& \text{\;if\;} t \leq  r \\
-\end{array}\right. \]
-Since $f\left(t - r\right) $ is minimized at $r  < g$ and $f\left(t - g\right) $ is minimized at $g  > r$,
+2 f\left(g - t\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
+2 f\left(g - t\right)& \text{\;if\;} t \leq  r \\
+\end{array},\right. \]
+Since $f\left(0\right)  = 0$, the objective is continuous at $t  = g $ and $t  = r $. Note that $f\left(t - r\right) $ is minimized at $r  < g$ and $f\left(t - g\right) $ is minimized at $g  > r$, we have,
 \begin{align*}
 &t^\star  \in \left(r , g \right),
 \end{align*}
 which classifies (-$r , 1$) as a class-$2$ point, which is incorrect.
-\\* Similarly, the optimal threshold if the agent misreports her label as $3 $ is,
+\\* Similarly, the optimal threshold if the agent misreports her label as $\text{\;blue\;}$ is,
 \[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 f(t + r)& \text{\;if\;} t \geq  g \\
-2 f\left(t - g\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
-2 f\left(t - g\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
-\end{array}\right. \]
-Since $f\left(t + r\right) $ is minimized at $t  = -r < g $ and $f\left(t - g\right) $ is minimized at $g $, for $r $ sufficiently close to $g $ (need more details?)
+2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
+2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
+\end{array},\right. \]
+Since $f\left(t + r\right) $ is minimized at $t  = -r < g $ and $f\left(g - t\right) $ is minimized at $g, $
+\begin{align*}
+&t^\star  \in \left(0, g \right),
+\end{align*}
+and the objective in this range is,
+\begin{align*}
+&2 f\left(g - t\right) + f\left(t + r\right).
+\end{align*}
+Now fix small $\varepsilon > 0$, there is sufficiently small $\delta > 0$ such that, due to strict convexity,
+\begin{align*}
+2 \dfrac{f\left(\delta + \varepsilon\right) - f\left(\delta\right)}{\varepsilon} &< \dfrac{f\left(2 r\right) - f\left(2 r - \varepsilon\right)}{\varepsilon} .
+\end{align*}
+This inequality implies that the objective at $t  = r  - \varepsilon$,
+\begin{align*}
+2 f\left(\delta + \varepsilon\right) + f\left(2 r - \varepsilon\right) &< 2 f\left(\delta\right) + f\left(2 r \right),
+\end{align*}
+which is the objective at $t  = r $. Therefore, the objective is decreasing at $r $, given that it is the sum of two strictly convex functions thus strictly convex itself, we have,
 \begin{align*}
 &t^\star  \in \left(0, r \right),
 \end{align*}
-which classifies (-$r , 1$) as a class-$1$ point, which is correct.
+which classifies (-$r , \text{\;red\;}$) as a red point, which is correct.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
 \newline \newline\end{proof}
 Intuitively, when the misclassified class-$1$ point pretends to be a class-$3$ point with a large loss, the classifier modifies the $2$-vs-$3$ decision boundary to minimize that loss, and the point benefits from the interdependence between the $2$-vs-$3$ decision and the $1$-vs-$2$ decision.
@@ -471,7 +503,7 @@ where $l^\star \left(y^{\dagger}_{i}\right)$ and $r^\star \left(y^{\dagger}_{i}\
 \draw[green, thick] (-2.5, -0.2) -- (4.0, -0.2);
 \draw[blue, thick] (4.0, -0.2) -- (5.0, -0.2);
 \node[below] at (0.0, -0.2){$0$};
-\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $2$ (Truthful)}\label{fig:1dat}
+\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $2$ (Truthful)}\label{fig:2dat}
 \end{figure}
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
@@ -485,7 +517,7 @@ where $l^\star \left(y^{\dagger}_{i}\right)$ and $r^\star \left(y^{\dagger}_{i}\
 \draw[green, thick] (-1.0, -0.2) -- (0.0, -0.2);
 \draw[blue, thick] (0.0, -0.2) -- (5.0, -0.2);
 \node[below] at (0.0, -0.2){$0$};
-\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $2$ (Misreport)}\label{fig:1dam}
+\end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $2$ (Misreport)}\label{fig:2dam}
 \end{figure}
 To generalize the above observations, suppose the learner is a probabilistic classifier with parameters estimated by maximum likelihood, and the agents report their labels to maximize the classification probability of their true labels. Then the following two conditions guarantee that the classification is incentive-compatible.
 \newline \newline
