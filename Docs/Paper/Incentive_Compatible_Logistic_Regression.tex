@@ -30,10 +30,7 @@
 \usepackage{caption}
 \usepackage{float}
 \usepackage{setspace}
-\usepackage{color}
 \usetikzlibrary{patterns}
-
-
 \def\E{\mathbb E}
 \def\H{\mathcal H}
 \def\R{\mathbb R}
@@ -42,9 +39,6 @@
 \def\argmin{\mathrm{argmin}}
 \def\sgn{\mathrm{sgn}}
 \newcommand{\comment}[1]{\textcolor{red}{#1}}
-
-
-
 \title{Incentive Incompatibility of Logistic Regression}
 % The \author macro works with any number of authors. There are two commands
 % used to separate the names and addresses of multiple authors: \And and \AND.
@@ -304,33 +298,10 @@ which is a contradiction to the optimality of $h^\star $.
 
 
 \section{Other Classifiers} 
-
-\subsection{Artificial Examples}
 In this section, we show that classifiers, including Bayes classifiers and kernel density estimators, that satisfy some separability conditions are always incentive-compatible. One intuition behind why some classifiers are incentive-incompatible is that one-vs-one classification decisions are not made independently. Logistic regression has highly interdependent one-vs-one decisions. The following example is one in which $1$-vs-$2$ decisions are completely determined by the $2$-vs-$3$ decisions, and as a result, a class-$1$ point that is misclassified as class-$2$ could misreport as class-$3$ to influence the $2$-vs-$3$ decision boundary and indirectly change the $1$-vs-$2$ decision boundary in its favor.
 \newline \newline
-Consider the three-class threshold classifiers with thresholds symmetric around $0$ in the form,
-\[ \hat{y}\left(x; t\right) =\left\{ \begin{array}{ll}
-\text{\;red\;}& \text{\;if\;} x < -t \\
-\text{\;green\;}& \text{\;if\;} -t \leq  x \leq  t \\
-\text{\;blue\;}& \text{\;if\;} x > t \\
-\end{array}\right. \]
-This is effectively a one-vs-one threshold classifier with the red-vs-green threshold of $-t $, with the green-vs-blue threshold of $t $ and the red-vs-blue threshold of any value between $-t $ and $t $. Now define the loss function as the squared error margin,
-\[ \ell\left(x_{i}, y_{i}; t\right) =\left\{ \begin{array}{ll}
-\left(\displaystyle\max\left\{x_{i} - \left(-t\right), 0\right\}\right)^{2}& \text{\;if\;} y_{i} = \text{\;red\;} \\
-\left(\displaystyle\min\left\{\displaystyle\max\left\{-t - x_{i}, 0\right\}, \displaystyle\max\left\{x_{i} - t, 0\right\}\right\}\right)^{2}& \text{\;if\;} y_{i} = \text{\;green\;} \\
-\left(\displaystyle\max\left\{t - x_{i}, 0\right\}\right)^{2}& \text{\;if\;} y_{i} = \text{\;blue\;} \\
-\end{array}\right. \]
-Then, the learner's maximization problem is,
-\begin{align*}
-&\displaystyle\min_{t \in \mathbb{R}} \ell\left(x_{i}, y_{i}; t\right).
-\end{align*}
-The agent's problem is to minimize the loss for their point with their true label. The loss can be either the margin loss or zero-one loss, here, for simplicity, assume the agents also want to minimize the margin,
-\begin{align*}
-&\displaystyle\max_{y^{\dagger}_{i} \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}} \ell\left(x_{i}, y_{i}; t^\star \left(y^{\dagger}_{i}\right)\right),
-\end{align*}
-where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for the learner when agent $i $ misreports the label as $y^{\dagger}_{i.}$
-\\* For the dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\}$, with some $r , g \in \left(0, 1\right)$ and $r  < g < 2 r $, the minimum loss is $\dfrac{2}{3} \left(g - r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g + \dfrac{1}{3} r > r $ when every agent reports truthfully. In this case, agent (-r, $\text{\;red\;}$) is misclassified as green. However, if (-r, $\text{\;red\;}$) misreports as blue, the minimum loss is $\dfrac{2}{3} \left(g + r\right)^{2}$ and it occurs when $t  = \dfrac{2}{3} g - \dfrac{1}{3} r < r $. In this case, agent (-r, $\text{\;red\;}$) is classified correctly, and in particular, she improves the loss from $g  - r $ to $0$.
-\newline \newline
+
+\subsection{A Good Example}
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
 \draw[thick] (-5.0, 0.0) -- (5.0, 0.0);
@@ -369,96 +340,51 @@ where $t^\star \left(y^{\dagger}_{i}\right)$ is the optimal threshold $t $ for t
 \node[below] at (5.0, -0.2){+$1$};
 \end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $1$ (Misreport)}\label{fig:1dam}
 \end{figure}
+ Consider a 3-way classifier $h_t: \R \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\} $ parametrized by $t\ge 0$:
+ \begin{equation}
+ h_{t}\left(x\right) =\left\{ \begin{array}{ll}
+ \text{\;red\;}& \text{\;if\;} x < t  \\
+ \text{\;green\;}& \text{\;if\;} -t \leq  x \leq  t \\
+ \text{\;blue\;}& \text{\;if\;} x  > t. \\
+ \end{array}\right. 
+ \end{equation}
+ Let the hypothesis space be
+ \begin{equation}
+ \H = \left\{ h_t : t \geq  0\right\}.
+ \end{equation}
+ Equivalently, a hypothesis $h_t$ partitions $\R$ into three sets: 
+ $X^\text{red}_t = (-\infty, -t)$,
+ $X^\text{green}_t = [-t, t]$,
+ $X^\text{blue}_t = (t, \infty)$.
+ Given a labeled point $(x,y)$ with  $y \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$, it could be outside the ``color region'' suggested by $h_t$. 
+ Accordingly, we define a loss function $\ell$ based on the distance it takes to move the point to the corresponding color region suggested by $h_t$.
+ Concretely,
+ \begin{equation}
+ \ell\left(x, y, h_t\right) = f(d(x, X^y_t))
+ \end{equation}
+ where 
+ \begin{equation}
+ d(x, X^y_t) = \min_{x' \in X^y_t} \|x-x'\|
+ \end{equation}
+ is the shortest distance from the point $x$ to the set (color region) $X^y_t$.
+ $f \ge 0$ is strictly convex with minimum at 0: $f(0) = 0$.
+ For example, $f$ can be the square function $f(z)=z^2$.
+ 
+ Given a training set $S=\{(x_1,y_1), \ldots (x_n, y_n)\}$, consider the Empiricial Risk Minimizer (ERM)
+ \begin{equation}
+ \hat h \in \argmin_{h \in \H} \sum_{i=1}^n \ell(x_i, y_i, h).
+ \end{equation}
 
-\section{A good example}
-Consider a 3-way classifier $h_t: \R \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\} $ parametrized by $t\ge 0$:
-\begin{equation}
-h_{t}\left(x\right) =\left\{ \begin{array}{ll}
-\text{\;red\;}& \text{\;if\;} x < t  \\
-\text{\;green\;}& \text{\;if\;} -t \leq  x \leq  t \\
-\text{\;blue\;}& \text{\;if\;} x  > t. \\
-\end{array}\right. 
-\end{equation}
-Let the hypothesis space be
-\begin{equation}
-\H = \left\{ h_t : t \geq  0\right\}.
-\end{equation}
-Equivalently, a hypothesis $h_t$ partitions $\R$ into three sets: 
-$X^\text{red}_t = (-\infty, -t)$,
-$X^\text{green}_t = [-t, t]$,
-$X^\text{blue}_t = (t, \infty)$.
-Given a labeled point $(x,y)$ with  $y \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$, it could be outside the ``color region'' suggested by $h_t$. 
-Accordingly, we define a loss function $\ell$ based on the distance it takes to move the point to the corresponding color region suggested by $h_t$.
-Concretely,
-\begin{equation}
-\ell\left(x, y, h_t\right) = f(d(x, X^y_t))
-\end{equation}
-where 
-\begin{equation}
-d(x, X^y_t) = \min_{x' \in X^y_t} \|x-x'\|
-\end{equation}
-is the shortest distance from the point $x$ to the set (color region) $X^y_t$.
-$f \ge 0$ is strictly convex with minimum at 0: $f(0) = 0$.
-For example, $f$ can be the square function $f(z)=z^2$.
-
-Given a training set $S=\{(x_1,y_1), \ldots (x_n, y_n)\}$, consider the Empiricial Risk Minimizer (ERM)
-\begin{equation}
-\hat h \in \argmin_{h \in \H} \sum_{i=1}^n \ell(x_i, y_i, h).
-\end{equation}
-
-We now exhibit a family of IIC datasets $S$, see Figure~\ref{fig:1dat}.
-$S$ consists of five labeled points:
-\begin{equation}
-S = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
-\end{equation}
-with $0< r  < g < 2 r.$
-\comment{Do we need $g < 1$ or $2r <1$?}
-
-%---
+We now exhibit a family of IIC datasets $S $ parameterized by $g $ and $r $, see Figure \ref{fig:1dat}. $S $ consists of five labeled points:
+\begin{align*}
+S\left(g, r\right)  &= \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
+\end{align*}
+with $0 < r < g < 1$.
+\newline \newline
 \begin{prop} \label{prop:ex1} 
-$S$ is incentive incompatible with respect to ERM on $\H$ and $\ell$.
+For any $g $, there exists an $r  \in \left(0, g\right)$ such that the dataset $S\left(g, r \right) $ is incentive incompatible with respect to ERM on $\mathcal{H}$ and $\ell$.
 \end{prop}
 \begin{proof} \label{proof:ex1pf} 
-The optimal threshold for the original dataset is,
-\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
-(t - r)^{2}& \text{\;if\;} t \geq  g \\
-2 \left(t - g\right)^{2} + \left(t - r\right)^{2}& \text{\;if\;} r < t < g \\
-2 \left(t - g\right)^{2}& \text{\;if\;} t \leq  r \\
-\end{array},\right. \]
-or,
-\[ t^\star  = \arg\displaystyle\min_{t}\left\{ \begin{array}{ll}
-(g - r)^{2}& \text{\;if\;} t = g \\
-\dfrac{2}{3} \left(g - r\right)^{2}& \text{\;if\;} t = \dfrac{2}{3} g + \dfrac{1}{3} r \\
-2 \left(g - r\right)^{2}& \text{\;if\;} t = r \\
-\end{array},\right. \]
-implying,
-\begin{align*}
-t^\star  &= \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
-\end{align*}
-which classifies (-$r , \text{\;red\;}$) as a green point, which is incorrect.
-\\* Similarly, the optimal threshold if the agent misreports her label as blue is,
-\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
-(t + r)^{2}& \text{\;if\;} t \geq  g \\
-2 \left(t - g\right)^{2} + \left(t + r\right)^{2}& \text{\;if\;} r \leq  t < g \\
-2 \left(t - g\right)^{2} + \left(t + r\right)^{2}& \text{\;if\;} t < r \\
-\end{array},\right. \]
-or,
-\[ t^\star  = \arg\displaystyle\min_{t}\left\{ \begin{array}{ll}
-(g + r)^{2}& \text{\;if\;} t = g \\
-> \dfrac{2}{3} \left(g + r\right)^{2}& \text{\;if\;} t = r \\
-\dfrac{2}{3} \left(g + r\right)^{2}& \text{\;if\;} t = \dfrac{2}{3} g - \dfrac{1}{3} r \\
-\end{array},\right. \]
-implying,
-\begin{align*}
-t^\star  &= \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
-\end{align*}
-which classifies (-$r , \text{\;red\;}$) as a red point, which is correct.
-\\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\newline \newline\end{proof}
-\begin{lem} \label{lem:ex1g} 
-$S_{1}$ is incentive incompatible for a strictly convex loss margin with thresholds symmetric around $0$ if $r  = g  - \delta$, for some small $\delta > 0$.
-\end{lem}
-\begin{proof} \label{proof:ex1gpf} 
 The optimal threshold for the original dataset is,
 \[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 f(t - r)& \text{\;if\;} t \geq  g \\
@@ -469,8 +395,8 @@ Since $f\left(0\right)  = 0$, the objective is continuous at $t  = g $ and $t  =
 \begin{align*}
 &t^\star  \in \left(r , g \right),
 \end{align*}
-which classifies (-$r , \text{\;red\;}$) as a green point, which is incorrect.
-\\* Similarly, the optimal threshold if the agent misreports her label as $\text{\;blue\;}$ is,
+which classifies (-$r , \text{\;red\;}$) incorrectly as a green point.
+\\* Similarly, the optimal threshold if the agent misreports her label as blue is,
 \[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 f(t + r)& \text{\;if\;} t \geq  g \\
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
@@ -484,7 +410,7 @@ and the objective in this range is,
 \begin{align*}
 &2 f\left(g - t\right) + f\left(t + r\right).
 \end{align*}
-Now fix small $\varepsilon > 0$, there is sufficiently small $\delta > 0$ such that, due to strict convexity,
+Define $\delta := g$ - r. Fix small $\varepsilon > 0$, there is sufficiently small $\delta > 0$ such that, due to strict convexity,
 \begin{align*}
 2 \dfrac{f\left(\delta + \varepsilon\right) - f\left(\delta\right)}{\varepsilon} &< \dfrac{f\left(2 r\right) - f\left(2 r - \varepsilon\right)}{\varepsilon} .
 \end{align*}
@@ -496,9 +422,33 @@ which is the objective at $t  = r $. Therefore, the objective is decreasing at $
 \begin{align*}
 &t^\star  \in \left(0, r \right),
 \end{align*}
-which classifies (-$r , \text{\;red\;}$) as a red point, which is correct.
+which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
 \newline \newline\end{proof}
+\begin{eg} \label{eg:ex1sq} 
+When $f $ is differentiable, there is a sufficient (but not necessary) condition on $g $ and $r $ such that $S\left(g, r \right) $ is IIC,
+\begin{align*}
+2 f'\left(g - r\right) &< f'\left(2 r\right).
+\end{align*}
+For any strictly convex $f $ satisfying $f\left(0\right)  = 0$ and $f'\left(0\right)  = 0$, for any fixed $g $, there exists at least one $r $ that satisfies the above condition since $f'\left(2 r\right)  > 0$ and $\lim_{g \to  r^{+}} f'\left(g - r\right) \to  f'\left(0\right) = 0$.
+\\* When the condition holds, the objective at $t  = r $ is increasing, implying that $t^\star $ is less than $r $, and the corresponding classifier classifies (-$r , \text{\;red\;}$) correctly as a red point when the agent misreports her label as blue.
+\newline \newline\end{eg}
+\begin{eg} \label{eg:ex2sq} 
+When $f $ is the square function, the loss is the square of the distance it takes to move the point to the correct region. In this case, $S\left(g, r\right) $ is IIC as long as $g  < 2 r. $
+\\* In particular, the optimal threshold for the original dataset is,
+\begin{align*}
+t^\star  &= \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
+\end{align*}
+which classifies (-$r , \text{\;red\;}$) incorrectly as a green point, but the optimal threshold if the agent misreports her label as blue is,
+\begin{align*}
+t^\star  &= \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
+\end{align*}
+which classifies (-$r , \text{\;red\;}$) correctly as a red point.
+\newline \newline\end{eg}
+
+
+\subsection{Another Example}
+
 Intuitively, when the misclassified class-$1$ point pretends to be a class-$3$ point with a large loss, the classifier modifies the $2$-vs-$3$ decision boundary to minimize that loss, and the point benefits from the interdependence between the $2$-vs-$3$ decision and the $1$-vs-$2$ decision.
 \newline \newline
 The decision boundaries can be related in more complicated ways. Consider the three-class $1D$ threshold classifiers in the form,
