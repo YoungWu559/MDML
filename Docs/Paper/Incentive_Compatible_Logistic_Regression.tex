@@ -380,7 +380,6 @@ f(t + r)& \text{\;if\;} t \geq  g \\
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
 \end{array},\right. \end{equation}
 Since $f\left(t + r\right) $ is minimized at $t  = -r < g $ and $f\left(g - t\right) $ is minimized at $g, $
-\end{proof}
 \begin{equation} 
 t^\star  \in \left(0, g \right),
 \end{equation}
@@ -402,20 +401,19 @@ t^\star  \in \left(0, r \right),
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\newline \newline
+\end{proof}
+
 \begin{eg} \label{eg:ex1df} 
 When $f $ is differentiable, there is a sufficient (but not necessary) condition on $g $ and $r $ such that $S\left(g, r \right) $ is IIC,
-\end{eg}
 \begin{equation} 
 2 f'\left(g - r\right) < f'\left(2 r\right).
 \end{equation}
 For any strictly convex $f $ satisfying $f\left(0\right)  = 0$ and $f'\left(0\right)  = 0$, for any fixed $g $, there exists at least one $r $ that satisfies the above condition since $f'\left(2 r\right)  > 0$ and $\lim_{g \to  r^{+}} f'\left(g - r\right) \to  f'\left(0\right) = 0$.
 \\* When the condition holds, the objective at $t  = r $ is increasing, implying that $t^\star $ is less than $r $, and the corresponding classifier classifies (-$r , \text{\;red\;}$) correctly as a red point when the agent misreports her label as blue.
-\newline \newline
+\end{eg}
 \begin{eg} \label{eg:ex2sq} 
 When $f $ is the square function, the loss is the square of the distance it takes to move the point to the correct region. In this case, $S\left(g, r\right) $ is IIC as long as $g  < 2 r. $
 \\* In particular, the optimal threshold for the original dataset is,
-\end{eg}
 \begin{equation} 
 t^\star  = \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
 \end{equation}
@@ -424,7 +422,7 @@ which classifies (-$r , \text{\;red\;}$) incorrectly as a green point, but the o
 t^\star  = \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
-\newline \newline
+\end{eg}
 
 \subsection{Another Example}
 
@@ -488,7 +486,6 @@ For any $g  > \dfrac{1}{3}$, there exists $r  \in \left(\dfrac{1}{3}, g\right)$ 
 \end{prop}
 \begin{proof} \label{proof:ex2pf} 
 The optimal thresholds for the original dataset is,
-\end{proof}
 \begin{equation} 
 a^\star  = - \dfrac{3}{4} r - \dfrac{1}{4}, b^\star  = \dfrac{1}{2} r + \dfrac{1}{2} ,
 \end{equation}
@@ -507,7 +504,7 @@ a^\star  > - \dfrac{1}{3}, b^\star  > 0,
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\newline \newline
+\end{proof}
 In this case with $\mathcal{H}'$ and $\ell'$, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to reduce the loss from the new blue point, but it increases the loss from the green point on the right at the same time. As a result, the classifier then modifies the green-vs-red decision boundary to reduce the loss from the green points. Intuitively, the misclassified red point could only directly affect the green-vs-blue decision boundary, however, it could indirectly affect the green-vs-red decision boundary by getting help from the green point.
 \newline \newline
 
