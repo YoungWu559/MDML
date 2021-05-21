@@ -376,9 +376,9 @@ In this section, we show that classifiers, including Bayes classifiers and kerne
  \end{equation}
 
 We now exhibit a family of IIC datasets $S $ parameterized by $g $ and $r $, see Figure \ref{fig:1dat}. $S $ consists of five labeled points:
-\begin{align*}
-S\left(g, r\right)  &= \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
-\end{align*}
+\begin{equation} 
+S\left(g, r\right)  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
+\end{equation}
 with $0 < r < g < 1$.
 \newline \newline
 \begin{prop} \label{prop:ex1} 
@@ -386,65 +386,68 @@ For any $g $, there exists an $r  \in \left(0, g\right)$ such that the dataset $
 \end{prop}
 \begin{proof} \label{proof:ex1pf} 
 The optimal threshold for the original dataset is,
-\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+\begin{equation} t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 f(t - r)& \text{\;if\;} t \geq  g \\
 2 f\left(g - t\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
 2 f\left(g - t\right)& \text{\;if\;} t \leq  r \\
-\end{array},\right. \]
+\end{array},\right. \end{equation}
 Since $f\left(0\right)  = 0$, the objective is continuous at $t  = g $ and $t  = r $. Note that $f\left(t - r\right) $ is minimized at $r  < g$ and $f\left(t - g\right) $ is minimized at $g  > r$, we have,
 \begin{align*}
 &t^\star  \in \left(r , g \right),
 \end{align*}
 which classifies (-$r , \text{\;red\;}$) incorrectly as a green point.
 \\* Similarly, the optimal threshold if the agent misreports her label as blue is,
-\[ t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+\begin{equation} t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 f(t + r)& \text{\;if\;} t \geq  g \\
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
-\end{array},\right. \]
+\end{array},\right. \end{equation}
 Since $f\left(t + r\right) $ is minimized at $t  = -r < g $ and $f\left(g - t\right) $ is minimized at $g, $
-\begin{align*}
-&t^\star  \in \left(0, g \right),
-\end{align*}
+\end{proof}
+\begin{equation} 
+t^\star  \in \left(0, g \right),
+\end{equation}
 and the objective in this range is,
-\begin{align*}
-&2 f\left(g - t\right) + f\left(t + r\right).
-\end{align*}
+\begin{equation} 
+2 f\left(g - t\right) + f\left(t + r\right).
+\end{equation}
 Define $\delta := g$ - r. Fix small $\varepsilon > 0$, there is sufficiently small $\delta > 0$ such that, due to strict convexity,
-\begin{align*}
-2 \dfrac{f\left(\delta + \varepsilon\right) - f\left(\delta\right)}{\varepsilon} &< \dfrac{f\left(2 r\right) - f\left(2 r - \varepsilon\right)}{\varepsilon} .
-\end{align*}
+\begin{equation} 
+2 \dfrac{f\left(\delta + \varepsilon\right) - f\left(\delta\right)}{\varepsilon} < \dfrac{f\left(2 r\right) - f\left(2 r - \varepsilon\right)}{\varepsilon} .
+\end{equation}
 This inequality implies that the objective at $t  = r  - \varepsilon$,
-\begin{align*}
-2 f\left(\delta + \varepsilon\right) + f\left(2 r - \varepsilon\right) &< 2 f\left(\delta\right) + f\left(2 r \right),
-\end{align*}
+\begin{equation} 
+2 f\left(\delta + \varepsilon\right) + f\left(2 r - \varepsilon\right) < 2 f\left(\delta\right) + f\left(2 r \right),
+\end{equation}
 which is the objective at $t  = r $. Therefore, the objective is decreasing at $r $, given that it is the sum of two strictly convex functions thus strictly convex itself, we have,
-\begin{align*}
-&t^\star  \in \left(0, r \right),
-\end{align*}
+\begin{equation} 
+t^\star  \in \left(0, r \right),
+\end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\newline \newline\end{proof}
+\newline \newline
 \begin{eg} \label{eg:ex1df} 
 When $f $ is differentiable, there is a sufficient (but not necessary) condition on $g $ and $r $ such that $S\left(g, r \right) $ is IIC,
-\begin{align*}
-2 f'\left(g - r\right) &< f'\left(2 r\right).
-\end{align*}
+\end{eg}
+\begin{equation} 
+2 f'\left(g - r\right) < f'\left(2 r\right).
+\end{equation}
 For any strictly convex $f $ satisfying $f\left(0\right)  = 0$ and $f'\left(0\right)  = 0$, for any fixed $g $, there exists at least one $r $ that satisfies the above condition since $f'\left(2 r\right)  > 0$ and $\lim_{g \to  r^{+}} f'\left(g - r\right) \to  f'\left(0\right) = 0$.
 \\* When the condition holds, the objective at $t  = r $ is increasing, implying that $t^\star $ is less than $r $, and the corresponding classifier classifies (-$r , \text{\;red\;}$) correctly as a red point when the agent misreports her label as blue.
-\newline \newline\end{eg}
+\newline \newline
 \begin{eg} \label{eg:ex2sq} 
 When $f $ is the square function, the loss is the square of the distance it takes to move the point to the correct region. In this case, $S\left(g, r\right) $ is IIC as long as $g  < 2 r. $
 \\* In particular, the optimal threshold for the original dataset is,
-\begin{align*}
-t^\star  &= \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
-\end{align*}
+\end{eg}
+\begin{equation} 
+t^\star  = \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
+\end{equation}
 which classifies (-$r , \text{\;red\;}$) incorrectly as a green point, but the optimal threshold if the agent misreports her label as blue is,
-\begin{align*}
-t^\star  &= \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
-\end{align*}
+\begin{equation} 
+t^\star  = \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
+\end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
-\newline \newline\end{eg}
+\newline \newline
 
 
 \subsection{Another Example}
@@ -488,20 +491,20 @@ which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \end{figure}
 Intuitively, in the previous example, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to minimize that loss, and the point benefits from the interdependence between the green-vs-blue decision and the green-vs-red decision.
 \newline \newline
-The decision boundaries can be related in more complicated ways. Consider another $3$-way classifier $h_{t} : \mathbb{R} \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$ parameterized by two thresholds $a $ and $b. $
-\[ h_{a, b}\left(x\right) =\left\{ \begin{array}{ll}
+The decision boundaries can be related in more complicated ways. Consider another $3$-way classifier $h_{a, b} : \mathbb{R} \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$ parameterized by two thresholds $a $ and $b. $
+\begin{equation} h_{a, b}\left(x\right) =\left\{ \begin{array}{ll}
 \text{\;red\;}& \text{\;if\;} x < a \\
 \text{\;green\;}& \text{\;if\;} a \leq  x \leq  b \\
 \text{\;blue\;}& \text{\;if\;} x > b \\
-\end{array}\right. \]
+\end{array}\right. \end{equation}
 Let the hypothesis space be,
-\begin{align*}
-\mathcal{H}' &= \left\{h_{a, b} : -1 < a < b < 1\right\}
-\end{align*}
+\begin{equation} 
+\mathcal{H}' = \left\{h_{a, b} : -1 < a < b < 1\right\}
+\end{equation}
 Here, a hypothesis $h'_{a, b}$ partitions [-$1, 1$] into three sets: $X^{\text{\;red\;}}_{a, b} = \left[-1, a\right), X^{\text{\;green\;}}_{a, b} = \left[a, b\right], X^{\text{\;blue\;}}_{a, b} = \left(b, 1\right]$. This time, we define a loss function $\ell$ based on the distance from the point to the center of the corresponding color region suggested by $h_{a, b}$. This leads to a classifier similar to k-means clustering procedure,
-\begin{align*}
-\ell'\left(x, y, h_{a, b}\right) &= \left\|x, \bar{X}^{y}_{a, b}\right\|^{2,}
-\end{align*}
+\begin{equation} 
+\ell'\left(x, y, h_{a, b}\right) = \left\|x - \bar{X}^{y}_{a, b}\right\|^{2,}
+\end{equation}
 where $\bar{X}^{\text{\;red\;}}_{a, b} = \dfrac{-1 + a}{2} , \bar{X}^{\text{\;green\;}}_{a, b} = \dfrac{a + b}{2}$ , and $\bar{X}^{\text{\;blue\;}}_{a, b} = \dfrac{b + 1}{2}$ are the centers of the decision regions.
 \newline \newline
 \begin{prop} \label{prop:ex2} 
@@ -509,25 +512,26 @@ For any $g  > \dfrac{1}{3}$, there exists $r  \in \left(\dfrac{1}{3}, g\right)$ 
 \end{prop}
 \begin{proof} \label{proof:ex2pf} 
 The optimal thresholds for the original dataset is,
-\begin{align*}
-a^\star  &= - \dfrac{3}{4} r - \dfrac{1}{4}, b^\star  = \dfrac{1}{2} r + \dfrac{1}{2} ,
-\end{align*}
+\end{proof}
+\begin{equation} 
+a^\star  = - \dfrac{3}{4} r - \dfrac{1}{4}, b^\star  = \dfrac{1}{2} r + \dfrac{1}{2} ,
+\end{equation}
 and since $r  > \dfrac{1}{3}$, we have,
-\begin{align*}
-a^\star  &< \dfrac{-1}{2} < \dfrac{-1}{3}, b^\star  > 0,
-\end{align*}
+\begin{equation} 
+a^\star  < - \dfrac{1}{2} < - \dfrac{1}{3}, b^\star  > 0,
+\end{equation}
 which classifies (-$r , \text{\;red\;}$) incorrectly as a green point.
 \\* Similarly, the optimal threshold if the agent misreports her label as blue is,
-\begin{align*}
-a^\star  &= \dfrac{1}{2} r - \dfrac{1}{2}, b^\star  = \dfrac{-3}{4} r + \dfrac{1}{4} ,
-\end{align*}
+\begin{equation} 
+a^\star  = \dfrac{1}{2} r - \dfrac{1}{2}, b^\star  = - \dfrac{3}{4} r + \dfrac{1}{4} ,
+\end{equation}
 and since $r  > \dfrac{1}{3}$, we have,
-\begin{align*}
-a^\star  &> \dfrac{-1}{3}, b^\star  > 0,
-\end{align*}
+\begin{equation} 
+a^\star  > - \dfrac{1}{3}, b^\star  > 0,
+\end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\newline \newline\end{proof}
+\newline \newline
 In this case with $\mathcal{H}'$ and $\ell'$, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to reduce the loss from the new blue point, but it increases the loss from the green point on the right at the same time. As a result, the classifier then modifies the green-vs-red decision boundary to reduce the loss from the green points. Intuitively, the misclassified red point could only directly affect the green-vs-blue decision boundary, however, it could indirectly affect the green-vs-red decision boundary by getting help from the green point.
 \newline \newline
 
