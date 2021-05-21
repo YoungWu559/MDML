@@ -425,7 +425,7 @@ which is the objective at $t  = r $. Therefore, the objective is decreasing at $
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
 \newline \newline\end{proof}
-\begin{eg} \label{eg:ex1sq} 
+\begin{eg} \label{eg:ex1df} 
 When $f $ is differentiable, there is a sufficient (but not necessary) condition on $g $ and $r $ such that $S\left(g, r \right) $ is IIC,
 \begin{align*}
 2 f'\left(g - r\right) &< f'\left(2 r\right).
@@ -449,43 +449,22 @@ which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 
 \subsection{Another Example}
 
-Intuitively, when the misclassified class-$1$ point pretends to be a class-$3$ point with a large loss, the classifier modifies the $2$-vs-$3$ decision boundary to minimize that loss, and the point benefits from the interdependence between the $2$-vs-$3$ decision and the $1$-vs-$2$ decision.
-\newline \newline
-The decision boundaries can be related in more complicated ways. Consider the three-class $1D$ threshold classifiers in the form,
-\[ \hat{y}\left(x; l\right) =\left\{ \begin{array}{ll}
-1& \text{\;if\;} x < l \\
-2& \text{\;if\;} l \leq  x \leq  r \\
-3& \text{\;if\;} x > r \\
-\end{array}\right. \]
-This is effectively a one-vs-one threshold classifier with the $1$-vs-$2$ threshold of $l $, with the $2$-vs-$3$ threshold of $r $ and the $1$-vs-$3$ threshold of any value between $l $ and $r $. Now define the loss function as the squared distance to the center of the decision region (bounded by the range of the data),
-\[ \ell\left(x_{i}, y_{i}; t\right) =\left\{ \begin{array}{ll}
-\left(x_{i} - \dfrac{l + \displaystyle\min_{i} x_{i}}{2}\right)^{2}& \text{\;if\;} y_{i} = 1 \\
-\left(x_{i} - \dfrac{l + r}{2}\right)^{2}& \text{\;if\;} y_{i} = 2 \\
-\left(x_{i} - \dfrac{r + \displaystyle\max_{i} x_{i}}{2}\right)^{2}& \text{\;if\;} y_{i} = 3 \\
-\end{array}\right. \]
-Then, the learner's maximization problem is,
-\begin{align*}
-&\displaystyle\min_{t \in \mathbb{R}} \ell\left(x_{i}, y_{i}; t\right).
-\end{align*}
-The agent's problem is to minimize the loss for their point with their true label. The loss can be either the distance-to-center loss or zero-one loss, here, for simplicity, assume the agents also want to minimize the distance to the center,
-\begin{align*}
-&\displaystyle\max_{y^{\dagger}_{i} \in \left\{1, 2, 3\right\}} \ell\left(x_{i}, y_{i}; l^\star \left(y^{\dagger}_{i}\right), r^\star \left(y^{\dagger}_{i}\right)\right),
-\end{align*}
-where $l^\star \left(y^{\dagger}_{i}\right)$ and $r^\star \left(y^{\dagger}_{i}\right)$ are the optimal thresholds for the learner when agent $i $ misreports the label as $y^{\dagger}_{i.}$
-\\* For the same dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-5, 1\right), \left(-3, 2\right), \left(-2, 1\right), \left(4, 2\right), \left(5, 3\right)\right\}$, the minimum loss is $29.5$ and it occurs when $l  = -2.5$ and $r = 4$ when every agent reports truthfully. In this case, agent (-$2, 1$) is misclassified as (-$2, 2$). However, if (-$2, 1$) misreports as (-$2, 3$), the loss from $l  = -2.5$ and $r = 4$ is above $68$ and the minimum loss is $57$ and it occurs when $l  = -1$ and $r  = 0$. In this case, agent (-$2, 1$) is classified correctly. In particular, the agent (-$2, 1$) improves the loss from $1$ to $0$.
-\newline \newline
-
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
 \draw[thick] (-5.0, 0.0) -- (5.0, 0.0);
 \draw[fill = red, thick] (-5.0, 0.0) circle [radius = 0.1];
 \draw[fill = green, thick] (-3.0, 0.0) circle [radius = 0.1];
 \draw[fill = red, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
-\draw[fill = green, thick] (4.0, 0.0) circle [radius = 0.1];
+\draw[fill = green, thick] (3.0, 0.0) circle [radius = 0.1];
 \draw[fill = blue, thick] (5.0, 0.0) circle [radius = 0.1];
 \draw[red, thick] (-5.0, -0.2) -- (-2.5, -0.2);
 \draw[green, thick] (-2.5, -0.2) -- (4.0, -0.2);
 \draw[blue, thick] (4.0, -0.2) -- (5.0, -0.2);
+\node[below] at (-5.0, -0.2){-$1$};
+\node[below] at (-3.0, -0.2){-$g $};
+\node[below] at (-2.0, -0.2){-$r $};
 \node[below] at (0.0, -0.2){$0$};
+\node[below] at (3.0, -0.2){+$g $};
+\node[below] at (5.0, -0.2){+$1$};
 \end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $2$ (Truthful)}\label{fig:2dat}
 \end{figure}
 
@@ -493,15 +472,70 @@ where $l^\star \left(y^{\dagger}_{i}\right)$ and $r^\star \left(y^{\dagger}_{i}\
 \draw[thick] (-5.0, 0.0) -- (5.0, 0.0);
 \draw[fill = red, thick] (-5.0, 0.0) circle [radius = 0.1];
 \draw[fill = green, thick] (-3.0, 0.0) circle [radius = 0.1];
-\draw[fill = blue, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
-\draw[fill = green, thick] (4.0, 0.0) circle [radius = 0.1];
+\draw[fill = red, thick] (-2.1, -0.1) rectangle (-1.9, 0.1);
+\draw[fill = green, thick] (3.0, 0.0) circle [radius = 0.1];
 \draw[fill = blue, thick] (5.0, 0.0) circle [radius = 0.1];
 \draw[red, thick] (-5.0, -0.2) -- (-1.0, -0.2);
 \draw[green, thick] (-1.0, -0.2) -- (0.0, -0.2);
 \draw[blue, thick] (0.0, -0.2) -- (5.0, -0.2);
+\node[below] at (-5.0, -0.2){-$1$};
+\node[below] at (-3.0, -0.2){-$g $};
+\node[below] at (-2.0, -0.2){-$r $};
 \node[below] at (0.0, -0.2){$0$};
+\node[below] at (3.0, -0.2){+$g $};
+\node[below] at (5.0, -0.2){+$1$};
 \end{tikzpicture} \captionof{figure}{$1D$ Artificial Incentive-incompatible Example $2$ (Misreport)}\label{fig:2dam}
 \end{figure}
+Intuitively, in the previous example, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to minimize that loss, and the point benefits from the interdependence between the green-vs-blue decision and the green-vs-red decision.
+\newline \newline
+The decision boundaries can be related in more complicated ways. Consider another $3$-way classifier $h_{t} : \mathbb{R} \to  \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$ parameterized by two thresholds $a $ and $b. $
+\[ h_{a, b}\left(x\right) =\left\{ \begin{array}{ll}
+\text{\;red\;}& \text{\;if\;} x < a \\
+\text{\;green\;}& \text{\;if\;} a \leq  x \leq  b \\
+\text{\;blue\;}& \text{\;if\;} x > b \\
+\end{array}\right. \]
+Let the hypothesis space be,
+\begin{align*}
+\mathcal{H}' &= \left\{h_{a, b} : -1 < a < b < 1\right\}
+\end{align*}
+Here, a hypothesis $h'_{a, b}$ partitions [-$1, 1$] into three sets: $X^{\text{\;red\;}}_{a, b} = \left[-1, a\right), X^{\text{\;green\;}}_{a, b} = \left[a, b\right], X^{\text{\;blue\;}}_{a, b} = \left(b, 1\right]$. This time, we define a loss function $\ell$ based on the distance from the point to the center of the corresponding color region suggested by $h_{a, b}$. This leads to a classifier similar to k-means clustering procedure,
+\begin{align*}
+\ell'\left(x, y, h_{a, b}\right) &= \left\|x, \bar{X}^{y}_{a, b}\right\|^{2,}
+\end{align*}
+where $\bar{X}^{\text{\;red\;}}_{a, b} = \dfrac{-1 + a}{2} , \bar{X}^{\text{\;green\;}}_{a, b} = \dfrac{a + b}{2}$ , and $\bar{X}^{\text{\;blue\;}}_{a, b} = \dfrac{b + 1}{2}$ are the centers of the decision regions.
+\newline \newline
+\begin{prop} \label{prop:ex2} 
+For any $g  > \dfrac{1}{3}$, there exists $r  \in \left(\dfrac{1}{3}, g\right)$ such that the dataset $S\left(g, r \right) $ is incentive incompatible with respect to ERM on $\mathcal{H}'$ and $\ell'$.
+\end{prop}
+\begin{proof} \label{proof:ex2pf} 
+The optimal thresholds for the original dataset is,
+\begin{align*}
+a^\star  &= - \dfrac{3}{4} r - \dfrac{1}{4}, b^\star  = \dfrac{1}{2} r + \dfrac{1}{2} ,
+\end{align*}
+and since $r  > \dfrac{1}{3}$, we have,
+\begin{align*}
+a^\star  &< \dfrac{-1}{2} < \dfrac{-1}{3}, b^\star  > 0,
+\end{align*}
+which classifies (-$r , \text{\;red\;}$) incorrectly as a green point.
+\\* Similarly, the optimal threshold if the agent misreports her label as blue is,
+\begin{align*}
+a^\star  &= \dfrac{1}{2} r - \dfrac{1}{2}, b^\star  = \dfrac{-3}{4} r + \dfrac{1}{4} ,
+\end{align*}
+and since $r  > \dfrac{1}{3}$, we have,
+\begin{align*}
+a^\star  &> \dfrac{-1}{3}, b^\star  > 0,
+\end{align*}
+which classifies (-$r , \text{\;red\;}$) correctly as a red point.
+\\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
+\newline \newline\end{proof}
+In this case with $\mathcal{H}'$ and $\ell'$, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to reduce the loss from the new blue point, but it increases the loss from the green point on the right at the same time. As a result, the classifier then modifies the green-vs-red decision boundary to reduce the loss from the green points. Intuitively, the misclassified red point could only directly affect the green-vs-blue decision boundary, however, it could indirectly affect the green-vs-red decision boundary by getting help from the green point.
+\newline \newline
+
+
+
+
+\section{Generalization} 
+
 To generalize the above observations, suppose the learner is a probabilistic classifier with parameters estimated by maximum likelihood, and the agents report their labels to maximize the classification probability of their true labels. Then the following two conditions guarantee that the classification is incentive-compatible.
 \newline \newline
 \begin{df} \label{df:mono} 
@@ -650,7 +684,6 @@ Similar to the above derivation (and also as a special case of a Bayes estimator
 \\ &= \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \dagger\right\} + \dfrac{1}{n_{y}} K\left(0\right)
 \\ &\leq  \mathbb{P}\left\{Y = y_{i} | x_{i} ; w^\star \dagger\right\}.
 \end{align*}\end{proof}
-
 
 \subsection{Empirical Risk Minimization}
 A similar result can be obtained for empirical risk minimization. We could either add an assumption that the loss function can be normalized so that the sum is constant and it behaves the same way as a probabilistic classifier, or we could use stronger Monotonic and IIA Conditions. Here, we state the additional normalization condition.
