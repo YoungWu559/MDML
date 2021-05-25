@@ -71,6 +71,29 @@ We study the incentive compatibility of multi-class logistic regression. We prov
 
 \end{abstract}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Introduction} 
 Consider an insurance company that makes its pricing decisions based on the customers' public observable characteristics, but the decision models are built using the information on private unobservable characteristics the customers' report. If the insurance company is transparent about its models, they might worry that customers have incentives to misreport their private information to get the contract that is the most beneficial to them. Similar examples include other rating systems that depend on the report of private information, such as loan applications, school grades, and employee screening.
 \newline \newline
@@ -187,6 +210,39 @@ Currently, there is no formal proof that the result is not due to numerical inst
 \subsection{Loss Functions}
 It is, however, possible to change the loss function so that logistic regression is incentive-compatible. Changing the loss function to absolute value $L^{1}$ loss is one possibility, due to \citet*{dekel2010incentive}. Their result on incentive compatibility of empirical risk minimization in the regression setting is applicable in our model. In addition to absolute value loss, empirical risk minimizers with zero-one loss are also always incentive-compatible.
 \newline \newline
+\begin{prop} \label{prop:dfp} 
+Multi-class probabilistic empirical risk minimization classifiers with absolute value $L^{1}$ loss are incentive-compatible.
+\end{prop}
+\begin{proof} \label{proof:dfppf} 
+The proof is adapted from the proof of Theorem $4.1$ in \citet*{dekel2010incentive}.
+\\* For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the convex hypothesis class $\mathcal{H}$, with the notation $h_{k}\left(x\right)$ representing the probability that the point $x $ is classified as $k $, let the optimal classifier be,
+\begin{align*}
+h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h\right)
+\\ &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \left| 1 - h_{y_{i'}}\left(x_{i'}\right) \right|,
+\end{align*}
+and for any fixed agent $i, $
+\begin{align*}
+h^{\dagger} &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i' \neq  i}^{n} \ell\left(y_{i'} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
+\end{align*}
+For a contradiction, assume $\ell\left(y_{i}; h^{\dagger}\right) \leq  \ell\left(y_{i}; h^\star \right)$, we show that $h^{\dagger} = h^\star $.
+\\* Since $\ell$ is the absolute value loss,
+\begin{align*}
+h^\star _{y_{i}}\left(x_{i}\right) &\leq  h^{\dagger}_{y_{i}}\left(x_{i}\right) \leq  1.
+\end{align*}
+Now define $\alpha \in \left(0, 1\right]$ by,
+\begin{align*}
+\alpha &= \dfrac{1 - h^\star _{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)},
+\end{align*}
+and define $h^{\alpha} \in \mathcal{H}$, since $\mathcal{H}$ is convex, by,
+\begin{align*}
+h^{\alpha} &= \alpha h^{\dagger} + \left(1 - \alpha\right) h^\star .
+\end{align*}
+Then, we have,
+\begin{align*}
+\ell\left(y^{\dagger}_{i} ; h^\star \right) - \ell\left(y_{i} ; h^\star \right) &= \ell\left(y^{\dagger}_{i} ; h^{\alpha}\right) - \ell\left(y_{i} ; h^{\alpha}\right).
+\end{align*}
+Note that the above equality holds for other agents too since they report truthfully, so the equality holds for the objective too. Therefore, $h^\star $ and $h^{\dagger}$ are both empirical risk minimizers on the original dataset.
+\newline \newline\end{proof}
 \begin{prop} \label{prop:zolog} 
 Multi-class deterministic empirical risk minimization classifiers with zero-one loss are incentive-compatible.
 \end{prop}
@@ -344,14 +400,33 @@ In this section, we show that classifiers, including Bayes classifiers and kerne
  d(x, X^y_t) = \min_{x' \in X^y_t} \|x-x'\|
  \end{equation}
  is the shortest distance from the point $x$ to the set (color region) $X^y_t$.
- $f \ge 0$ is strictly convex with minimum at 0: $f(0) = 0$.
+ $f \ge 0$ is strictly convex and continuously differentiable with a minimum of 0 at 0: $f(0) = 0$.
  For example, $f$ can be the square function $f(z)=z^2$.
- 
+To be concrete, for a fixed $t, $
+\begin{equation} \ell\left(x, y = \text{\;red\;}, h_{t}\right) =\left\{ \begin{array}{ll}
+0& \text{\;if\;} x \leq  -t \\
+f(x + t)& \text{\;if\;} x > -t \\
+\end{array},\right. \end{equation}
+Similarly, we have,
+\begin{equation} \ell\left(x, y = \text{\;green\;}, h_{t}\right) =\left\{ \begin{array}{ll}
+f(t - x)& \text{\;if\;} x \leq  -t \\
+0& \text{\;if\;} -t < x < t \\
+f(x - t)& \text{\;if\;} x \geq  t \\
+\end{array},\right. \end{equation}
+and,
+\begin{equation} \ell\left(x, y = \text{\;blue\;}, h_{t}\right) =\left\{ \begin{array}{ll}
+f(t - x)& \text{\;if\;} x \leq  t \\
+0& \text{\;if\;} x > t \\
+\end{array}.\right. \end{equation}
+Also note that strict convexity implies continuity but not differentiability. For example, $f\left(t\right)  = t^{2} + \left| t \right|$ is strictly convex but not differentiable at $t  = 0$.
  Given a training set $S=\{(x_1,y_1), \ldots (x_n, y_n)\}$, consider the Empiricial Risk Minimizer (ERM)
  \begin{equation}
  \hat h \in \argmin_{h \in \H} \sum_{i=1}^n \ell(x_i, y_i, h).
  \end{equation}
-
+\\* We define $R $ as the risk, the objective function in the above minimization,
+\begin{align*}
+R\left(S, h\right)  &= \displaystyle\sum_{i=1}^{n} \ell\left(x_{i}, y_{i}, h\right).
+\end{align*}
 We now exhibit a family of IIC datasets $S $ parameterized by $g $ and $r $, see Figure \ref{fig:1dat}. $S $ consists of five labeled points:
 \begin{equation} 
 S\left(g, r\right)  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
@@ -359,70 +434,97 @@ S\left(g, r\right)  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left
 with $0 < r < g < 1$.
 \newline \newline
 \begin{prop} \label{prop:ex1} 
-For any $g $, there exists an $r  \in \left(0, g\right)$ such that the dataset $S\left(g, r \right) $ is incentive incompatible with respect to ERM on $\mathcal{H}$ and $\ell$.
+For any $g  \in \left(0, 1\right]$, there exists an $r  \in \left(0, g\right)$ such that the dataset $S\left(g, r \right) $ is incentive incompatible with respect to ERM on $\mathcal{H}$ and $\ell$.
 \end{prop}
 \begin{proof} \label{proof:ex1pf} 
-The optimal threshold for the original dataset is,
-\begin{equation} t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
-f(t - r)& \text{\;if\;} t \geq  g \\
-2 f\left(g - t\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
+The optimal threshold for the original dataset $S $ is,
+\begin{equation} \hat{t} = \arg\displaystyle\min_{t \geq  0} R\left(S, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 2 f\left(g - t\right)& \text{\;if\;} t \leq  r \\
+2 f\left(g - t\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
+f(t - r)& \text{\;if\;} t \geq  g \\
 \end{array},\right. \end{equation}
-Since $f\left(0\right)  = 0$, the objective is continuous at $t  = g $ and $t  = r $. Note that $f\left(t - r\right) $ is minimized at $r  < g$ and $f\left(t - g\right) $ is minimized at $g  > r$, we have,
-\begin{align*}
-&t^\star  \in \left(r , g \right),
-\end{align*}
+Since $f $ is strictly convex thus continuous in $t $ on [-$1, 1$], any linear combination with positive coefficients is also strictly convex and continuous in $t $. In addition, due to the assumption that $f\left(0\right)  = 0$,
+\begin{equation} 
+R\left(S, h_{t} | t = r\right)  = 2 f\left(g - r\right) = \lim_{t \to  r^{+}} R\left(s, h_{t}\right),
+\end{equation}
+and,
+\begin{equation} 
+R\left(S, h_{t} | t = g\right)  = f\left(g - r\right) = \lim_{t \to  g^{-}} R\left(s, h_{t}\right),
+\end{equation}
+implying that $R\left(S, h_{t}\right) $ is continuous in $t. $
+\\* Given the assumption that $f $ is minimized at $0$, we have $2 f\left(t - r\right) $ is minimized at $t  = r < g$ and $f\left(t - g\right) $ is minimized at $t  = g > r$. Therefore, the minimum of $R\left(S, h_{t}\right) $ occurs in the region $r  < t < g $, meaning,
+\begin{equation} 
+\hat{t} \in \left(r , g \right),
+\end{equation}
 which classifies (-$r , \text{\;red\;}$) incorrectly as a green point.
-\\* Similarly, the optimal threshold if the agent misreports her label as blue is,
-\begin{equation} t^\star  = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
-f(t + r)& \text{\;if\;} t \geq  g \\
-2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
+\\* Now, let $S^{\dagger}$ be the dataset in which all agents except for (-$r , \text{\;red\;}$) report truthfully, and the agent (-$r , \text{\;red\;}$) misreports her label as blue. In this case, the optimal threshold for $S^{\dagger}$ is,
+\begin{equation} \hat{t}\dagger = \arg\displaystyle\min_{t \geq  0} R\left(S^{\dagger}, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
+2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
+f(t + r)& \text{\;if\;} t \geq  g \\
 \end{array},\right. \end{equation}
-Since $f\left(t + r\right) $ is minimized at $t  = -r < g $ and $f\left(g - t\right) $ is minimized at $g, $
+Since $f\left(t + r\right) $ is minimized at $t  = -r < g $, the minimum of $R\left(S^{\dagger}, h_{t}\right) $ occurs in the region $r  < g, $
 \begin{equation} 
-t^\star  \in \left(0, g \right),
+\hat{t}\dagger \in \left(0, g \right),
 \end{equation}
-and the objective in this range is,
+and we have, in this range,
 \begin{equation} 
-2 f\left(g - t\right) + f\left(t + r\right).
+R\left(S^{\dagger}, h_{t}\right)  = 2 f\left(g - t\right) + f\left(t + r\right).
 \end{equation}
-Define $\delta := g$ - r. Fix small $\varepsilon > 0$, there is sufficiently small $\delta > 0$ such that, due to strict convexity,
+Due to strict convexity of $f $, we have $f'\left(a\right)$ is strictly increasing in $a $. Given that $f'\left(0\right) = 0$ at the global minimum, we can find small $\delta > 0$ such that the following holds
 \begin{equation} 
-2 \dfrac{f\left(\delta + \varepsilon\right) - f\left(\delta\right)}{\varepsilon} < \dfrac{f\left(2 r\right) - f\left(2 r - \varepsilon\right)}{\varepsilon} .
+2 f'\left(\delta\right) < f'\left(2 r\right) .
 \end{equation}
-This inequality implies that the objective at $t  = r  - \varepsilon$,
+Now, take $r  = g - \delta$, we have, for $t  \in \left(0, g \right)$,
 \begin{equation} 
-2 f\left(\delta + \varepsilon\right) + f\left(2 r - \varepsilon\right) < 2 f\left(\delta\right) + f\left(2 r \right),
+\dfrac{\partial R\left(S, h_{t}\right)}{\partial t} = - 2 f'\left(g - r\right) + f'\left(2 r\right) > 0.
 \end{equation}
-which is the objective at $t  = r $. Therefore, the objective is decreasing at $r $, given that it is the sum of two strictly convex functions thus strictly convex itself, we have,
+Therefore, the objective is decreasing at $t  = r $, and given that it is the sum of two strictly convex functions thus strictly convex itself, we have,
 \begin{equation} 
-t^\star  \in \left(0, r \right),
+\hat{t}\dagger \in \left(0, r \right),
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
 \end{proof}
 
-\begin{eg} \label{eg:ex1df} 
-When $f $ is differentiable, there is a sufficient (but not necessary) condition on $g $ and $r $ such that $S\left(g, r \right) $ is IIC,
-\begin{equation} 
-2 f'\left(g - r\right) < f'\left(2 r\right).
-\end{equation}
-For any strictly convex $f $ satisfying $f\left(0\right)  = 0$ and $f'\left(0\right)  = 0$, for any fixed $g $, there exists at least one $r $ that satisfies the above condition since $f'\left(2 r\right)  > 0$ and $\lim_{g \to  r^{+}} f'\left(g - r\right) \to  f'\left(0\right) = 0$.
-\\* When the condition holds, the objective at $t  = r $ is increasing, implying that $t^\star $ is less than $r $, and the corresponding classifier classifies (-$r , \text{\;red\;}$) correctly as a red point when the agent misreports her label as blue.
-\end{eg}
-\begin{eg} \label{eg:ex2sq} 
-When $f $ is the square function, the loss is the square of the distance it takes to move the point to the correct region. In this case, $S\left(g, r\right) $ is IIC as long as $g  < 2 r. $
+\begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
+\draw[->, thick] (0.0, 0.0) -- (6.0, 0.0);
+\draw[thick] (1.5, 3.0) arc (180:360:1.5);
+\draw[thick] (0.0, 4.5) arc (180:270:1.5);
+\draw[thick] (4.5, 3.0) arc (270:360:1.5);
+\draw[dashed, thick] (1.5, 0.0) -- (1.5, 3.0);
+\draw[dashed, thick] (4.5, 0.0) -- (4.5, 3.0);
+\node[right] at (6.0, 0.0){$t $};
+\node[below] at (1.5, 0.0){r};
+\node[below] at (4.5, 0.0){g};
+\node[below] at (0.0, 0.0){$0$};
+\node[above] at (6.0, 4.5){$R\left(S, h_{t}\right) $};
+ 
+\draw[->, thick] (7.0, 0.0) -- (13.0, 0.0);
+\draw[thick] (7.0, 3.00) arc (180:360:2.25);
+\draw[thick] (11.5, 3.0) arc (270:360:1.5);
+\draw[dashed, thick] (10.5, 0.0) -- (10.5, 1.0);
+\draw[dashed, thick] (11.5, 0.0) -- (11.5, 3.0);
+\node[right] at (13.0, 0.0){$t $};
+\node[below] at (10.5, 0.0){r};
+\node[below] at (11.5, 0.0){g};
+\node[below] at (7.0, 0.0){$0$};
+\node[above] at (13.0, 4.5){$R\left(S^{\dagger}, h_{t}\right) $};
+\end{tikzpicture} \captionof{figure}{Risk on $S $ vs $S^{\dagger}$}\label{fig:exf}
+\end{figure}
+\begin{eg} \label{eg:ex1sq} 
+When $f $ is the square function, the loss is the square of the distance it takes to move the point to the correct region. In this case, $S\left(g, r\right) $ is IIC as long as $g  < 2 r $, which is consistent with the condition in Proposition \ref{prop:ex1}.
 \\* In particular, the optimal threshold for the original dataset is,
-\begin{equation} 
-t^\star  = \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
-\end{equation}
+\begin{align*}
+\hat{t} &= \dfrac{2}{3} g + \dfrac{1}{3} r \in \left(r , g \right),
+\end{align*}
 which classifies (-$r , \text{\;red\;}$) incorrectly as a green point, but the optimal threshold if the agent misreports her label as blue is,
-\begin{equation} 
-t^\star  = \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
-\end{equation}
+\begin{align*}
+\hat{t}\dagger &= \dfrac{2}{3} g - \dfrac{1}{3} r \in \left(0, r \right),
+\end{align*}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
-\end{eg}
+\newline \newline\end{eg}
+
 
 \subsection{Another Example}
 
@@ -486,6 +588,7 @@ For any $g  > \dfrac{1}{3}$, there exists $r  \in \left(\dfrac{1}{3}, g\right)$ 
 \end{prop}
 \begin{proof} \label{proof:ex2pf} 
 The optimal thresholds for the original dataset is,
+\end{proof}
 \begin{equation} 
 a^\star  = - \dfrac{3}{4} r - \dfrac{1}{4}, b^\star  = \dfrac{1}{2} r + \dfrac{1}{2} ,
 \end{equation}
@@ -504,7 +607,7 @@ a^\star  > - \dfrac{1}{3}, b^\star  > 0,
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\end{proof}
+\newline \newline
 In this case with $\mathcal{H}'$ and $\ell'$, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to reduce the loss from the new blue point, but it increases the loss from the green point on the right at the same time. As a result, the classifier then modifies the green-vs-red decision boundary to reduce the loss from the green points. Intuitively, the misclassified red point could only directly affect the green-vs-blue decision boundary, however, it could indirectly affect the green-vs-red decision boundary by getting help from the green point.
 \newline \newline
 
