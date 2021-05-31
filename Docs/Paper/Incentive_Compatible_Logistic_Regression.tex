@@ -215,34 +215,77 @@ Multi-class probabilistic empirical risk minimization classifiers with absolute 
 \end{prop}
 \begin{proof} \label{proof:dfppf} 
 The proof is adapted from the proof of Theorem $4.1$ in \citet*{dekel2010incentive}.
-\\* For any dataset $\left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the convex hypothesis class $\mathcal{H}$, with the notation $h_{k}\left(x\right)$ representing the probability that the point $x $ is classified as $k $, let the optimal classifier be,
+\\* For any dataset $S  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the convex hypothesis class $\mathcal{H}$, with the notation $h_{y}\left(x\right)$ representing the probability that the point $x $ is classified as $y  \in \left\{1, 2, ..., k\right\}$, define the absolute value loss for multi-class classification as,
+\begin{equation} 
+\ell\left(y_{i} ; h\right) = \dfrac{1}{k} \displaystyle\sum_{y=1}^{k} \left| \mathbbm{1}_{\left\{y = y_{i}\right\}} - h_{y}\left(x_{i}\right) \right|,
+\end{equation}
+let the optimal classifier be,
+\begin{equation} 
+h^\star  = \arg\displaystyle\min_{h \in \mathcal{H}} R\left(S, h\right) = \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h\right),
+\end{equation}
+and for a fixed agent $i $ who misreports her label as $y^{\dagger}_{i}$, let the dataset be,
 \begin{align*}
-h^\star  &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h\right)
-\\ &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \left| 1 - h_{y_{i'}}\left(x_{i'}\right) \right|,
+S^{\dagger} &= S \setminus  \left\{\left(x_{i}, y_{i}\right)\right\} \cup \left\{\left(x_{i}, y^{\dagger}_{i}\right)\right\},
 \end{align*}
-and for any fixed agent $i, $
-\begin{align*}
-h^{\dagger} &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i' \neq  i}^{n} \ell\left(y_{i'} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
-\end{align*}
+and the optimal classifier be,
+\begin{equation} 
+h^{\dagger} = \arg\displaystyle\min_{h \in \mathcal{H}} R\left(S^{\dagger}, h\right) = \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i' \neq  i}^{n} \ell\left(y_{i'} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
+\end{equation}
 For a contradiction, assume $\ell\left(y_{i}; h^{\dagger}\right) \leq  \ell\left(y_{i}; h^\star \right)$, we show that $h^{\dagger} = h^\star $.
-\\* Since $\ell$ is the absolute value loss,
-\begin{align*}
-h^\star _{y_{i}}\left(x_{i}\right) &\leq  h^{\dagger}_{y_{i}}\left(x_{i}\right) \leq  1.
-\end{align*}
-Now define $\alpha \in \left(0, 1\right]$ by,
-\begin{align*}
-\alpha &= \dfrac{1 - h^\star _{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)},
-\end{align*}
+\\* First, by noting that $h_{y}\left(x_{i}\right) \in \left[0, 1\right]$ and that the sum of $h_{y}\left(x_{i}\right)$ over $y $ is always $1$, the loss function can be simplified to,
+\begin{equation} 
+\ell\left(y_{i} ; h\right) = \dfrac{2}{k} \left(1 - h_{y_{i}}\left(x_{i}\right)\right).
+\end{equation}
+Therefore, we have the following inequality,
+\begin{equation} 
+0 \leq  h^\star _{y_{i}}\left(x_{i}\right) \leq  h^{\dagger}_{y_{i}}\left(x_{i}\right) \leq  1.
+\end{equation}
+Now define $\alpha_{i} \in \left[0, 1\right]$ by,
+\begin{equation} 
+\alpha_{i} = \dfrac{1 - h^\star _{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)},
+\end{equation}
 and define $h^{\alpha} \in \mathcal{H}$, since $\mathcal{H}$ is convex, by,
-\begin{align*}
-h^{\alpha} &= \alpha h^{\dagger} + \left(1 - \alpha\right) h^\star .
-\end{align*}
+\begin{equation} 
+h^{\alpha} = \alpha h^{\dagger} + \left(1 - \alpha\right) h^\star .
+\end{equation}
 Then, we have,
-\begin{align*}
-\ell\left(y^{\dagger}_{i} ; h^\star \right) - \ell\left(y_{i} ; h^\star \right) &= \ell\left(y^{\dagger}_{i} ; h^{\alpha}\right) - \ell\left(y_{i} ; h^{\alpha}\right).
-\end{align*}
-Note that the above equality holds for other agents too since they report truthfully, so the equality holds for the objective too. Therefore, $h^\star $ and $h^{\dagger}$ are both empirical risk minimizers on the original dataset.
-\newline \newline\end{proof}
+\begin{equation} 
+h^{\alpha_{i}}_{y_{i}} = \dfrac{1 - h^\star _{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)} \hat{h}_{y_{i}}\left(x_{i}\right) + \dfrac{1 - h^{\dagger}_{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)} h^\star _{y_{i}}\left(x_{i}\right) = 1,
+\end{equation}
+implying that there is $\alpha \in \left(0, \alpha_{i}\right]$ such that the relation holds with equality,
+\begin{equation} 
+\ell\left(y^{\dagger}_{i} ; h^\star \right) - \ell\left(y_{i} ; h^\star \right) = \ell\left(y^{\dagger}_{i} ; h^{\alpha}\right) - \ell\left(y_{i} ; h^{\alpha}\right).
+\end{equation}
+Note that the above equality holds for other agents too since they report truthfully, so the equality holds for the risk too by summing the above equality over $i, $
+\begin{equation} 
+R\left(S^{\dagger}, h^\star \right) - R\left(S, h^\star \right) = R\left(S^{\dagger}, h^{\alpha}\right) - R\left(S, h^{\alpha}\right).
+\end{equation}
+Since $h^\star $ is the ERM on $S, $
+\begin{equation} 
+R(S, h^\star ) \leq  R\left(S, h^{\alpha}\right),
+\end{equation}
+which implies that,
+\begin{equation} 
+R\left(S^{\dagger}, h^\star \right) \leq  R\left(S^{\dagger}, h^{\alpha}\right).
+\end{equation}
+Due to convexity,
+\begin{equation} 
+R\left(S^{\dagger}, h^{\alpha}\right) \leq  \alpha R\left(S^{\dagger}, h^{\dagger}\right) + \left(1 - \alpha\right) R\left(S^{\dagger}, h^\star \right),
+\end{equation}
+which implies,
+\begin{equation} 
+R\left(S^{\dagger}, h^\star \right) \leq  R\left(S^{\dagger}, h^{\dagger}\right).
+\end{equation}
+Since $h^{\dagger}$ is the ERM on $S^{\dagger,}$
+\begin{equation} 
+R\left(S^{\dagger}, h^{\dagger}\right) \leq  R\left(S^{\dagger}, h^\star \right),
+\end{equation}
+we conclude that,
+\begin{equation} 
+R\left(S^{\dagger}, h^{\dagger}\right) = R\left(S^{\dagger}, h^\star \right),
+\end{equation}
+meaning $h^\star $ and $h^{\dagger}$ are both empirical risk minimizers on the original dataset.
+\end{proof}
 \begin{prop} \label{prop:zolog} 
 Multi-class deterministic empirical risk minimization classifiers with zero-one loss are incentive-compatible.
 \end{prop}
@@ -588,7 +631,6 @@ For any $g  > \dfrac{1}{3}$, there exists $r  \in \left(\dfrac{1}{3}, g\right)$ 
 \end{prop}
 \begin{proof} \label{proof:ex2pf} 
 The optimal thresholds for the original dataset is,
-\end{proof}
 \begin{equation} 
 a^\star  = - \dfrac{3}{4} r - \dfrac{1}{4}, b^\star  = \dfrac{1}{2} r + \dfrac{1}{2} ,
 \end{equation}
@@ -607,7 +649,7 @@ a^\star  > - \dfrac{1}{3}, b^\star  > 0,
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\newline \newline
+\end{proof}
 In this case with $\mathcal{H}'$ and $\ell'$, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to reduce the loss from the new blue point, but it increases the loss from the green point on the right at the same time. As a result, the classifier then modifies the green-vs-red decision boundary to reduce the loss from the green points. Intuitively, the misclassified red point could only directly affect the green-vs-blue decision boundary, however, it could indirectly affect the green-vs-red decision boundary by getting help from the green point.
 \newline \newline
 
