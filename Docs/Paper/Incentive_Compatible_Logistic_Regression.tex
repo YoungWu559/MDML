@@ -148,6 +148,78 @@ The last group of papers uses machine learning or robust statistics techniques w
 
 
 
+\section{Definition of Strategyproofness} 
+\begin{df} \label{df:sp1} 
+(Dekel, Fischer, Procaccia $2010$) Consider $\hat{\theta} \in \Theta$ such that $\hat{\theta}_{j} = \theta_{j}$ whenever $j  \notin C $. If for all $i  \in C, $
+\end{df}
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) - p_{i}\left(\hat{\theta}\right) \geq  v_{i}\left(f\left(\theta\right), \theta_{i}\right) - p_{i}\left(\theta\right) + \varepsilon,
+\end{equation}
+then for all $i  \in C, $
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) - p_{i}\left(\hat{\theta}\right) = v_{i}\left(f\left(\theta\right), \theta_{i}\right) - p_{i}\left(\theta\right) + \varepsilon.
+\end{equation}
+
+Statement: group strategyproofness requires that if some member of an arbitrary coalition of agents strictly gains from a joint deviation by the coalition, then some other member must strictly lose.
+\newline \newline
+Definition according to the statement:
+\begin{df} \label{df:sp1p} 
+If there is $i  \in C $ such that,
+\end{df}
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) - p_{i}\left(\hat{\theta}\right) > v_{i}\left(f\left(\theta\right), \theta_{i}\right) - p_{i}\left(\theta\right) + \varepsilon,
+\end{equation}
+then there is $i' \in C $ such that,
+\begin{equation} 
+v_{i'}\left(f\left(\hat{\theta}\right), \theta_{i'}\right) - p_{i}\left(\hat{\theta}\right) < v_{i'}\left(f\left(\theta\right), \theta_{i'}\right) - p_{i}\left(\theta\right).
+\end{equation}
+
+\begin{df} \label{df:sp2} 
+(BP2011, L2011, CZ2015, L2015, TWZZ2020) For all $i $, all $\theta$, all $\hat{\theta}$ which differ only in $i, $
+\end{df}
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) \leq  v_{i}\left(f\left(\theta\right), \theta_{i}\right) + \varepsilon.
+\end{equation}
+
+\begin{df} \label{df:sp3} 
+(BBM2009) For any group $C $ and $\theta, \hat{\theta}$ such that $\hat{\theta}_{i} = \theta_{i}$ for any $i  \notin C $, for all $i  \in C, $
+\end{df}
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) \leq  v_{i}\left(f\left(\theta\right), \theta_{i}\right).
+\end{equation}
+
+\begin{df} \label{df:sp4} 
+(CZ2015) For any group $C $ and $\theta, \hat{\theta}$ such that $\hat{\theta}_{i} = \theta_{i}$ for any $i  \notin C $, for at least one $i  \in C, $
+\end{df}
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) \leq  v_{i}\left(f\left(\theta\right), \theta_{i}\right).
+\end{equation}
+
+\begin{df} \label{df:sp5} 
+(PV2012) For any $\theta, \hat{\theta}$ and every coalition of players $C $ satisfying $\theta_{i} = \hat{\theta}_{i}$ for all $i  \notin C $, one of the following is true:
+\end{df}
+\begin{enumerate}
+\item There is some $i  \in C $, such that,
+\end{enumerate}
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) - p_{i}\left(\hat{\theta}\right) < v_{i}\left(f\left(\theta\right), \theta_{i}\right) - p_{i}\left(\theta\right),
+\end{equation}
+or,
+\begin{enumerate}
+\setcounter{enumi}{1}
+\item For all $i  \in C $, it holds that,
+\end{enumerate}
+\begin{equation} 
+v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) - p_{i}\left(\hat{\theta}\right) = v_{i}\left(f\left(\theta\right), \theta_{i}\right) - p_{i}\left(\theta\right).
+\end{equation}
+
+Here, Definition \ref{df:sp1} and Definition \ref{df:sp2} (or Definition \ref{df:sp3} for group) are equivalent. Definition \ref{df:sp1p} and Definition \ref{df:sp5} are equivalent. Definition \ref{df:sp4} is inconsistent with the rest of the definitions.
+\newline \newline
+The equivalence between Definition \ref{df:sp1} and Definition \ref{df:sp1p} can be seen through Definition \ref{df:sp5}: if $\left(1\right)$ does not hold, then $\left(2\right)$ must be true.
+\newline \newline
+
+
+
 \section{Logistic Regression} 
 
 \subsection{Model}
@@ -205,17 +277,70 @@ $3$ &$0.8273350$ &$4.309293$ &-$1.200060$\\ \hline
 \end{tabular} \end{center}
 Currently, there is no formal proof that the result is not due to numerical instability, therefore, @(logit) is stated as a conjecture. Numerical experiments indicate that incentive-incompatible datasets are rare. If the data points are two-dimensional and standard normally distributed, and the labels are created using randomly generated weights with a small probability of error, then such a dataset is incentive-incompatible with a probability of $0.005$.
 \newline \newline
+In the Theorem $4.4$ of \citet*{dekel2010incentive}, it is stated that an ERM classifier with a loss function $\ell\left(\hat{y}, y\right) = \mu\left(\left| \hat{y} - y \right|\right)$, with $\mu$ that is monotonically increasing, strictly convex, and has unbounded subderivatives, is not incentive compatible. The result does not apply to logistic regression, including the binary case since the loss function of logistic regression is given by,
+\begin{equation} 
+\ell\left(\hat{y}, y\right) = - y \log\left(\hat{y}\right) - \left(1 - y\right) \log\left(1 - \hat{y}\right) = -\log\left(1-\left| \hat{y-y} \right|\right).
+\end{equation}
+Note that the second equality holds because when $y  = 1$,
+\begin{equation} 
+\ell\left(\hat{y}, y\right) = - \log\left(\hat{y}\right) = -\log\left(1-\left| \hat{1-y} \right|\right),
+\end{equation}
+and when $y  = 0$,
+\begin{equation} 
+\ell\left(\hat{y}, y\right) = - \log\left(\hat{1-y}\right) = -\log\left(1-\left| \hat{0-y} \right|\right).
+\end{equation}
+Therefore, we have,
+\begin{equation} 
+\mu\left(z\right) = -\log\left(1-z\right),
+\end{equation}
+and,
+\begin{equation} 
+\mu'\left(z\right) = \dfrac{1}{1-z} .
+\end{equation}
+It is a monotonically increasing strictly convex function with unbounded subderivatives. Technically, all assumptions of the theorem is satisfied; however, in the proof of Proposition $4.5$, and in particular, Lemma $4.6$, it is implicitly assumed that if $h\left(x_{i}\right)  > y_{i} = 0$ (or similarly $h\left(x_{i}\right)  < y_{i} = 1$), the agent can report $y_{i} < 0$ (or $y_{i} > 1$) to improve the loss, which is impossible in the classification setting.
+\newline \newline
 
 
 \subsection{Loss Functions}
-It is, however, possible to change the loss function so that logistic regression is incentive-compatible. Changing the loss function to absolute value $L^{1}$ loss is one possibility, due to \citet*{dekel2010incentive}. Their result on incentive compatibility of empirical risk minimization in the regression setting is applicable in our model. In addition to absolute value loss, empirical risk minimizers with zero-one loss are also always incentive-compatible.
+It is, however, possible to change the loss function so that logistic regression is incentive-compatible. Changing the loss function to the zero-one loss is one possibility, and it turns out that empirical risk minimizers with zero-one loss are also always incentive-compatible.
 \newline \newline
+To formalize incentive compatibility for empirical risk minimizers, we use the following definition,
+\begin{df} \label{df:icerm} 
+A dataset $S $ of size $n $ is incentive-incompatible for an empirical risk minimizer from a hypothesis space $\mathcal{H}$ with a loss function $\ell$ if there exists at least one agent $i $, and some $y^{\dagger}_{i} \neq  y_{i}$ such that,
+\end{df}
+\begin{equation} 
+\ell\left(y_{i} ; h^\star \right) < \ell\left(y_{i} ; h^{\dagger}\right),
+\end{equation}
+where,
+\begin{equation} 
+h^\star  = \arg\displaystyle\min_{h \in \mathcal{H}} \dfrac{1}{n} \displaystyle\sum_{i' = 1}^{n} \ell\left(y_{i} ; h\right),
+\end{equation}
+and,
+\begin{equation} 
+h^{\dagger} = \arg\displaystyle\min_{h \in \mathcal{H}} \dfrac{1}{n} \displaystyle\sum_{i' \neq  i} \ell\left(y_{i} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
+\end{equation}
+A classifier is incentive-compatible if there does not exist a dataset that is incentive-incompatible for the empirical risk minimizer.
+\newline \newline
+We use the notation $\hat{R}\left(S, h \right)$ for the empirical risk associated with the hypothesis $h $ on the training set $S $ with size $\left| S \right| = n, $
+\begin{equation} 
+\hat{R}\left(S, h \right) = \dfrac{1}{n} \displaystyle\sum_{i' = 1}^{n} \ell\left(y_{i} ; h\right).
+\end{equation}
+Here, we are assuming that each agent has a degenerate distribution for $x_{i}$, so the risk for agent $i $ associated with $h $ is given by,
+\begin{equation} 
+R_{i}\left(h\right) = \mathbb{E}_{x\left[\ell\left(y_{i} ; h\right)\right]} = \ell\left(y_{i} ; h\right).
+\end{equation}
+We also assume that the risk for the learner is the average risk over all $n $ agents,
+\begin{equation} 
+R(h) = \dfrac{1}{n} \displaystyle\sum_{i=1}^{n} R_{i}\left(h\right).
+\end{equation}
+
 \begin{prop} \label{prop:dfp} 
-Multi-class probabilistic empirical risk minimization classifiers with absolute value $L^{1}$ loss are incentive-compatible.
+(The proof only work in the binary case, remove this) Multi-class probabilistic empirical risk minimization classifiers with absolute value $L^{1}$ loss are incentive-compatible.
 \end{prop}
 \begin{proof} \label{proof:dfppf} 
 The proof is adapted from the proof of Theorem $4.1$ in \citet*{dekel2010incentive}.
 \\* For any dataset $S  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the convex hypothesis class $\mathcal{H}$, with the notation $h_{y}\left(x\right)$ representing the probability that the point $x $ is classified as $y  \in \left\{1, 2, ..., k\right\}$, define the absolute value loss for multi-class classification as,
+\end{proof}
 \begin{equation} 
 \ell\left(y_{i} ; h\right) = \dfrac{1}{k} \displaystyle\sum_{y=1}^{k} \left| \mathbbm{1}_{\left\{y = y_{i}\right\}} - h_{y}\left(x_{i}\right) \right|,
 \end{equation}
@@ -285,7 +410,7 @@ we conclude that,
 R\left(S^{\dagger}, h^{\dagger}\right) = R\left(S^{\dagger}, h^\star \right),
 \end{equation}
 meaning $h^\star $ and $h^{\dagger}$ are both empirical risk minimizers on the original dataset.
-\end{proof}
+\newline \newline
 \begin{prop} \label{prop:zolog} 
 Multi-class deterministic empirical risk minimization classifiers with zero-one loss are incentive-compatible.
 \end{prop}
@@ -432,7 +557,7 @@ In this section, we show that classifiers, including Bayes classifiers and kerne
  $X^\text{red}_t = (-\infty, -t)$,
  $X^\text{green}_t = [-t, t]$,
  $X^\text{blue}_t = (t, \infty)$.
- Given a labeled point $(x,y)$ with  $y \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$, it could be outside the ``color region'' suggested by $h_t$. 
+ Given a labeled point $(x,y)$ with  $y \in \left\{\text{\;red\;}, \text{\;green\;}, \text{\;blue\;}\right\}$, it could be outside the ''color region'' suggested by $h_t$. 
  Accordingly, we define a loss function $\ell$ based on the distance it takes to move the point to the corresponding color region suggested by $h_t$.
  Concretely,
  \begin{equation}
@@ -466,10 +591,8 @@ Also note that strict convexity implies continuity but not differentiability. Fo
  \begin{equation}
  \hat h \in \argmin_{h \in \H} \sum_{i=1}^n \ell(x_i, y_i, h).
  \end{equation}
-\\* We define $R $ as the risk, the objective function in the above minimization,
-\begin{align*}
-R\left(S, h\right)  &= \displaystyle\sum_{i=1}^{n} \ell\left(x_{i}, y_{i}, h\right).
-\end{align*}
+\\* Note that the objective function in the above minimization is the empirical risk.
+\newline \newline
 We now exhibit a family of IIC datasets $S $ parameterized by $g $ and $r $, see Figure \ref{fig:1dat}. $S $ consists of five labeled points:
 \begin{equation} 
 S\left(g, r\right)  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{5} = \left\{\left(-1, \text{\;red\;}\right), \left(-g, \text{\;green\;}\right), \left(-r, \text{\;red\;}\right), \left(g, \text{\;green\;}\right), \left(1, \text{\;blue\;}\right)\right\},
@@ -481,27 +604,28 @@ For any $g  \in \left(0, 1\right]$, there exists an $r  \in \left(0, g\right)$ s
 \end{prop}
 \begin{proof} \label{proof:ex1pf} 
 The optimal threshold for the original dataset $S $ is,
-\begin{equation} \hat{t} = \arg\displaystyle\min_{t \geq  0} R\left(S, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+\begin{equation} \hat{t} = \arg\displaystyle\min_{t \geq  0} \hat{R}\left(S, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 2 f\left(g - t\right)& \text{\;if\;} t \leq  r \\
 2 f\left(g - t\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
 f(t - r)& \text{\;if\;} t \geq  g \\
 \end{array},\right. \end{equation}
 Since $f $ is strictly convex thus continuous in $t $ on [-$1, 1$], any linear combination with positive coefficients is also strictly convex and continuous in $t $. In addition, due to the assumption that $f\left(0\right)  = 0$,
+\end{proof}
 \begin{equation} 
-R\left(S, h_{t} | t = r\right)  = 2 f\left(g - r\right) = \lim_{t \to  r^{+}} R\left(s, h_{t}\right),
+\hat{R}\left(S, h_{t} | t = r\right) = 2 f\left(g - r\right) = \lim_{t \to  r^{+}} \hat{R}\left(s, h_{t}\right),
 \end{equation}
 and,
 \begin{equation} 
-R\left(S, h_{t} | t = g\right)  = f\left(g - r\right) = \lim_{t \to  g^{-}} R\left(s, h_{t}\right),
+\hat{R}\left(S, h_{t} | t = g\right) = f\left(g - r\right) = \lim_{t \to  g^{-}} \hat{R}\left(s, h_{t}\right),
 \end{equation}
-implying that $R\left(S, h_{t}\right) $ is continuous in $t. $
-\\* Given the assumption that $f $ is minimized at $0$, we have $2 f\left(t - r\right) $ is minimized at $t  = r < g$ and $f\left(t - g\right) $ is minimized at $t  = g > r$. Therefore, the minimum of $R\left(S, h_{t}\right) $ occurs in the region $r  < t < g $, meaning,
+implying that $\hat{R}\left(S, h_{t}\right)$ is continuous in $t. $
+\\* Given the assumption that $f $ is minimized at $0$, we have $2 f\left(t - r\right) $ is minimized at $t  = r < g$ and $f\left(t - g\right) $ is minimized at $t  = g > r$. Therefore, the minimum of $\hat{R}\left(S, h_{t}\right)$ occurs in the region $r  < t < g $, meaning,
 \begin{equation} 
 \hat{t} \in \left(r , g \right),
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) incorrectly as a green point.
 \\* Now, let $S^{\dagger}$ be the dataset in which all agents except for (-$r , \text{\;red\;}$) report truthfully, and the agent (-$r , \text{\;red\;}$) misreports her label as blue. In this case, the optimal threshold for $S^{\dagger}$ is,
-\begin{equation} \hat{t}\dagger = \arg\displaystyle\min_{t \geq  0} R\left(S^{\dagger}, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+\begin{equation} \hat{t}\dagger = \arg\displaystyle\min_{t \geq  0} \hat{R}\left(S^{\dagger}, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
 f(t + r)& \text{\;if\;} t \geq  g \\
@@ -512,7 +636,7 @@ Since $f\left(t + r\right) $ is minimized at $t  = -r < g $, the minimum of $R\l
 \end{equation}
 and we have, in this range,
 \begin{equation} 
-R\left(S^{\dagger}, h_{t}\right)  = 2 f\left(g - t\right) + f\left(t + r\right).
+\hat{R}\left(S^{\dagger}, h_{t}\right) = 2 f\left(g - t\right) + f\left(t + r\right).
 \end{equation}
 Due to strict convexity of $f $, we have $f'\left(a\right)$ is strictly increasing in $a $. Given that $f'\left(0\right) = 0$ at the global minimum, we can find small $\delta > 0$ such that the following holds
 \begin{equation} 
@@ -520,7 +644,7 @@ Due to strict convexity of $f $, we have $f'\left(a\right)$ is strictly increasi
 \end{equation}
 Now, take $r  = g - \delta$, we have, for $t  \in \left(0, g \right)$,
 \begin{equation} 
-\dfrac{\partial R\left(S, h_{t}\right)}{\partial t} = - 2 f'\left(g - r\right) + f'\left(2 r\right) > 0.
+\dfrac{\partial \hat{R}\left(S, h_{t}\right)}{\partial t} = - 2 f'\left(g - r\right) + f'\left(2 r\right) > 0.
 \end{equation}
 Therefore, the objective is decreasing at $t  = r $, and given that it is the sum of two strictly convex functions thus strictly convex itself, we have,
 \begin{equation} 
@@ -528,7 +652,7 @@ Therefore, the objective is decreasing at $t  = r $, and given that it is the su
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\end{proof}
+\newline \newline
 
 \begin{figure}[H] \centering \begin{tikzpicture} [scale = 1] 
 \draw[->, thick] (0.0, 0.0) -- (6.0, 0.0);
@@ -631,6 +755,7 @@ For any $g  > \dfrac{1}{3}$, there exists $r  \in \left(\dfrac{1}{3}, g\right)$ 
 \end{prop}
 \begin{proof} \label{proof:ex2pf} 
 The optimal thresholds for the original dataset is,
+\end{proof}
 \begin{equation} 
 a^\star  = - \dfrac{3}{4} r - \dfrac{1}{4}, b^\star  = \dfrac{1}{2} r + \dfrac{1}{2} ,
 \end{equation}
@@ -649,7 +774,7 @@ a^\star  > - \dfrac{1}{3}, b^\star  > 0,
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) correctly as a red point.
 \\* Therefore, the point has the incentive to misreport and the dataset is incentive incompatible.
-\end{proof}
+\newline \newline
 In this case with $\mathcal{H}'$ and $\ell'$, when the misclassified red point pretends to be a blue point with a large loss, the classifier modifies the green-vs-blue decision boundary to reduce the loss from the new blue point, but it increases the loss from the green point on the right at the same time. As a result, the classifier then modifies the green-vs-red decision boundary to reduce the loss from the green points. Intuitively, the misclassified red point could only directly affect the green-vs-blue decision boundary, however, it could indirectly affect the green-vs-red decision boundary by getting help from the green point.
 \newline \newline
 
