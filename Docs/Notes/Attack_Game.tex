@@ -1,0 +1,162 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{mathabx}
+\usepackage{listings}
+\usepackage{bbm}
+\usepackage{caption}
+\usepackage{natbib}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage[margin = 1 in]{geometry}
+\usepackage{tcolorbox}
+\usetikzlibrary{patterns,automata,positioning,arrows}
+\title{Poisoning Attacks in Games Example}
+\author{-}
+\date{\today}
+\hbadness=99999
+
+\begin{document}
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{conj}{Conjecture}
+\newtheorem{algo}{Algorithm}
+\newtheorem{obs}{Observation}
+\newtheorem{clm}{Claim}
+\theoremstyle{definition}
+\newtheorem{df}{Definition}
+\newtheorem{eg}{Example}
+\newtheorem{asm}{Assumption}
+\newtheorem{cond}{Condition}
+\theoremstyle{remark}
+\newtheorem{rmk}{Remark}
+\maketitle \onehalfspacing \allowdisplaybreaks \raggedbottom
+
+
+\section{Example} 
+Consider the repeated game with the following stage game,
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Actions &Accept &Reject\\ \hline
+Accept &$\theta, \theta$ &$0, 0$\\ \hline
+Reject &$0, 0$ &-$\theta, -\theta$\\ \hline
+\end{tabular} \end{center}
+Assume a common prior,
+\begin{equation} \theta =\left\{ \begin{array}{ll}
+1& \text{\;with probability\;} p = \dfrac{1}{2} \\
+-1& \text{\;with probability\;} 1 - p = \dfrac{1}{2} \\
+\end{array}.\right. \end{equation}
+Now suppose the reward function is given by,
+\begin{equation} R_{i}^{t}\left(\theta = 1\right) =\left\{ \begin{array}{ll}
+1& \text{\;with probability\;} q = \dfrac{2}{3} \\
+-1& \text{\;with probability\;} 1 - q = \dfrac{1}{3} \\
+\end{array},\right. \end{equation}
+and,
+\begin{equation} R_{i}^{t}\left(\theta = -1\right) =\left\{ \begin{array}{ll}
+1& \text{\;with probability\;} 1 - q = \dfrac{1}{3} \\
+-1& \text{\;with probability\;} q = \dfrac{2}{3} \\
+\end{array}.\right. \end{equation}
+In a world with $\theta = -1$,
+\\* In stage $1$, with probability $q^{2} = \dfrac{1}{9}$, we have $R_{i}^{1}\left(\theta = -1\right) = 1$, and the posterior belief that $\theta = 1$ is,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{1} = 1\right\} = \dfrac{p q}{p q + \left(1 - p\right)\left(1 - q\right)} = \dfrac{2}{3} > \dfrac{1}{2} .
+\end{equation}
+This implies that both players will select the action Accept.
+\\* In stage $2$ after the history {(Accept, Accept)}, the posterior belief of both players that $\theta = -1$ is,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{2} = -1, h_{1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} = \dfrac{p q^{2} \left(1 - q\right)^{1}}{p q^{2} \left(1 - q\right)^{1} + \left(1 - p\right)\left(1 - q\right)^{2} q^{1}} = \dfrac{2}{3} > \dfrac{1}{2} ,
+\end{equation}
+and,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{2} = 1, h_{1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} = \dfrac{p q^{3} \left(1 - q\right)^{0}}{p q^{3} \left(1 - q\right)^{0} + \left(1 - p\right)\left(1 - q\right)^{3} q^{0}} = \dfrac{8}{9} > \dfrac{1}{2} .
+\end{equation}
+This implies that it doesn't matter what the rewards are in the second stage, both players will select the action Accept.
+\\* The same implications hold for $t  > 2$. In general, we have,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{t} = -1, h_{1} = ... = h_{t-1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} \geq  \dfrac{p q^{t} \left(1 - q\right)^{t-1}}{p q^{t} \left(1 - q\right)^{t-1} + \left(1 - p\right)\left(1 - q\right)^{t} q^{t-1}} = \dfrac{2}{3} > \dfrac{1}{2} ,
+\end{equation}
+and,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{t} = 1, h_{1} = ... = h_{t-1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} \geq  \dfrac{p q^{t+1} \left(1 - q\right)^{t-2}}{p q^{t+1} \left(1 - q\right)^{t-2} + \left(1 - p\right)\left(1 - q\right)^{t+1} q^{t-2}} = \dfrac{8}{9} > \dfrac{1}{2} .
+\end{equation}
+Since player $i $ only observes the past actions of player -$i $, but not the actual reward, player $i $ makes the decision based on $t  - 1$ Accepts, $1$ negative reward in stage $1$, and at most $t  - 1$ positive rewards. As a result, the posterior belief that $\theta = 1$ is always at least $\dfrac{2}{3}$, which implies that it doesn't matter what the rewards are in each stage, both players will select the action Accept.
+\newline \newline
+Note that the players will always choose Accept in a world with $\theta = -1$ in which the unique Nash Equilibrium is (Reject, Reject) in every stage just because the rewards are inconsistent with the state of the world in the first stage. In a more general setting with any $p $ and $q  > \dfrac{1}{2}$, there exists a finite $T $ such that if the reward is different from $\theta$ in the first $T $ periods for both players, both players will always choose the non-NE action in all future periods after $T. $
+\newline \newline
+From the perspective from the adversary, they only have to perturb the reward distribution in the first stage (or first finite number of stages) to ensure that the action pair (Accept, Accept) is chosen, the same action pair will be used in all future stages.
+\newline \newline
+
+
+
+\section{Uniqueness of Nash Equilibrium} 
+
+\subsection{Two by Two Games}
+A game with a unique Nash Equilibrium that is not a dominant strategy equilibrium.
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Action &A &B\\ \hline
+A &$\left(1, 1\right)$ &$\left(0, 0\right)$\\ \hline
+B &$\left(0, 1\right)$ &$\left(1, 0\right)$\\ \hline
+\end{tabular} \end{center}
+For a general two player two by two game, if it has a unique pure strategy Nash Equilibrium, then at least one player is using a dominant strategy.
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Action &A &B\\ \hline
+A &(a, b) &(c, d)\\ \hline
+B &(e, f) &(g, h)\\ \hline
+\end{tabular} \end{center}
+Proof: without loss of generality, suppose (A, A) is the unique pure strategy Nash Equilibrium. It implies that $a \geq  e$ and $b \geq  d$. Since (B, B) is not a Nash Equilibrium, either $c > g$ or $f > h$, and in either case A is a dominant strategy for one of the players.
+\newline \newline
+For a symmetric two player two by two game, if it has a unique pure strategy Nash Equilibrium, then it is a dominant strategy equilibrium.
+\newline \newline
+For a symmetric two player two by two game, it has a unique strict pure strategy Nash Equilibrium iff it is a strictly dominant strategy equilibrium.
+\newline \newline
+A game with a dominant strategy equilibrium that is not the unique Nash Equilibrium.
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Action &A &B\\ \hline
+A &$\left(1, 1\right)$ &$\left(1, 0\right)$\\ \hline
+B &$\left(1, 1\right)$ &$\left(0, 0\right)$\\ \hline
+\end{tabular} \end{center}
+For a general two player two by two game specified below, it has a unique (completely) mixed strategy Nash Equilibrium iff $\left(b  - d\right)\left(f - h\right) < 0, \left(a  - e\right)\left(c - g\right) < 0$ and either $\left(b  - d\right)\left(a - e\right) < 0$ or $\left(f  - h\right)\left(c - g\right) < 0$.
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Action &$\beta$ &$1 - \beta$\\ \hline
+$\alpha$ &(a, b) &(c, d)\\ \hline
+$1 - \alpha$ &(e, f) &(g, h)\\ \hline
+\end{tabular} \end{center}
+Proof: suppose the game has a mixed strategy Nash Equilibrium in which the row player mixes action A with probability $\alpha$ and the column player mixes action A with probability $\beta$, then it is given by the indifference conditions:
+\begin{align*}
+\alpha b + \left(1 - \alpha\right) f &= \alpha d + \left(1 - \alpha\right) h,
+\\ \beta a + \left(1 - \beta\right) c &= \beta e + \left(1 - \beta\right) g.
+\end{align*}
+Then we have,
+\begin{align*}
+\alpha &= \dfrac{h - f}{h - f + b - d} \in \left(0, 1\right),
+\\ \beta &= \dfrac{a - e}{a - e + g - c} \in \left(0, 1\right).
+\end{align*}
+If $h  > f$, then $\alpha \in \left(0, 1\right)$ implies $b  > d,$ and since (B, B) is not a Nash Equilibrium, $c  > g.$
+\\* If $f  > h$, then $\alpha \in \left(0, 1\right)$ implies $d  > b,$ and since (B, A) is not a Nash Equilibrium, $a  > e.$
+\\* If $a  > e$, then $\beta \in \left(0, 1\right)$ implies $g  > c,$ and since (A, A) is not a Nash Equilibrium, $d  > b.$
+\\* If $e  > a$, then $\beta \in \left(0, 1\right)$ implies $c  > g,$ and since (A, B) is not a Nash Equilibrium, $h  > f.$
+\\* Therefore, we have $\left(b  - d\right)\left(f - h\right) < 0, \left(a  - e\right)\left(c - g\right) < 0$ and $\left(b  - d\right)\left(a - e\right) < 0$.
+\newline \newline
+For a general two player two by two game specified below, it has a unique (completely) mixed strategy Nash Equilibrium if $\left(b  - d\right)\left(f - h\right) \neq  0, \left(a  - e\right)\left(c - g\right) \neq  0$ and either $\left(b  - d\right)\left(a - e\right) < 0$ or $\left(f  - h\right)\left(c - g\right) < 0$.
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Action &$\beta$ &$1 - \beta$\\ \hline
+$\alpha$ &(a, b) &(c, d)\\ \hline
+$1 - \alpha$ &(e, f) &(g, h)\\ \hline
+\end{tabular} \end{center}
+Proof: if $\left(b  - d\right)\left(f - h\right) > 0$, the column player has a strictly dominant strategy, $a  \neq  e $ and $c  \neq  g $ implies that there is a unique pure strategy Nash.
+\\* if $\left(a  - e\right)\left(c - g\right) > 0$, the row player has a strictly dominant strategy, $b  \neq  d $ and $f  \neq  h $ implies that thre is a unique pure strategy Nash.
+\\* if $\left(b  - d\right)\left(f - h\right) < 0$ and $\left(a  - e\right)\left(c - g\right) < 0$, then there is a unique mixed strategy Nash Equilibrium.
+\newline \newline
+
+
+\end{document}

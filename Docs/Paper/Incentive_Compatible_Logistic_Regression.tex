@@ -164,7 +164,7 @@ Statement: group strategyproofness requires that if some member of an arbitrary 
 \newline \newline
 Definition according to the statement:
 \begin{df} \label{df:sp1p} 
-If there is $i  \in C $ such that,
+(DFP $2010$) If there is $i  \in C $ such that,
 \end{df}
 \begin{equation} 
 v_{i}\left(f\left(\hat{\theta}\right), \theta_{i}\right) - p_{i}\left(\hat{\theta}\right) > v_{i}\left(f\left(\theta\right), \theta_{i}\right) - p_{i}\left(\theta\right) + \varepsilon,
@@ -279,15 +279,15 @@ Currently, there is no formal proof that the result is not due to numerical inst
 \newline \newline
 In the Theorem $4.4$ of \citet*{dekel2010incentive}, it is stated that an ERM classifier with a loss function $\ell\left(\hat{y}, y\right) = \mu\left(\left| \hat{y} - y \right|\right)$, with $\mu$ that is monotonically increasing, strictly convex, and has unbounded subderivatives, is not incentive compatible. The result does not apply to logistic regression, including the binary case since the loss function of logistic regression is given by,
 \begin{equation} 
-\ell\left(\hat{y}, y\right) = - y \log\left(\hat{y}\right) - \left(1 - y\right) \log\left(1 - \hat{y}\right) = -\log\left(1-\left| \hat{y-y} \right|\right).
+\ell\left(\hat{y}, y\right) = - y \log\left(\hat{y}\right) - \left(1 - y\right) \log\left(1 - \hat{y}\right) = -\log\left(1 - \left| y - \hat{y} \right|\right).
 \end{equation}
 Note that the second equality holds because when $y  = 1$,
 \begin{equation} 
-\ell\left(\hat{y}, y\right) = - \log\left(\hat{y}\right) = -\log\left(1-\left| \hat{1-y} \right|\right),
+\ell\left(\hat{y}, y\right) = - \log\left(\hat{y}\right) = -\log\left(1-\left| 1 - \hat{y} \right|\right),
 \end{equation}
 and when $y  = 0$,
 \begin{equation} 
-\ell\left(\hat{y}, y\right) = - \log\left(\hat{1-y}\right) = -\log\left(1-\left| \hat{0-y} \right|\right).
+\ell\left(\hat{y}, y\right) = - \log\left(1 - \hat{y}\right) = -\log\left(1 - \left| 0 - \hat{y} \right|\right).
 \end{equation}
 Therefore, we have,
 \begin{equation} 
@@ -478,7 +478,7 @@ Now suppose, for a contradiction, that agent $i $ prefers misreporting,
 \begin{align*}
 \ell\left(y_{i} ; h^\star \right) &> \ell\left(y_{i} ; h^{\dagger}\right),
 \end{align*}
-which implies, since $y^{\dagger}_{i} = 1 - y_{i}$, and the special property of the logistic loss function $\ell\left(0 ; h\right) + \ell\left(1 ; h\right) = 1$,
+which implies, since $y^{\dagger}_{i} = 1 - y_{i}$, and the special property of the logistic loss function $\exp\left(\ell\left(0 ; h\right)\right) + \exp\left(\ell\left(1 ; h\right)\right) = 1$,
 \begin{align*}
 \ell\left(y^{\dagger}_{i} ; h^\star \right) &< \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right).
 \end{align*}
