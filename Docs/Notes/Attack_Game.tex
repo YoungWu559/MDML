@@ -38,61 +38,6 @@
 \maketitle \onehalfspacing \allowdisplaybreaks \raggedbottom
 
 
-\section{Example} 
-Consider the repeated game with the following stage game,
-\begin{center} \begin{tabular}{|c|c|c|c|}
-\hline
- Actions &Accept &Reject\\ \hline
-Accept &$\theta, \theta$ &$0, 0$\\ \hline
-Reject &$0, 0$ &-$\theta, -\theta$\\ \hline
-\end{tabular} \end{center}
-Assume a common prior,
-\begin{equation} \theta =\left\{ \begin{array}{ll}
-1& \text{\;with probability\;} p = \dfrac{1}{2} \\
--1& \text{\;with probability\;} 1 - p = \dfrac{1}{2} \\
-\end{array}.\right. \end{equation}
-Now suppose the reward function is given by,
-\begin{equation} R_{i}^{t}\left(\theta = 1\right) =\left\{ \begin{array}{ll}
-1& \text{\;with probability\;} q = \dfrac{2}{3} \\
--1& \text{\;with probability\;} 1 - q = \dfrac{1}{3} \\
-\end{array},\right. \end{equation}
-and,
-\begin{equation} R_{i}^{t}\left(\theta = -1\right) =\left\{ \begin{array}{ll}
-1& \text{\;with probability\;} 1 - q = \dfrac{1}{3} \\
--1& \text{\;with probability\;} q = \dfrac{2}{3} \\
-\end{array}.\right. \end{equation}
-In a world with $\theta = -1$,
-\\* In stage $1$, with probability $q^{2} = \dfrac{1}{9}$, we have $R_{i}^{1}\left(\theta = -1\right) = 1$, and the posterior belief that $\theta = 1$ is,
-\begin{equation} 
-\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{1} = 1\right\} = \dfrac{p q}{p q + \left(1 - p\right)\left(1 - q\right)} = \dfrac{2}{3} > \dfrac{1}{2} .
-\end{equation}
-This implies that both players will select the action Accept.
-\\* In stage $2$ after the history {(Accept, Accept)}, the posterior belief of both players that $\theta = -1$ is,
-\begin{equation} 
-\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{2} = -1, h_{1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} = \dfrac{p q^{2} \left(1 - q\right)^{1}}{p q^{2} \left(1 - q\right)^{1} + \left(1 - p\right)\left(1 - q\right)^{2} q^{1}} = \dfrac{2}{3} > \dfrac{1}{2} ,
-\end{equation}
-and,
-\begin{equation} 
-\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{2} = 1, h_{1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} = \dfrac{p q^{3} \left(1 - q\right)^{0}}{p q^{3} \left(1 - q\right)^{0} + \left(1 - p\right)\left(1 - q\right)^{3} q^{0}} = \dfrac{8}{9} > \dfrac{1}{2} .
-\end{equation}
-This implies that it doesn't matter what the rewards are in the second stage, both players will select the action Accept.
-\\* The same implications hold for $t  > 2$. In general, we have,
-\begin{equation} 
-\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{t} = -1, h_{1} = ... = h_{t-1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} \geq  \dfrac{p q^{t} \left(1 - q\right)^{t-1}}{p q^{t} \left(1 - q\right)^{t-1} + \left(1 - p\right)\left(1 - q\right)^{t} q^{t-1}} = \dfrac{2}{3} > \dfrac{1}{2} ,
-\end{equation}
-and,
-\begin{equation} 
-\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{t} = 1, h_{1} = ... = h_{t-1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} \geq  \dfrac{p q^{t+1} \left(1 - q\right)^{t-2}}{p q^{t+1} \left(1 - q\right)^{t-2} + \left(1 - p\right)\left(1 - q\right)^{t+1} q^{t-2}} = \dfrac{8}{9} > \dfrac{1}{2} .
-\end{equation}
-Since player $i $ only observes the past actions of player -$i $, but not the actual reward, player $i $ makes the decision based on $t  - 1$ Accepts, $1$ negative reward in stage $1$, and at most $t  - 1$ positive rewards. As a result, the posterior belief that $\theta = 1$ is always at least $\dfrac{2}{3}$, which implies that it doesn't matter what the rewards are in each stage, both players will select the action Accept.
-\newline \newline
-Note that the players will always choose Accept in a world with $\theta = -1$ in which the unique Nash Equilibrium is (Reject, Reject) in every stage just because the rewards are inconsistent with the state of the world in the first stage. In a more general setting with any $p $ and $q  > \dfrac{1}{2}$, there exists a finite $T $ such that if the reward is different from $\theta$ in the first $T $ periods for both players, both players will always choose the non-NE action in all future periods after $T. $
-\newline \newline
-From the perspective from the adversary, they only have to perturb the reward distribution in the first stage (or first finite number of stages) to ensure that the action pair (Accept, Accept) is chosen, the same action pair will be used in all future stages.
-\newline \newline
-
-
-
 \section{Uniqueness of Nash Equilibrium} 
 
 \subsection{Two by Two Games}
@@ -158,5 +103,197 @@ Proof: if $\left(b  - d\right)\left(f - h\right) > 0$, the column player has a s
 \\* if $\left(b  - d\right)\left(f - h\right) < 0$ and $\left(a  - e\right)\left(c - g\right) < 0$, then there is a unique mixed strategy Nash Equilibrium.
 \newline \newline
 
+
+\subsection{Rosen Characterization}
+Let $x_{1} = \alpha \in \left[0, 1\right]$ be the action set $S_{1}$ for the row player.
+\\* Let $x_{2} = \beta \in \left[0, 1\right]$ be the action set $S_{2}$ for the column player.
+\\* Then the payoff functions are,
+\begin{align*}
+\varphi_{1}\left(x_{1}, x_{2}\right) &= a x_{1} x_{2} + e \left(1 - x_{1}\right) x_{2} + c x_{1} \left(1 - x_{2}\right) + g \left(1 - x_{1}\right)\left(1 - x_{2}\right),
+\\ \varphi_{2}\left(x_{1}, x_{2}\right) &= b x_{1} x_{2} + f \left(1 - x_{1}\right) x_{2} + d x_{1} \left(1 - x_{2}\right) + h \left(1 - x_{1}\right)\left(1 - x_{2}\right).
+\end{align*}
+The pseudo-gradient funtion is given by,
+\begin{align*}
+g\left(x, r\right)  &= \begin{bmatrix} r_{1} \nabla _{1} \varphi_{1}\left(x\right) \\ r_{2} \nabla _{2} \varphi_{2}\left(x\right) \end{bmatrix}
+\\ &= \begin{bmatrix} r_{1} \left(\left(a - e\right) x_{2} + \left(c - g\right) \left(1 - x_{2}\right)\right) \\ r_{2} \left(\left(b - d\right) x_{1} + \left(f - h\right) \left(1 - x_{1}\right)\right) \end{bmatrix} .
+\end{align*}
+The Jocobian of $g\left(x, r \right) $ is given by,
+\begin{align*}
+G\left(x, r\right)  &= \begin{bmatrix} 0 & r_{1} \left(\left(a - e\right) - \left(c - g\right)\right) \\ r_{2} \left(\left(b - d\right) - \left(f - h\right)\right) & 0 \end{bmatrix} .
+\end{align*}
+Then $\sigma\left(x, r \right)$ is diagonally strictly concave (Theorem $6$) if $G\left(x, r\right)  + G^{T}\left(x, r \right)$ is negative definite for some $r  > 0$, here,
+\begin{align*}
+\left(2 r_{1} \left(\left(a - e\right) - \left(c - g\right)\right) + 2 r_{2} \left(\left(b - d\right) - \left(f - h\right)\right)\right)^{2} &< 0,
+\end{align*}
+which is never true?
+\newline \newline
+
+
+\subsection{Moulin Characterization}
+Dominance Solvable Nash Equilibrium is unique. For two by two games, it means at least one player has a dominant strategy, and the other player is not indifferent between the two actions.
+\newline \newline
+
+
+\subsection{Dominant Strategy Implementability}
+Suppose the agents only have one type, then the dominant strategy implementation of  $s^{\dagger}$ is,
+\begin{align*}
+&\displaystyle\min \displaystyle\sum_{t=1}^{T} \left\|\delta^{t}\right\| \text{\;\text{\;such that\;}\;}
+\\ R_{i}\left(s_{i}^{\dagger}, a_{-i}^{t}\right) + \delta_{i, s_{i}^{\dagger}, a_{-i}^{t}}^{t} &\geq  R\left(a_{i}^{t}, a_{-i}^{t}\right) + \delta_{i, a_{i}^{t}, a_{-i}^{t}}^{t} \;\forall\; a_{i}^{t}, \;\forall\; a_{-i}^{t}, \;\forall\; i, \;\forall\; t.
+\end{align*}
+Suppose the agents have types given by the belief $p $ of the game, then a direct revelation dominant strategy implementation of $s^{\dagger}\left(p\right)$ is (the agents report $p $ and the designer chooses $s^{\dagger}\left(p \right)$ for the players),
+\begin{align*}
+&\displaystyle\min \displaystyle\sum_{t=1}^{T} \left\|\delta^{t}\right\| \text{\;\text{\;such that\;}\;}
+\\ R_{i}\left(s^{\dagger}\left(p_{i}^{t}, q_{-i}^{t}\right)\right) + \delta_{i, p_{i}^{t}, q_{-i}^{t}}^{t} &\geq  R\left(s^{\dagger}\left(q_{i}^{t}, q_{-i}^{t}\right)\right) + \delta_{i, q_{i}^{t}, q_{-i}^{t}}^{t} \;\forall\; q_{i}^{t}, \;\forall\; q_{-i}^{t}, \;\forall\; i, \;\forall\; t.
+\end{align*}
+Suppose the agents have types given by the belief $p  \sim  P $ distribution over types is common knowledge, then a direct revelation Bayesian implementation of $s^{\dagger}\left(p\right)$ is,
+\begin{align*}
+&\displaystyle\min \displaystyle\sum_{t=1}^{T} \left\|\delta^{t}\right\| \text{\;\text{\;such that\;}\;}
+\\ \mathbb{E}_{q_{-i}^{t} \sim  P} R_{i}\left(s^{\dagger}\left(p_{i}^{t}, q_{-i}^{t}\right)\right) + \delta_{i, p_{i}^{t}, q_{-i}^{t}}^{t} &\geq  \mathbb{E}_{q_{-i}^{t} \sim  P} R\left(s^{\dagger}\left(q_{i}^{t}, q_{-i}^{t}\right)\right) + \delta_{i, q_{i}^{t}, q_{-i}^{t}}^{t} \;\forall\; q_{i}^{t}, \;\forall\; i, \;\forall\; t.
+\end{align*}
+
+
+
+
+\section{Correlated Equilibrium Example} 
+
+\subsection{Numerical Example}
+From Roth $2017$,
+\begin{center} \begin{tabular}{|c|c|c|c|c|}
+\hline
+ - &A &B &C\\ \hline
+A &$\left(1, 1\right)$ &(-$1, -1$) &$\left(0, 0\right)$\\ \hline
+B &(-$1, -1$) &$\left(1, 1\right)$ &$\left(0, 0\right)$\\ \hline
+C &$\left(0, 0\right)$ &$\left(0, 0\right)$ &(-$1.1, -1.1$)\\ \hline
+\end{tabular} \end{center}
+\begin{itemize}
+\item Dominant strategy: none
+\item Pure strategy Nash: $\left(A , A \right), \left(B , B \right)$
+\item Mixed strategy Nash: $\left(A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)$
+\end{itemize}Check indifference conditions:
+\begin{align*}
+M\left(A, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(1\right) + \dfrac{1}{2} \left(-1\right) = 0
+\\ M\left(B, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(-1\right) + \dfrac{1}{2} \left(1\right) = 0
+\end{align*}
+Check support conditions:
+\begin{align*}
+M\left(C, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= 0 \geq  \dfrac{1}{2} \left(0\right) + \dfrac{1}{2} \left(0\right)
+\end{align*}
+\begin{itemize}
+\item Correlated equilibrium: $\left(\left(A,A \right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)}\right)$
+\end{itemize}The equilibrium payoff is:
+\begin{align*}
+M\left(\left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(1\right) + \dfrac{1}{2} \left(1\right) = 1
+\end{align*}
+Check best response conditioned on the player receiving the signal $A $ (i.e. the player infers that the strategy is $\left(A , A \right)$ so the other player will play $A $):
+\begin{align*}
+M\left(B, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | A\right)  &= M\left(B, A\right) = -1 < 1
+\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | A\right)  &= M\left(C, A\right) = 0 < 1
+\end{align*}
+Check best response conditioned on the player receiving the signal $B $ (i.e. the player infers that the strategy is $\left(B , B \right)$ so the other player will play $B $):
+\begin{align*}
+M\left(A, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | B\right)  &= M\left(A, B\right) = -1 < 1
+\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | B\right)  &= M\left(C, B\right) = 0 < 1
+\end{align*}
+This cannot be implemented as a mixed strategy equilibrium since the actions are not independent.
+\begin{itemize}
+\item Coarse correlated equilibrium: $\left(\left(A,A \right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)$
+\end{itemize}The equilibrium payoff is:
+\begin{align*}
+M\left(\left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(-1.1\right) = 0.3
+\end{align*}
+Check best response not conditioned on the signal (i.e. the other player receives each of the signals $A , B , C $ with probability $\dfrac{1}{3}$):
+\begin{align*}
+M\left(A, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(A, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(-1\right) + \dfrac{1}{3} \left(0\right) = 0 < 0.3
+\\ M\left(B, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(B, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(-1\right) + \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(0\right) = 0 < 0.3
+\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(C, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(0\right) + \dfrac{1}{3} \left(0\right) + \dfrac{1}{3} \left(-1.1\right) < 0 < 0.3
+\end{align*}
+This is not a correlated equilibrium since the best response conditioned on the player receiving the signal $C $ is not satisfied:
+\begin{align*}
+M\left(A, \left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)} | C\right)  &= M\left(A, C\right) = 0 > -1.1
+\\ M\left(B, \left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)} | C\right)  &= M\left(B, C\right) = 0 > -1.1
+\end{align*}
+\begin{itemize}
+\item Relation
+\end{itemize}Dominant $\Rightarrow $ Pure Nash $\Rightarrow $ Mixed Nash $\Rightarrow $ Correlated $\Rightarrow $ Coarse Correlated
+\newline \newline
+
+
+\subsection{MAB Book}
+\begin{itemize}
+\item Coarse correlated equilibrium:
+\end{itemize}\begin{align*}
+\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right)\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+\begin{itemize}
+\item Correlated equilibrium:
+\end{itemize}\begin{align*}
+\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | i\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+\begin{itemize}
+\item What if the signal also specify the other player's action? Convexify the set of pure strategy Nash?
+\end{itemize}\begin{align*}
+\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | \left(i, j\right)\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+\begin{itemize}
+\item Mixed strategy equilibrium?
+\end{itemize}\begin{align*}
+\mathbb{E}_{i\sim \sigma_{i}, j\sim \sigma_{j}}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | i\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+
+
+
+
+\section{Information Cascade Example} 
+Consider the repeated game with the following stage game,
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Actions &Accept &Reject\\ \hline
+Accept &$\theta, \theta$ &$0, 0$\\ \hline
+Reject &$0, 0$ &-$\theta, -\theta$\\ \hline
+\end{tabular} \end{center}
+Assume a common prior,
+\begin{equation} \theta =\left\{ \begin{array}{ll}
+1& \text{\;with probability\;} p = \dfrac{1}{2} \\
+-1& \text{\;with probability\;} 1 - p = \dfrac{1}{2} \\
+\end{array}.\right. \end{equation}
+Now suppose the reward function is given by,
+\begin{equation} R_{i}^{t}\left(\theta = 1\right) =\left\{ \begin{array}{ll}
+1& \text{\;with probability\;} q = \dfrac{2}{3} \\
+-1& \text{\;with probability\;} 1 - q = \dfrac{1}{3} \\
+\end{array},\right. \end{equation}
+and,
+\begin{equation} R_{i}^{t}\left(\theta = -1\right) =\left\{ \begin{array}{ll}
+1& \text{\;with probability\;} 1 - q = \dfrac{1}{3} \\
+-1& \text{\;with probability\;} q = \dfrac{2}{3} \\
+\end{array}.\right. \end{equation}
+In a world with $\theta = -1$,
+\\* In stage $1$, with probability $q^{2} = \dfrac{1}{9}$, we have $R_{i}^{1}\left(\theta = -1\right) = 1$, and the posterior belief that $\theta = 1$ is,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{1} = 1\right\} = \dfrac{p q}{p q + \left(1 - p\right)\left(1 - q\right)} = \dfrac{2}{3} > \dfrac{1}{2} .
+\end{equation}
+This implies that both players will select the action Accept.
+\\* In stage $2$ after the history {(Accept, Accept)}, the posterior belief of both players that $\theta = -1$ is,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{2} = -1, h_{1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} = \dfrac{p q^{2} \left(1 - q\right)^{1}}{p q^{2} \left(1 - q\right)^{1} + \left(1 - p\right)\left(1 - q\right)^{2} q^{1}} = \dfrac{2}{3} > \dfrac{1}{2} ,
+\end{equation}
+and,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{2} = 1, h_{1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} = \dfrac{p q^{3} \left(1 - q\right)^{0}}{p q^{3} \left(1 - q\right)^{0} + \left(1 - p\right)\left(1 - q\right)^{3} q^{0}} = \dfrac{8}{9} > \dfrac{1}{2} .
+\end{equation}
+This implies that it doesn't matter what the rewards are in the second stage, both players will select the action Accept.
+\\* The same implications hold for $t  > 2$. In general, we have,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{t} = -1, h_{1} = ... = h_{t-1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} \geq  \dfrac{p q^{t} \left(1 - q\right)^{t-1}}{p q^{t} \left(1 - q\right)^{t-1} + \left(1 - p\right)\left(1 - q\right)^{t} q^{t-1}} = \dfrac{2}{3} > \dfrac{1}{2} ,
+\end{equation}
+and,
+\begin{equation} 
+\mathbb{P}_{i} \left\{\theta = 1 | R_{i}^{t} = 1, h_{1} = ... = h_{t-1} = \left(\text{\;Accept\;}, \text{\;Accept\;}\right)\right\} \geq  \dfrac{p q^{t+1} \left(1 - q\right)^{t-2}}{p q^{t+1} \left(1 - q\right)^{t-2} + \left(1 - p\right)\left(1 - q\right)^{t+1} q^{t-2}} = \dfrac{8}{9} > \dfrac{1}{2} .
+\end{equation}
+Since player $i $ only observes the past actions of player -$i $, but not the actual reward, player $i $ makes the decision based on $t  - 1$ Accepts, $1$ negative reward in stage $1$, and at most $t  - 1$ positive rewards. As a result, the posterior belief that $\theta = 1$ is always at least $\dfrac{2}{3}$, which implies that it doesn't matter what the rewards are in each stage, both players will select the action Accept.
+\newline \newline
+Note that the players will always choose Accept in a world with $\theta = -1$ in which the unique Nash Equilibrium is (Reject, Reject) in every stage just because the rewards are inconsistent with the state of the world in the first stage. In a more general setting with any $p $ and $q  > \dfrac{1}{2}$, there exists a finite $T $ such that if the reward is different from $\theta$ in the first $T $ periods for both players, both players will always choose the non-NE action in all future periods after $T. $
+\newline \newline
+From the perspective from the adversary, they only have to perturb the reward distribution in the first stage (or first finite number of stages) to ensure that the action pair (Accept, Accept) is chosen, the same action pair will be used in all future stages.
+\newline \newline
 
 \end{document}
