@@ -38,6 +38,175 @@
 \maketitle \onehalfspacing \allowdisplaybreaks \raggedbottom
 
 
+\section{Correlated Equilibrium Example} 
+
+\subsection{Numerical Example}
+From Roth $2017$,
+\begin{center} \begin{tabular}{|c|c|c|c|c|}
+\hline
+ - &A &B &C\\ \hline
+A &$\left(1, 1\right)$ &(-$1, -1$) &$\left(0, 0\right)$\\ \hline
+B &(-$1, -1$) &$\left(1, 1\right)$ &$\left(0, 0\right)$\\ \hline
+C &$\left(0, 0\right)$ &$\left(0, 0\right)$ &(-$1.1, -1.1$)\\ \hline
+\end{tabular} \end{center}
+\begin{itemize}
+\item Dominant strategy: none
+\item Pure strategy Nash: $\left(A , A \right), \left(B , B \right)$
+\item Mixed strategy Nash: $\left(A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)$
+\end{itemize}Check indifference conditions:
+\begin{align*}
+M\left(A, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(1\right) + \dfrac{1}{2} \left(-1\right) = 0
+\\ M\left(B, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(-1\right) + \dfrac{1}{2} \left(1\right) = 0
+\end{align*}
+Check support conditions:
+\begin{align*}
+M\left(C, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= 0 \geq  \dfrac{1}{2} \left(0\right) + \dfrac{1}{2} \left(0\right)
+\end{align*}
+\begin{itemize}
+\item Correlated equilibrium: $\left(\left(A,A \right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)}\right)$
+\end{itemize}The equilibrium payoff is:
+\begin{align*}
+M\left(\left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(1\right) + \dfrac{1}{2} \left(1\right) = 1
+\end{align*}
+Check best response conditioned on the player receiving the signal $A $ (i.e. the player infers that the strategy is $\left(A , A \right)$ so the other player will play $A $):
+\begin{align*}
+M\left(B, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | A\right)  &= M\left(B, A\right) = -1 < 1
+\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | A\right)  &= M\left(C, A\right) = 0 < 1
+\end{align*}
+Check best response conditioned on the player receiving the signal $B $ (i.e. the player infers that the strategy is $\left(B , B \right)$ so the other player will play $B $):
+\begin{align*}
+M\left(A, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | B\right)  &= M\left(A, B\right) = -1 < 1
+\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | B\right)  &= M\left(C, B\right) = 0 < 1
+\end{align*}
+This cannot be implemented as a mixed strategy equilibrium since the actions are not independent.
+\begin{itemize}
+\item Coarse correlated equilibrium: $\left(\left(A,A \right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)$
+\end{itemize}The equilibrium payoff is:
+\begin{align*}
+M\left(\left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(-1.1\right) = 0.3
+\end{align*}
+Check best response not conditioned on the signal (i.e. the other player receives each of the signals $A , B , C $ with probability $\dfrac{1}{3}$):
+\begin{align*}
+M\left(A, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(A, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(-1\right) + \dfrac{1}{3} \left(0\right) = 0 < 0.3
+\\ M\left(B, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(B, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(-1\right) + \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(0\right) = 0 < 0.3
+\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(C, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(0\right) + \dfrac{1}{3} \left(0\right) + \dfrac{1}{3} \left(-1.1\right) < 0 < 0.3
+\end{align*}
+This is not a correlated equilibrium since the best response conditioned on the player receiving the signal $C $ is not satisfied:
+\begin{align*}
+M\left(A, \left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)} | C\right)  &= M\left(A, C\right) = 0 > -1.1
+\\ M\left(B, \left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)} | C\right)  &= M\left(B, C\right) = 0 > -1.1
+\end{align*}
+\begin{itemize}
+\item Relation
+\end{itemize}Dominant $\Rightarrow $ Pure Nash $\Rightarrow $ Mixed Nash $\Rightarrow $ Correlated $\Rightarrow $ Coarse Correlated
+\newline \newline
+
+
+\subsection{MAB Book}
+\begin{itemize}
+\item Coarse correlated equilibrium:
+\end{itemize}\begin{align*}
+\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right)\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+\begin{itemize}
+\item Correlated equilibrium:
+\end{itemize}\begin{align*}
+\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | i\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+\begin{itemize}
+\item What if the signal also specify the other player's action? Convexify the set of pure strategy Nash?
+\end{itemize}\begin{align*}
+\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | \left(i, j\right)\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+\begin{itemize}
+\item Mixed strategy equilibrium?
+\end{itemize}\begin{align*}
+\mathbb{E}_{i\sim \sigma_{i}, j\sim \sigma_{j}}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | i\right] &\geq  0 \;\forall\; i_{0} .
+\end{align*}
+
+
+
+
+\section{Dominant Strategy Implementability} 
+
+\subsection{PD Games Symmetric Implementation}
+Suppose the original game is,
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Action &Cooperate &Defect\\ \hline
+Cooperate &$x , x $ &$0, y $\\ \hline
+Defect &$y , 0$ &$1, 1$\\ \hline
+\end{tabular} \end{center}
+Suppose the modified game is,
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+ Action &Cooperate &Defect\\ \hline
+Cooperate &$x  + \delta_{1}, x  + \delta_{1}$ &$0 + \delta_{2}, y + \delta_{3}$\\ \hline
+Defect &$y  + \delta_{3}, 0 + \delta_{2}$ &$1 + \delta_{4}, 1 + \delta_{4}$\\ \hline
+\end{tabular} \end{center}
+\begin{equation} 
+\displaystyle\min_{\delta} \delta_{1}^{2} + \delta_{2}^{2} + \delta_{3}^{2} + \delta_{4}^{2}
+\end{equation}
+such that
+\begin{equation} 
+x  + \delta_{1} \geq  y  + \delta_{3} + \varepsilon
+\end{equation}
+\begin{equation} 
+0 + \delta_{2} \geq  y  + \delta_{4} + \varepsilon
+\end{equation}
+Dominant strategy implementation Lagrange multiplier:
+\begin{align*}
+\mathcal{L} &= \delta_{1}^{2} + \delta_{2}^{2} + \delta_{3}^{2} + \delta_{4}^{2} - \lambda\left(x + \delta_{1} - y - \delta_{3} - \varepsilon\right) - \mu\left(\delta_{2} - y - \delta_{4} - \varepsilon\right)
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{1}} &= 2 \delta_{1} - \lambda = 0
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{2}} &= 2 \delta_{2} - \mu = 0
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{3}} &= 2 \delta_{3} + \lambda = 0
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{4}} &= 2 \delta_{4} + \mu = 0
+\\ \lambda\left(x + \delta_{1} - y - \delta_{3} - \varepsilon\right) &= 0
+\\ \mu\left(\delta_{2} - y - \delta_{4} - \varepsilon\right) &= 0
+\end{align*}
+The interior solution is given by,
+\begin{align*}
+\lambda &= y - x + \varepsilon \geq  0
+\\ \mu &= y + \varepsilon \geq  0
+\\ \delta_{1} &= \dfrac{1}{2} \left(y - x + \varepsilon\right)
+\\ \delta_{2} &= \dfrac{1}{2} \left(y + \varepsilon\right)
+\\ \delta_{3} &= - \dfrac{1}{2} \left(y - x + \varepsilon\right)
+\\ \delta_{4} &= - \dfrac{1}{2} \left(y + \varepsilon\right)
+\end{align*}
+The boundary solutions require,
+\begin{align*}
+\lambda &= 0 \Rightarrow  x  - y - \varepsilon \geq  0
+\\ \mu &= 0 \Rightarrow  - y  - \varepsilon \geq  0
+\end{align*}
+These are not feasible because the inequalities are not satisfied for sufficiently small $\varepsilon$.
+\newline \newline
+Bayesian (Nash) implementation Lagrange multiplier:
+\begin{align*}
+\mathcal{L} &= \delta_{1}^{2} + \delta_{2}^{2} + \delta_{3}^{2} + \delta_{4}^{2} - \lambda\left(x + \delta_{1} - y - \delta_{3} - \varepsilon\right)
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{1}} &= 2 \delta_{1} - \lambda = 0
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{2}} &= 2 \delta_{2} = 0
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{3}} &= 2 \delta_{3} + \lambda = 0
+\\ \dfrac{\partial \mathcal{L}}{\partial \delta_{4}} &= 2 \delta_{4} = 0
+\\ \lambda\left(x + \delta_{1} - y - \delta_{3} - \varepsilon\right) &= 0
+\end{align*}
+The interior solution is given by,
+\begin{align*}
+\lambda &= y - x + \varepsilon \geq  0
+\\ \delta_{1} &= \dfrac{1}{2} \left(y - x + \varepsilon\right)
+\\ \delta_{2} &= 0
+\\ \delta_{3} &= - \dfrac{1}{2} \left(y - x + \varepsilon\right)
+\\ \delta_{4} &= 0
+\end{align*}
+The boundary solutions require,
+\begin{align*}
+\lambda &= 0 \Rightarrow  x  - y - \varepsilon  \geq  0
+\end{align*}
+This is not feasible because the inequality is not satisfied for sufficiently small $\varepsilon$.
+\newline \newline
+
+
+
+
 \section{Uniqueness of Nash Equilibrium} 
 
 \subsection{Two by Two Games}
@@ -149,95 +318,6 @@ Suppose the agents have types given by the belief $p  \sim  P $ distribution ove
 \begin{align*}
 &\displaystyle\min \displaystyle\sum_{t=1}^{T} \left\|\delta^{t}\right\| \text{\;\text{\;such that\;}\;}
 \\ \mathbb{E}_{q_{-i}^{t} \sim  P} R_{i}\left(s^{\dagger}\left(p_{i}^{t}, q_{-i}^{t}\right)\right) + \delta_{i, p_{i}^{t}, q_{-i}^{t}}^{t} &\geq  \mathbb{E}_{q_{-i}^{t} \sim  P} R\left(s^{\dagger}\left(q_{i}^{t}, q_{-i}^{t}\right)\right) + \delta_{i, q_{i}^{t}, q_{-i}^{t}}^{t} \;\forall\; q_{i}^{t}, \;\forall\; i, \;\forall\; t.
-\end{align*}
-
-
-
-
-\section{Correlated Equilibrium Example} 
-
-\subsection{Numerical Example}
-From Roth $2017$,
-\begin{center} \begin{tabular}{|c|c|c|c|c|}
-\hline
- - &A &B &C\\ \hline
-A &$\left(1, 1\right)$ &(-$1, -1$) &$\left(0, 0\right)$\\ \hline
-B &(-$1, -1$) &$\left(1, 1\right)$ &$\left(0, 0\right)$\\ \hline
-C &$\left(0, 0\right)$ &$\left(0, 0\right)$ &(-$1.1, -1.1$)\\ \hline
-\end{tabular} \end{center}
-\begin{itemize}
-\item Dominant strategy: none
-\item Pure strategy Nash: $\left(A , A \right), \left(B , B \right)$
-\item Mixed strategy Nash: $\left(A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)$
-\end{itemize}Check indifference conditions:
-\begin{align*}
-M\left(A, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(1\right) + \dfrac{1}{2} \left(-1\right) = 0
-\\ M\left(B, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(-1\right) + \dfrac{1}{2} \left(1\right) = 0
-\end{align*}
-Check support conditions:
-\begin{align*}
-M\left(C, A^{\left(\dfrac{1}{2}\right)}B^{\left(\dfrac{1}{2}\right)}\right)  &= 0 \geq  \dfrac{1}{2} \left(0\right) + \dfrac{1}{2} \left(0\right)
-\end{align*}
-\begin{itemize}
-\item Correlated equilibrium: $\left(\left(A,A \right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)}\right)$
-\end{itemize}The equilibrium payoff is:
-\begin{align*}
-M\left(\left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)}\right)  &= \dfrac{1}{2} \left(1\right) + \dfrac{1}{2} \left(1\right) = 1
-\end{align*}
-Check best response conditioned on the player receiving the signal $A $ (i.e. the player infers that the strategy is $\left(A , A \right)$ so the other player will play $A $):
-\begin{align*}
-M\left(B, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | A\right)  &= M\left(B, A\right) = -1 < 1
-\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | A\right)  &= M\left(C, A\right) = 0 < 1
-\end{align*}
-Check best response conditioned on the player receiving the signal $B $ (i.e. the player infers that the strategy is $\left(B , B \right)$ so the other player will play $B $):
-\begin{align*}
-M\left(A, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | B\right)  &= M\left(A, B\right) = -1 < 1
-\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{2}\right)}\left(B,B\right)^{\left(\dfrac{1}{2}\right)} | B\right)  &= M\left(C, B\right) = 0 < 1
-\end{align*}
-This cannot be implemented as a mixed strategy equilibrium since the actions are not independent.
-\begin{itemize}
-\item Coarse correlated equilibrium: $\left(\left(A,A \right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)$
-\end{itemize}The equilibrium payoff is:
-\begin{align*}
-M\left(\left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(-1.1\right) = 0.3
-\end{align*}
-Check best response not conditioned on the signal (i.e. the other player receives each of the signals $A , B , C $ with probability $\dfrac{1}{3}$):
-\begin{align*}
-M\left(A, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(A, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(-1\right) + \dfrac{1}{3} \left(0\right) = 0 < 0.3
-\\ M\left(B, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(B, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(-1\right) + \dfrac{1}{3} \left(1\right) + \dfrac{1}{3} \left(0\right) = 0 < 0.3
-\\ M\left(C, \left(A,A\right)^{\left(\dfrac{1}{3}\right)}\left(B,B\right)^{\left(\dfrac{1}{3}\right)}\left(C,C\right)^{\left(\dfrac{1}{3}\right)}\right)  &= M\left(C, A^{\left(\dfrac{1}{3}\right)}B^{\left(\dfrac{1}{3}\right)}C^{\left(\dfrac{1}{3}\right)}\right)  = \dfrac{1}{3} \left(0\right) + \dfrac{1}{3} \left(0\right) + \dfrac{1}{3} \left(-1.1\right) < 0 < 0.3
-\end{align*}
-This is not a correlated equilibrium since the best response conditioned on the player receiving the signal $C $ is not satisfied:
-\begin{align*}
-M\left(A, \left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)} | C\right)  &= M\left(A, C\right) = 0 > -1.1
-\\ M\left(B, \left(A,A\right)^{\left(\dfrac{1}{3}\right)},\left(B,B\right)^{\left(\dfrac{1}{3}\right)},\left(C,C\right)^{\left(\dfrac{1}{3}\right)} | C\right)  &= M\left(B, C\right) = 0 > -1.1
-\end{align*}
-\begin{itemize}
-\item Relation
-\end{itemize}Dominant $\Rightarrow $ Pure Nash $\Rightarrow $ Mixed Nash $\Rightarrow $ Correlated $\Rightarrow $ Coarse Correlated
-\newline \newline
-
-
-\subsection{MAB Book}
-\begin{itemize}
-\item Coarse correlated equilibrium:
-\end{itemize}\begin{align*}
-\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right)\right] &\geq  0 \;\forall\; i_{0} .
-\end{align*}
-\begin{itemize}
-\item Correlated equilibrium:
-\end{itemize}\begin{align*}
-\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | i\right] &\geq  0 \;\forall\; i_{0} .
-\end{align*}
-\begin{itemize}
-\item What if the signal also specify the other player's action? Convexify the set of pure strategy Nash?
-\end{itemize}\begin{align*}
-\mathbb{E}_{\left(i, j\right)\sim \sigma}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | \left(i, j\right)\right] &\geq  0 \;\forall\; i_{0} .
-\end{align*}
-\begin{itemize}
-\item Mixed strategy equilibrium?
-\end{itemize}\begin{align*}
-\mathbb{E}_{i\sim \sigma_{i}, j\sim \sigma_{j}}\left[M\left(i, j\right) - M\left(i_{0}, j\right) | i\right] &\geq  0 \;\forall\; i_{0} .
 \end{align*}
 
 
