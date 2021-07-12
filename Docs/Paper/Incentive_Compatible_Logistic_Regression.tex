@@ -306,110 +306,311 @@ It is, however, possible to change the loss function so that logistic regression
 \newline \newline
 To formalize incentive compatibility for empirical risk minimizers, we use the following definition,
 \begin{df} \label{df:icerm} 
-A dataset $S $ of size $n $ is incentive-incompatible for an empirical risk minimizer from a hypothesis space $\mathcal{H}$ with a loss function $\ell$ if there exists at least one agent $i $, and some $y^{\dagger}_{i} \neq  y_{i}$ such that,
+A dataset $S $ of size $n $ is incentive-incompatible (IIC) for a minimum-norm empirical risk minimizer (MNERM) from a hypothesis space $\mathcal{H}$ containing function $h $ : Xsc $\to  \mathbb{R}$ with a loss function $\ell : \mathbb{R} \times \mathbb{R} \to  \mathbb{R}$ if there exists at least one agent $i $, and some $y^{\dagger}_{i} \neq  y_{i}$ such that,
 \end{df}
 \begin{equation} 
-\ell\left(y_{i} ; h^\star \right) < \ell\left(y_{i} ; h^{\dagger}\right),
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) < \ell\left(y_{i} , h^{\dagger}\left(x_{i}\right)\right),
 \end{equation}
 where,
 \begin{equation} 
-h^\star  = \arg\displaystyle\min_{h \in \mathcal{H}} \dfrac{1}{n} \displaystyle\sum_{i' = 1}^{n} \ell\left(y_{i} ; h\right),
+h^\star  = \arg\displaystyle\min_{h \in \mathcal{H}^\star } \left\|h\right\|, \text{\;where\;} ,
+\end{equation}
+\begin{equation} 
+\mathcal{H}^\star  = \arg\displaystyle\min_{h \in \mathcal{H}} \dfrac{1}{n} \displaystyle\sum_{i' = 1}^{n} \ell\left(y_{i'}, h\left(x_{i'}\right)\right),
 \end{equation}
 and,
 \begin{equation} 
-h^{\dagger} = \arg\displaystyle\min_{h \in \mathcal{H}} \dfrac{1}{n} \displaystyle\sum_{i' \neq  i} \ell\left(y_{i} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
+h^{\dagger} = \arg\displaystyle\min_{h \in \mathcal{H}^{\dagger}} \left\|h\right\|, \text{\;where\;} ,
 \end{equation}
-A classifier is incentive-compatible if there does not exist a dataset that is incentive-incompatible for the empirical risk minimizer.
-\newline \newline
-We use the notation $\hat{R}\left(S, h \right)$ for the empirical risk associated with the hypothesis $h $ on the training set $S $ with size $\left| S \right| = n, $
 \begin{equation} 
-\hat{R}\left(S, h \right) = \dfrac{1}{n} \displaystyle\sum_{i' = 1}^{n} \ell\left(y_{i} ; h\right).
+\mathcal{H}^{\dagger} = \arg\displaystyle\min_{h \in \mathcal{H}} \dfrac{1}{n} \displaystyle\sum_{i' \neq  i} \ell\left(y_{i'}, h\left(x_{i'}\right)\right) + \ell\left(y^{\dagger}_{i}, h\left(x_{i}\right)\right).
+\end{equation}
+Here, the norm on $\mathcal{H}$ can be $\displaystyle\int_{x \in Xsc} h\left(x\right) d x. $
+\\* A classifier is incentive-compatible if there does not exist a dataset that is incentive-incompatible for the minimum-norm empirical risk minimizer.
+\newline \newline
+We use the notation $\hat{R}_{S}\left(h \right)$ for the empirical risk associated with the hypothesis $h $ on the training set $S $ with size $\left| S \right| = n, $
+\begin{equation} 
+\hat{R}_{S}\left(h \right) = \dfrac{1}{n} \displaystyle\sum_{i' = 1}^{n} \ell\left(y_{i}, h\left(x_{i}\right)\right).
 \end{equation}
 Here, we are assuming that each agent has a degenerate distribution for $x_{i}$, so the risk for agent $i $ associated with $h $ is given by,
 \begin{equation} 
-R_{i}\left(h\right) = \mathbb{E}_{x\left[\ell\left(y_{i} ; h\right)\right]} = \ell\left(y_{i} ; h\right).
+R_{i}\left(h\right) = \mathbb{E}_{x\left[\ell\left(y_{i}, h\left(x_{i}\right)\right)\right]} = \ell\left(y_{i}, h\left(x_{i}\right)\right).
 \end{equation}
 We also assume that the risk for the learner is the average risk over all $n $ agents,
 \begin{equation} 
 R(h) = \dfrac{1}{n} \displaystyle\sum_{i=1}^{n} R_{i}\left(h\right).
 \end{equation}
 
-\begin{prop} \label{prop:dfp} 
-(The proof only work in the binary case, remove this) Multi-class probabilistic empirical risk minimization classifiers with absolute value $L^{1}$ loss are incentive-compatible.
-\end{prop}
+The following table summarizes the results in this section:
+
+\begin{center} \begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+ incentive &loss &hypothesis &classifier &$y $ domain &$x $ domain &reference\\ \hline
+IC &$\left| y - \hat{y} \right|$ &convex &MNERM &unrestricted $\mathbb{R}$ &unrestricted &Dekel $2010$\\ \hline
+IC &$\left| y - \hat{y} \right|$ &convex &MNERM &$\left[0, 1\right]$ &unrestricted &Prop $1$\\ \hline
+IC &$\mathbbm{1}_{\left\{y = \hat{y}\right\}}$ &unrestricted &ERM &discrete &unrestricted &Prop $3$\\ \hline
+IC &$y  \log \left(\hat{y}\right)$ &$w \in \mathbb{R}^{m}$ &logistic regression &$\left\{0, 1\right\}$ &unrestricted &Prop $4$\\ \hline
+IC &NA &NA &maximum likelihood &$\left\{0, 1\right\}$ &unrestricted &Cor $1$\\ \hline
+IC &NA &NA &Bayes &discrete &unrestricted &Cor $3$\\ \hline
+IC &NA &NA &kernel density &discrete &$\mathbb{R}^{m}$ &Cor $4$\\ \hline
+IIC &(y - $\hat{y})^{2}$ &$w \in \mathbb{R}^{m}$ &linear regression &unrestricted $\mathbb{R}$ &$\mathbb{R}^{m}$ &Perote $2004$ etc.\\ \hline
+IIC &convex $\mu\left(\left| y - \hat{y} \right|\right)$ &convex &MNERM &unrestricted $\mathbb{R}$ &unrestricted &Dekel $2010$\\ \hline
+IIC &margin &symmetric threshold &ERM &discrete &$\mathbb{R}$ &Prop $5$\\ \hline
+IIC &clustering &thresholds &ERM &discrete &$\mathbb{R}$ &Prop $6$\\ \hline
+\end{tabular} \end{center}
+We first adapt the proof of Theorem $4.1$ in \citet*{dekel2010incentive} to the incentive compatibility definition in our setting. We note a key requirement in \citet*{dekel2010incentive} that is not emphasized in their paper that we define as the full support condition of $y $ that specifies the freedom of $y $ to take on any arbitrary value in a set.
+\newline \newline
+\begin{df} \label{df:full} 
+The report $y^{\dagger}$ has full support on $Y  \subseteq \mathbb{R}$ if $y^{\dagger}$ can take on any value in $Y. $
+\newline \newline\end{df}
+In particular, if an agent can only report her label as positive integers, then the report is not full support on $\mathbb{R}$.
+\newline \newline
+\begin{lem} \label{lem:dfp} 
+If the reports have full support on $\left[0, 1\right]$, binary minimum norm empirical risk minimization classifiers with absolute value $L^{1}$ loss are incentive-compatible.
+\end{lem}
 \begin{proof} \label{proof:dfppf} 
 The proof is adapted from the proof of Theorem $4.1$ in \citet*{dekel2010incentive}.
-\\* For any dataset $S  = \left\{\left(x_{i}, y_{i}\right)\right\}_{i=1}^{n}$, and the convex hypothesis class $\mathcal{H}$, with the notation $h_{y}\left(x\right)$ representing the probability that the point $x $ is classified as $y  \in \left\{1, 2, ..., k\right\}$, define the absolute value loss for multi-class classification as,
+\\* Suppose there is an agent $i $ with label $y_{i}$ and reported $y^{\dagger}_{i} \neq  y_{i}$, we show that the agent cannot be better off,
 \end{proof}
 \begin{equation} 
-\ell\left(y_{i} ; h\right) = \dfrac{1}{k} \displaystyle\sum_{y=1}^{k} \left| \mathbbm{1}_{\left\{y = y_{i}\right\}} - h_{y}\left(x_{i}\right) \right|,
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) \leq  \ell\left(y_{i}, h^{\dagger}\left(x_{i}\right)\right).
 \end{equation}
-let the optimal classifier be,
+For a contradiction, we assume the opposite,
 \begin{equation} 
-h^\star  = \arg\displaystyle\min_{h \in \mathcal{H}} R\left(S, h\right) = \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'} ; h\right),
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) > \ell\left(y_{i}, h^{\dagger}\left(x_{i}\right)\right).
 \end{equation}
-and for a fixed agent $i $ who misreports her label as $y^{\dagger}_{i}$, let the dataset be,
+From the optimality of $h^{\dagger}$ on $S^{\dagger,}$
+\begin{equation} 
+\hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) \leq  \hat{R}_{S^{\dagger}}\left(h^\star \right).
+\end{equation}
+To get the contradiction, we want to show that,
+\begin{equation} 
+\hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) > \hat{R}_{S^{\dagger}}\left(h^\star \right).
+\end{equation}
+We show this by showing,
+\begin{equation} \label{equation:key1} 
+\hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) \geq  \hat{R}_{S^{\dagger}}\left(h^\star \right),
+\end{equation}
+and, separately,
+\begin{equation} \label{equation:key2} 
+\hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) \neq  \hat{R}_{S^{\dagger}}\left(h^\star \right).
+\end{equation}
+To show that the Equation \ref{equation:key1} holds, we define some $h_{\alpha}$ as,
+\begin{equation} 
+h_{\alpha} = \alpha h^\star  + \left(1 - \alpha\right) h^{\dagger,}
+\end{equation}
+Due to the convexity of $\hat{R}$, we have,
+\begin{equation} 
+\hat{R}_{S^{\dagger}}\left(h_{\alpha}\right) \leq  \alpha \hat{R}_{S^{\dagger}}\left(h^\star \right) + \left(1 - \alpha\right) \hat{R}_{S^{\dagger}}\left(h^{\dagger}\right).
+\end{equation}
+Now we claim that following equality holds and present the proof later,
+\begin{equation} \label{equation:main} 
+\hat{R}_{S^{\dagger}}\left(h^\star \right) - \hat{R}_{S}\left(h^\star \right) = \hat{R}_{S^{\dagger}}\left(h_{\alpha}\right) - \hat{R}_{S}\left(h_{\alpha}\right).
+\end{equation}
+Given the above equality, if we subtract $\hat{R}_{S}\left(h^\star \right) \leq  \hat{R}_{S}\left(h_{\alpha}\right)$, due to optimality of $h^\star $ on $S $, we have,
+\begin{equation} 
+\hat{R}_{S^{\dagger}}\left(h^\star \right) \leq  \hat{R}_{S^{\dagger}}\left(h_{\alpha}\right).
+\end{equation}
+Therefore, we have,
+\begin{equation} 
+\hat{R}_{S^{\dagger}}\left(h^\star \right) \leq  \alpha \hat{R}_{S^{\dagger}}\left(h^\star \right) + \left(1 - \alpha\right) \hat{R}_{S^{\dagger}}\left(h^{\dagger}\right),
+\end{equation}
+meaning,
+\begin{equation} 
+\left(1 - \alpha\right) \hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) \geq  \left(1 - \alpha\right) \hat{R}_{S^{\dagger}}\left(h^\star \right),
+\end{equation}
+so we have Equation \ref{equation:key1}.
+\\* Now we prove the claim we made earlier Equation \ref{equation:main},
+\begin{equation} 
+\hat{R}_{S^{\dagger}}\left(h^\star \right) - \hat{R}_{S}\left(h^\star \right) = \hat{R}_{S^{\dagger}}\left(h_{\alpha}\right) - \hat{R}_{S}\left(h_{\alpha}\right),
+\end{equation}
+meaning,
+\begin{equation} 
+\ell\left(y^{\dagger}_{i}, h^\star \left(x_{i}\right)\right) - \ell\left(y_{i}, h^\star \left(x_{i}\right)\right) = \ell\left(y^{\dagger}_{i}, h_{\alpha}\left(x_{i}\right)\right) - \ell\left(y_{i}, h_{\alpha}\left(x_{i}\right)\right).
+\end{equation}
+We use the absolute value loss assumption,
+\begin{equation} 
+\ell\left(y, h\left(x\right)\right) = \left| y - h\left(x\right) \right|,
+\end{equation}
+then we want,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h^\star \left(x_{i}\right) \right| - \left| y_{i} - h^\star \left(x_{i}\right) \right| = \left| y^{\dagger}_{i} - h_{\alpha}\left(x_{i}\right) \right| - \left| y_{i} - h_{\alpha}\left(x_{i}\right) \right|.
+\end{equation}
+We also know that,
+\begin{equation} 
+\left| y_{i} - h^\star \left(x_{i}\right) \right| > \left| y_{i} - h^{\dagger}\left(x_{i}\right) \right|.
+\end{equation}
+Therefore, we can list out all possible combinations of the relationships between $y_{i}, h^\star \left(x_{i}\right), h^{\dagger}\left(x_{i}\right) = y^{\dagger,}$
+\begin{enumerate}
+\item $h^{\dagger}\left(x_{i}\right) \leq  y_{i} \leq  h^\star \left(x_{i}\right),$
+\item $h^{\dagger}\left(x_{i}\right) \geq  y_{i} \geq  h^\star \left(x_{i}\right),$
+\item $y_{i} \leq  h^{\dagger}\left(x_{i}\right) \leq  h^\star \left(x_{i}\right),$
+\item $y_{i} \geq  h^{\dagger}\left(x_{i}\right) \geq  h^\star \left(x_{i}\right).$
+\end{enumerate}
+
+In the case $\left(4\right)$, we have for $\alpha < 1$,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h^\star \left(x_{i}\right) \right| - \left| y_{i} - h^\star \left(x_{i}\right) \right| = y^{\dagger}_{i} - y_{i,}
+\end{equation}
+and,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h_{\alpha}\left(x_{i}\right) \right| - \left| y_{i} - h_{\alpha}\left(x_{i}\right) \right| = y^{\dagger}_{i} - y_{i.}
+\end{equation}
+In the case $\left(3\right)$, we have for $\alpha < 1$,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h^\star \left(x_{i}\right) \right| - \left| y_{i} - h^\star \left(x_{i}\right) \right| = y_{i} - y^{\dagger}_{i,}
+\end{equation}
+and,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h_{\alpha}\left(x_{i}\right) \right| - \left| y_{i} - h_{\alpha}\left(x_{i}\right) \right| = y_{i} - y^{\dagger}_{i.}
+\end{equation}
+In the case $\left(2\right)$, we have for $\alpha < \dfrac{y_{i} - h^\star \left(x_{i}\right)}{h^{\dagger}\left(x_{i}\right) - h^\star \left(x_{i}\right)}$,
+\begin{equation} 
+h^{\dagger}\left(x_{i}\right) = y^{\dagger}_{i} \leq  y_{i} \leq  h_{\alpha}\left(x_{i}\right) < h^\star \left(x_{i}\right),
+\end{equation}
+so,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h^\star \left(x_{i}\right) \right| - \left| y_{i} - h^\star \left(x_{i}\right) \right| =  y^{\dagger}_{i} - y_{i,}
+\end{equation}
+and,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h_{\alpha}\left(x_{i}\right) \right| - \left| y_{i} - h_{\alpha}\left(x_{i}\right) \right| = y^{\dagger}_{i} - y_{i.}
+\end{equation}
+In the case $\left(1\right)$, we have for $\alpha < \dfrac{y_{i} - h^\star \left(x_{i}\right)}{h^{\dagger}\left(x_{i}\right) - h^\star \left(x_{i}\right)}$,
+\begin{equation} 
+h^{\dagger}\left(x_{i}\right) = y^{\dagger}_{i} \leq  y_{i} \leq  h_{\alpha}\left(x_{i}\right) < h^\star \left(x_{i}\right),
+\end{equation}
+so,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h^\star \left(x_{i}\right) \right| - \left| y_{i} - h^\star \left(x_{i}\right) \right| =  y_{i} - y^{\dagger}_{i,}
+\end{equation}
+and,
+\begin{equation} 
+\left| y^{\dagger}_{i} - h_{\alpha}\left(x_{i}\right) \right| - \left| y_{i} - h_{\alpha}\left(x_{i}\right) \right| = y_{i} - y^{\dagger}_{i.}
+\end{equation}
+In all cases, the equality holds as required.
+\\* To show that the Equation \ref{equation:key2} holds, For a contradiction, assume the they are equal,
+\begin{equation} 
+\hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) = \hat{R}_{S^{\dagger}}\left(h^\star \right).
+\end{equation}
+Both of them are ERM on $S^{\dagger}$, so the tie-breaking rule says,
+\begin{equation} 
+\left\|h^{\dagger}\right\| \leq  \left\|h^\star \right\|.
+\end{equation}
+We also know that, due to convexity of $\hat{R}$, as shown below,
 \begin{align*}
-S^{\dagger} &= S \setminus  \left\{\left(x_{i}, y_{i}\right)\right\} \cup \left\{\left(x_{i}, y^{\dagger}_{i}\right)\right\},
+\hat{R}_{S^{\dagger}}\left(h_{\alpha}\right) &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} \left| y_{i} - h_{\alpha}\left(x_{i}\right) \right|
+\\ &= \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} \left| \alpha \left(y_{i} - \hat{h}\left(x_{i}\right)\right) + \left(1 - \alpha\right) \left(y_{i} - h^\star \left(x_{i}\right)\right) \right|
+\\ &\leq  \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} \alpha \left| y_{i} - \hat{h}\left(x_{i}\right) \right| + \dfrac{1}{n} \displaystyle\sum_{i'=1}^{n} \left(1 - \alpha\right) \left| y_{i} - h^\star \left(x_{i}\right) \right|
+\\ &= \alpha \hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) + \left(1 - \alpha\right) \hat{R}_{S^{\dagger}}\left(h^\star \right),
 \end{align*}
-and the optimal classifier be,
+we have,
 \begin{equation} 
-h^{\dagger} = \arg\displaystyle\min_{h \in \mathcal{H}} R\left(S^{\dagger}, h\right) = \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i' \neq  i}^{n} \ell\left(y_{i'} ; h\right) + \ell\left(y^{\dagger}_{i} ; h\right).
+\hat{R}_{S^{\dagger}}\left(h_{\alpha}\right) \leq  \alpha \hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) + \left(1 - \alpha\right) \hat{R}_{S^{\dagger}}\left(h^\star \right) = \hat{R}_{S^{\dagger}}\left(h^\star \right),
 \end{equation}
-For a contradiction, assume $\ell\left(y_{i}; h^{\dagger}\right) \leq  \ell\left(y_{i}; h^\star \right)$, we show that $h^{\dagger} = h^\star $.
-\\* First, by noting that $h_{y}\left(x_{i}\right) \in \left[0, 1\right]$ and that the sum of $h_{y}\left(x_{i}\right)$ over $y $ is always $1$, the loss function can be simplified to,
+or,
 \begin{equation} 
-\ell\left(y_{i} ; h\right) = \dfrac{2}{k} \left(1 - h_{y_{i}}\left(x_{i}\right)\right).
+\hat{R}_{S}\left(h_{\alpha}\right) \leq  \hat{R}_{S}\left(h^\star \right).
 \end{equation}
-Therefore, we have the following inequality,
+But due to the optimality of $h^\star $ on $S, $
 \begin{equation} 
-0 \leq  h^\star _{y_{i}}\left(x_{i}\right) \leq  h^{\dagger}_{y_{i}}\left(x_{i}\right) \leq  1.
+\hat{R}_{S}\left(h_{\alpha}\right) \geq  \hat{R}_{S}\left(h^\star \right).
 \end{equation}
-Now define $\alpha_{i} \in \left[0, 1\right]$ by,
+Therefore,
 \begin{equation} 
-\alpha_{i} = \dfrac{1 - h^\star _{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)},
+\hat{R}_{S}\left(h_{\alpha}\right) = \hat{R}_{S}\left(h^\star \right),
 \end{equation}
-and define $h^{\alpha} \in \mathcal{H}$, since $\mathcal{H}$ is convex, by,
+and tie-breaking rule says,
 \begin{equation} 
-h^{\alpha} = \alpha h^{\dagger} + \left(1 - \alpha\right) h^\star .
+\left\|h^\star \right\| \leq  \left\|h_{\alpha}\right\| \leq  \left\|h^{\dagger}\right\|.
 \end{equation}
-Then, we have,
+Therefore,
 \begin{equation} 
-h^{\alpha_{i}}_{y_{i}} = \dfrac{1 - h^\star _{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)} \hat{h}_{y_{i}}\left(x_{i}\right) + \dfrac{1 - h^{\dagger}_{y_{i}}\left(x_{i}\right)}{h^{\dagger}_{y_{i}}\left(x_{i}\right) - h^\star _{y_{i}}\left(x_{i}\right)} h^\star _{y_{i}}\left(x_{i}\right) = 1,
+\left\|h^\star \right\| = \left\|h^{\dagger}\right\|,
 \end{equation}
-implying that there is $\alpha \in \left(0, \alpha_{i}\right]$ such that the relation holds with equality,
+meaning $h^\star  = h^{\dagger}$, which contradicts with,
 \begin{equation} 
-\ell\left(y^{\dagger}_{i} ; h^\star \right) - \ell\left(y_{i} ; h^\star \right) = \ell\left(y^{\dagger}_{i} ; h^{\alpha}\right) - \ell\left(y_{i} ; h^{\alpha}\right).
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) > \ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right).
 \end{equation}
-Note that the above equality holds for other agents too since they report truthfully, so the equality holds for the risk too by summing the above equality over $i, $
+
+\begin{lem} \label{lem:dfpd} 
+If the reports have full support on $\left\{0, 1\right\}$, binary minimum norm empirical risk minimization classifiers with absolute value $L^{1}$ loss are incentive-compatible.
+\end{lem}
+\begin{proof} \label{proof:dfpdpf} 
+Suppose there is an agent $i $ with label $y_{i}$ and reported $y^{\dagger}_{i} \neq  y_{i}$, we show that the agent cannot be better off,
+\end{proof}
 \begin{equation} 
-R\left(S^{\dagger}, h^\star \right) - R\left(S, h^\star \right) = R\left(S^{\dagger}, h^{\alpha}\right) - R\left(S, h^{\alpha}\right).
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) \leq  \ell\left(y_{i}, h^{\dagger}\left(x_{i}\right)\right).
 \end{equation}
-Since $h^\star $ is the ERM on $S, $
+For a contradiction, we assume the opposite,
+\begin{equation} \label{equation:asm} 
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) > \ell\left(y_{i}, h^{\dagger}\left(x_{i}\right)\right),
+\end{equation}
+and with absolute value loss, we have.
 \begin{equation} 
-R(S, h^\star ) \leq  R\left(S, h^{\alpha}\right),
+\left| y_{i} - h^\star \left(x_{i}\right) \right| > \left| y_{i} - h^{\dagger}\left(x_{i}\right) \right|.
 \end{equation}
-which implies that,
+There are two cases,
+\begin{enumerate}
+\item $y_{i} = 0$ and $y^{\dagger}_{i} = 1$,
+\item $y_{i} = 1$ and $y^{\dagger}_{i} = 0$.
+In the case $\left(1\right)$, this assumption implies that we are given,
+\end{enumerate}
 \begin{equation} 
-R\left(S^{\dagger}, h^\star \right) \leq  R\left(S^{\dagger}, h^{\alpha}\right).
+0 \leq  h^{\dagger}\left(x_{i}\right) < h^\star \left(x_{i}\right) \leq  1.
 \end{equation}
-Due to convexity,
+In the case $\left(2\right)$, this assumption implies that we are given,
 \begin{equation} 
-R\left(S^{\dagger}, h^{\alpha}\right) \leq  \alpha R\left(S^{\dagger}, h^{\dagger}\right) + \left(1 - \alpha\right) R\left(S^{\dagger}, h^\star \right),
+0 \leq  h^\star \left(x_{i}\right) < h^{\dagger}\left(x_{i}\right) \leq  1.
 \end{equation}
-which implies,
+In both cases, we have,
 \begin{equation} 
-R\left(S^{\dagger}, h^\star \right) \leq  R\left(S^{\dagger}, h^{\dagger}\right).
+\left| y^{\dagger}_{i} - h^\star \left(x_{i}\right) \right| < \left| y^{\dagger}_{i} - h^{\dagger}\left(x_{i}\right) \right|,
 \end{equation}
-Since $h^{\dagger}$ is the ERM on $S^{\dagger,}$
+or,
+\begin{equation} \label{equation:cls} 
+\ell\left(y^{\dagger}_{i}, h^\star \left(x_{i}\right)\right) < \ell\left(y^{\dagger}_{i}, h^{\dagger}\left(x_{i}\right)\right).
+\end{equation}
+Due to the optimality of $h^{\dagger,}$
 \begin{equation} 
-R\left(S^{\dagger}, h^{\dagger}\right) \leq  R\left(S^{\dagger}, h^\star \right),
+\hat{R}_{S^{\dagger}}\left(h^{\dagger}\right) \leq  \hat{R}_{S^{\dagger}}\left(h^\star \right),
 \end{equation}
-we conclude that,
+or,
 \begin{equation} 
-R\left(S^{\dagger}, h^{\dagger}\right) = R\left(S^{\dagger}, h^\star \right),
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'}, h^{\dagger}\left(x_{i'}\right)\right) + \ell\left(y^{\dagger}_{i}, h^{\dagger}\left(x_{i}\right)\right) \leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'}, h^\star \left(x_{i'}\right)\right) + \ell\left(y^{\dagger}_{i}, h^\star \left(x_{i}\right)\right)
 \end{equation}
-meaning $h^\star $ and $h^{\dagger}$ are both empirical risk minimizers on the original dataset.
+using Equation \ref{equation:cls},
+\begin{equation} 
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'}, h^{\dagger}\left(x_{i'}\right)\right) \leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'}, h^\star \left(x_{i'}\right)\right),
+\end{equation}
+and using Equation \ref{equation:asm},
+\begin{equation} 
+\displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'}, h^{\dagger}\left(x_{i'}\right)\right) + \ell\left(y_{i}, h^{\dagger}\left(x_{i}\right)\right) \leq  \displaystyle\sum_{i'=1, i' \neq  i}^{n} \ell\left(y_{i'}, h^\star \left(x_{i'}\right)\right) + \ell\left(y_{i}, h^\star \left(x_{i}\right)\right),
+\end{equation}
+or,
+\begin{equation} 
+\displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'}, h^{\dagger}\left(x_{i'}\right)\right) \leq  \displaystyle\sum_{i'=1}^{n} \ell\left(y_{i'}, h^\star \left(x_{i'}\right)\right),
+\end{equation}
+or,
+\begin{equation} 
+\hat{R}_{S}\left(h^{\dagger}\right) \leq  \hat{R}_{S}\left(h^\star \right),
+\end{equation}
+which is a contradiction to the optimality of $h^\star $.
+\newline \newline
+\begin{prop} \label{prop:dfpmu} 
+Binary probabilistic empirical risk minimization classifiers with convex absolute value loss $\ell\left(y ; h\right) = \mu\left(\left| y - h\left(x\right) \right|\right), \mu$ monotonically increasing strictly convex with unbounded subderivatives, are incentive-incompatible.
+\end{prop}
+\begin{proof} \label{proof:dfpmupf} 
+As long as $h^\star \left(x_{i}\right) \neq  y_{i}$, say $h^\star \left(x_{i}\right) > y_{i}$, then there is $y^{\dagger}_{i}$ small enough such that,
+\end{proof}
+\begin{equation} 
+h^{\dagger}\left(x_{i}\right) < h^\star \left(x_{i}\right),
+\end{equation}
+leading to,
+\begin{equation} 
+\ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right) < \ell\left(y_{i}, h^\star \right).
+\end{equation}
+In this case, the agent $i $ has incentive to lie.
 \newline \newline
 \begin{prop} \label{prop:zolog} 
 Multi-class deterministic empirical risk minimization classifiers with zero-one loss are incentive-compatible.
@@ -425,7 +626,7 @@ Fix an agent $i $ with $x_{i}$, and fix the other agents' reports, $\left(x_{-i}
 \end{align*}
 If $y_{i} = h^\star \left(x_{i}\right)$, then the classifier is already classifying $x_{i}$ correctly, misreporting will not improve the outcome for $i $. Assume the prediction is $h^\star \left(x_{i}\right) = y^\star  \neq  y_{i}$, and suppose $h^\star $ is making $q $ mistakes, meaning,
 \begin{align*}
-q  &= \displaystyle\min_{h \in \mathcal{H}} \ell\left(y_{i} ; h^\star \right).
+q  &= \displaystyle\min_{h \in \mathcal{H}} \ell\left(y_{i}, h^\star \left(x_{i}\right)\right).
 \end{align*}
 Agent $i $ can misreport in the following two ways:
 \end{proof}
@@ -437,9 +638,9 @@ Agent $i $ can misreport in the following two ways:
 since $\ell\left(y^\star  ; h^{\dagger}\right) > q - 1 = \ell\left(y^\star  ; h^\star \right)$ contradicts the optimality of $h^{\dagger.}$
 \\* Suppose that agent $i $ could get her true label with $h^{\dagger}$, meaning $h^{\dagger}\left(x_{i}\right) = y_{i}$, then,
 \begin{align*}
-\ell\left(y_{i} ; h^{\dagger}\right) &= \ell\left(y^\star  ; h^{\dagger}\right) - 1
+\ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right) &= \ell\left(y^\star  ; h^{\dagger}\right) - 1
 \\ &\leq  k - 2
-\\ &< \ell\left(y_{i} ; h^\star \right),
+\\ &< \ell\left(y_{i}, h^\star \left(x_{i}\right)\right),
 \end{align*}
 which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot improve the outcome by misreporting $y^\star $.
 \item If agent $i $ reports $y^{\dagger}_{i} = y' \neq  y^\star $, let the new classifier be $h^{\dagger}$, note that we must have,
@@ -449,9 +650,9 @@ which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot imp
 since $\ell\left(y' ; h^{\dagger}\right) > q = \ell\left(y' ; h^\star \right)$ contradicts the optimality of $h^{\dagger.}$
 \\* Suppose that agent $i $ could get her true label with $h^{\dagger}$, then,
 \begin{align*}
-\ell\left(y_{i} ; h^{\dagger}\right) &= \ell\left(y_{i} ; h^{\dagger}\right) - 1
+\ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right) &= \ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right) - 1
 \\ &\leq  q - 1
-\\ &< \ell\left(y_{i} ; h^\star \right),
+\\ &< \ell\left(y_{i}, h^\star \left(x_{i}\right)\right),
 \end{align*}
 which contradicts the optimality of $h^\star $. Therefore, agent $i $ cannot improve the outcome by misreporting $y'$.
 \\* Therefore, no agent can improve the outcome and the dataset is incentive-compatible.
@@ -476,7 +677,7 @@ h^{\dagger} &= h^\star \left(y^{\dagger}_{i}\right) = \arg\displaystyle\min_{h \
 \end{align*}
 Now suppose, for a contradiction, that agent $i $ prefers misreporting,
 \begin{align*}
-\ell\left(y_{i} ; h^\star \right) &> \ell\left(y_{i} ; h^{\dagger}\right),
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) &> \ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right),
 \end{align*}
 which implies, since $y^{\dagger}_{i} = 1 - y_{i}$, and the special property of the logistic loss function $\exp\left(\ell\left(0 ; h\right)\right) + \exp\left(\ell\left(1 ; h\right)\right) = 1$,
 \begin{align*}
@@ -604,7 +805,7 @@ For any $g  \in \left(0, 1\right]$, there exists an $r  \in \left(0, g\right)$ s
 \end{prop}
 \begin{proof} \label{proof:ex1pf} 
 The optimal threshold for the original dataset $S $ is,
-\begin{equation} \hat{t} = \arg\displaystyle\min_{t \geq  0} \hat{R}\left(S, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+\begin{equation} \hat{t} = \arg\displaystyle\min_{t \geq  0} \hat{R}_{S}\left(h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 2 f\left(g - t\right)& \text{\;if\;} t \leq  r \\
 2 f\left(g - t\right) + f\left(t - r\right)& \text{\;if\;} r < t < g \\
 f(t - r)& \text{\;if\;} t \geq  g \\
@@ -612,20 +813,20 @@ f(t - r)& \text{\;if\;} t \geq  g \\
 Since $f $ is strictly convex thus continuous in $t $ on [-$1, 1$], any linear combination with positive coefficients is also strictly convex and continuous in $t $. In addition, due to the assumption that $f\left(0\right)  = 0$,
 \end{proof}
 \begin{equation} 
-\hat{R}\left(S, h_{t} | t = r\right) = 2 f\left(g - r\right) = \lim_{t \to  r^{+}} \hat{R}\left(s, h_{t}\right),
+\hat{R}_{S}\left(h_{t} | t = r\right) = 2 f\left(g - r\right) = \lim_{t \to  r^{+}} \hat{R}\left(s, h_{t}\right),
 \end{equation}
 and,
 \begin{equation} 
-\hat{R}\left(S, h_{t} | t = g\right) = f\left(g - r\right) = \lim_{t \to  g^{-}} \hat{R}\left(s, h_{t}\right),
+\hat{R}_{S}\left(h_{t} | t = g\right) = f\left(g - r\right) = \lim_{t \to  g^{-}} \hat{R}\left(s, h_{t}\right),
 \end{equation}
-implying that $\hat{R}\left(S, h_{t}\right)$ is continuous in $t. $
-\\* Given the assumption that $f $ is minimized at $0$, we have $2 f\left(t - r\right) $ is minimized at $t  = r < g$ and $f\left(t - g\right) $ is minimized at $t  = g > r$. Therefore, the minimum of $\hat{R}\left(S, h_{t}\right)$ occurs in the region $r  < t < g $, meaning,
+implying that $\hat{R}_{S}\left(h_{t}\right)$ is continuous in $t. $
+\\* Given the assumption that $f $ is minimized at $0$, we have $2 f\left(t - r\right) $ is minimized at $t  = r < g$ and $f\left(t - g\right) $ is minimized at $t  = g > r$. Therefore, the minimum of $\hat{R}_{S}\left(h_{t}\right)$ occurs in the region $r  < t < g $, meaning,
 \begin{equation} 
 \hat{t} \in \left(r , g \right),
 \end{equation}
 which classifies (-$r , \text{\;red\;}$) incorrectly as a green point.
 \\* Now, let $S^{\dagger}$ be the dataset in which all agents except for (-$r , \text{\;red\;}$) report truthfully, and the agent (-$r , \text{\;red\;}$) misreports her label as blue. In this case, the optimal threshold for $S^{\dagger}$ is,
-\begin{equation} \hat{t}\dagger = \arg\displaystyle\min_{t \geq  0} \hat{R}\left(S^{\dagger}, h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
+\begin{equation} \hat{t}\dagger = \arg\displaystyle\min_{t \geq  0} \hat{R}_{S^{\dagger}}\left(h_{t}\right) = \arg\displaystyle\min_{t \geq  0}\left\{ \begin{array}{ll}
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} t < r \\
 2 f\left(g - t\right) + f\left(t + r\right)& \text{\;if\;} r \leq  t < g \\
 f(t + r)& \text{\;if\;} t \geq  g \\
@@ -636,7 +837,7 @@ Since $f\left(t + r\right) $ is minimized at $t  = -r < g $, the minimum of $R\l
 \end{equation}
 and we have, in this range,
 \begin{equation} 
-\hat{R}\left(S^{\dagger}, h_{t}\right) = 2 f\left(g - t\right) + f\left(t + r\right).
+\hat{R}_{S^{\dagger}}\left(h_{t}\right) = 2 f\left(g - t\right) + f\left(t + r\right).
 \end{equation}
 Due to strict convexity of $f $, we have $f'\left(a\right)$ is strictly increasing in $a $. Given that $f'\left(0\right) = 0$ at the global minimum, we can find small $\delta > 0$ such that the following holds
 \begin{equation} 
@@ -644,7 +845,7 @@ Due to strict convexity of $f $, we have $f'\left(a\right)$ is strictly increasi
 \end{equation}
 Now, take $r  = g - \delta$, we have, for $t  \in \left(0, g \right)$,
 \begin{equation} 
-\dfrac{\partial \hat{R}\left(S, h_{t}\right)}{\partial t} = - 2 f'\left(g - r\right) + f'\left(2 r\right) > 0.
+\dfrac{\partial \hat{R}_{S}\left(h_{t}\right)}{\partial t} = - 2 f'\left(g - r\right) + f'\left(2 r\right) > 0.
 \end{equation}
 Therefore, the objective is decreasing at $t  = r $, and given that it is the sum of two strictly convex functions thus strictly convex itself, we have,
 \begin{equation} 
@@ -964,7 +1165,7 @@ h^{\dagger} &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i'=1
 \end{align*}
 Now suppose, for a contradiction, that agent $i $ prefers misreporting, assume the following incentive inequality,
 \begin{align*}
-\ell\left(y_{i} ; h^\star \right) &> \ell\left(y_{i} ; h^{\dagger}\right).
+\ell\left(y_{i}, h^\star \left(x_{i}\right)\right) &> \ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right).
 \end{align*}
 If there are only two classes, then by symmetry,
 \begin{align*}
@@ -976,11 +1177,11 @@ h' &= \arg\displaystyle\min_{h \in \mathcal{H}} \displaystyle\sum_{i' = 1, i' \n
 \end{align*}
 then the Monotonic Condition for ERM implies,
 \begin{align*}
-\dfrac{\ell\left(y_{i} ; h^\star \right)}{\ell\left(y'_{i} ; h^\star \right)} &\leq  \dfrac{\ell\left(y_{i} ; h'\right)}{\ell\left(y'_{i} ; h'\right)},
+\dfrac{\ell\left(y_{i}, h^\star \left(x_{i}\right)\right)}{\ell\left(y'_{i} ; h^\star \right)} &\leq  \dfrac{\ell\left(y_{i} ; h'\right)}{\ell\left(y'_{i} ; h'\right)},
 \end{align*}
 and the IIA Condition implies,
 \begin{align*}
-\dfrac{\ell\left(y_{i} ; h'\right)}{\ell\left(y'_{i} ; h'\right)} &= \dfrac{\ell\left(y_{i} ; h^{\dagger}\right)}{\ell\left(y'_{i} ; h^{\dagger}\right)}.
+\dfrac{\ell\left(y_{i} ; h'\right)}{\ell\left(y'_{i} ; h'\right)} &= \dfrac{\ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right)}{\ell\left(y'_{i} ; h^{\dagger}\right)}.
 \end{align*}
 Combining the above two inequalities with the incentive inequality, we have,
 \begin{align*}
@@ -992,7 +1193,7 @@ Note that the above inequality is true for all $y'_{i} \notin \left\{y_{i}, y^{\
 \end{align*}
 and given the losses are normalized,
 \begin{align*}
-C  - \ell\left(y_{i} ; h^\star \right) - \ell\left(y^{\dagger}_{i} ; h^\star \right) &> C  - \ell\left(y_{i} ; h^{\dagger}\right) - \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right),
+C  - \ell\left(y_{i}, h^\star \left(x_{i}\right)\right) - \ell\left(y^{\dagger}_{i} ; h^\star \right) &> C  - \ell\left(y_{i},  h^{\dagger}\left(x_{i}\right)\right) - \ell\left(y^{\dagger}_{i} ; h^{\dagger}\right),
 \end{align*}
 and using the incentive inequality again,
 \begin{align*}
